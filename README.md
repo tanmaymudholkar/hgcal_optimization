@@ -1,11 +1,11 @@
 # HGCstandalone
 
-1. Install ROOT:
-   see: https://root.cern.ch/drupal/content/production-version-534
-   Download ROOT source file and unpack it
-      cd root
-      ./configure
-      make
+##1. Install ROOT:
+##   see: https://root.cern.ch/drupal/content/production-version-534
+##   Download ROOT source file and unpack it
+##      cd root
+##      ./configure
+##      make
 
 2. Download the Standalone code:
    git clone https://github.com/mengleisun/HGCstandalone.git
