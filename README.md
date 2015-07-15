@@ -15,7 +15,7 @@
      the path to the root can be found by "which root"
 
 #4. Compile the userlib
-      cd PFCal/PFCalEE/
+      cd HGCstandalone
       cd userlib
       mkdir {obj, lib, bin}
       make dictionary
