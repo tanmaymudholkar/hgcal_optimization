@@ -6,3 +6,10 @@ LSFJOB_*
 bin
 obj
 *.root
+dEdXs_for_weight
+g4copy.log
+geometry_of_detector
+layer_numbers_for_weight
+layer_types_for_weight
+layer_weights.dat
+thicknesses_for_weight

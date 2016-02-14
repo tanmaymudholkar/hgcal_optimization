@@ -1,0 +1,2355 @@
+
+QUEUE: test
+  -- High priority public testing queue - Max CPU limit: (2 KSI2K week) Default: 1 minute - Max 1 job per user.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 99   10  Open:Active       -    1    -    -     0     0     0     0     0    0
+
+DEFAULT LIMITS:
+ RUNLIMIT                
+ 1.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 120241.0 min of KSI2K
+
+ RUNLIMIT                
+ 60241.0 min of KSI2K
+
+ PROCLIMIT               
+ 1
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             0
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: all  
+HOSTS:  g_shareshort/ g_sharelong/ g_share/ 
+ADMINISTRATORS:  uschwick jbl 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 60241 && cpuf > 0.3 && swp>500)] order[-joblong] rusage[joblong=1]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: amsmd
+  -- AMS production queue
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 99   10  Open:Active     400    -    -    -   398     0   398     0     0    0
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 20080.0 min of KSI2K
+
+ RUNLIMIT                
+ 60240.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 20081.0 min of KSI2K
+
+ RUNLIMIT                
+ 60241.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             0
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_AMSMD/   
+HOSTS:  g_amsprod/ 
+ADMINISTRATORS:  uschwick jbl aelin 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 60241 && cpuf > 0.3 && swp>500)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_ops
+  -- GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 99   10  Open:Active       -    -    -    -     3     1     2     0     0    0
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 44.0 min of KSI2K
+
+ RUNLIMIT                
+ 44.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 45.0 min of KSI2K
+
+ RUNLIMIT                
+ 45.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_OPS/   
+HOSTS:  g_share/ g_shareshort/ g_sharelong/ g_atlascaturgent/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 30 && swp>500 && maxmem>=1000)] order[-joblong] rusage[joblong=1]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: lhcbinter
+  -- interactive queue dedicated to LHCb
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 99    0  Open:Active       -    -    -    -     3     0     3     0     0    0
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  ONLY_INTERACTIVE
+
+USERS: u_INT/ u_LHCBINTER/   
+HOSTS:  g_lhcbinter/ 
+ADMINISTRATORS:  uschwick jbl joel 
+RES_REQ:  select[(lftm > 2880 && swp>1300)]
+
+-------------------------------------------------------------------------------
+
+QUEUE: lhcbt3inter
+  -- Queue for LHCb T3 nodes. Interactive access only
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 99   10  Open:Active       -    -    -    -    40     0    40     0     0    0
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  ONLY_INTERACTIVE
+
+USERS: u_INT/ u_LHCBT3/   
+HOSTS:  g_lhcbt3/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 2880 && swp>1300)] order[ut:mem]
+
+-------------------------------------------------------------------------------
+
+QUEUE: cmsinter
+  -- interactive queue dedicated to CMS
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 99    0  Open:Active       -   40    -   50     0     0     0     0     0    0
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  ONLY_INTERACTIVE
+
+USERS: u_INT/ u_CMSCOMM/ u_CMSALCA/ u_CMSPHYS/   
+HOSTS:  g_cmsinter/ 
+ADMINISTRATORS:  uschwick jbl cmsprod 
+RES_REQ:  select[(lftm > 2880 && swp>1300)]
+
+-------------------------------------------------------------------------------
+
+QUEUE: atlasinter
+  -- interactive queue dedicated to CMS
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 99    0  Open:Active       -    -    -    -     0     0     0     0     0    0
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  ONLY_INTERACTIVE
+
+USERS: u_INT/ u_ATLAS/   
+HOSTS:  g_atlasinter/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 2880 && swp>1300)]
+
+-------------------------------------------------------------------------------
+
+QUEUE: amsprod
+  -- AMS production queue
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 90   10  Open:Active       -    -    -    -  2574  2461   113     0     0    0
+
+DEFAULT LIMITS:
+ RUNLIMIT                
+ 241920.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ RUNLIMIT                
+ 241920.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             0
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_AMSPROD/ u_INT/   
+HOSTS:  g_amsprod/ 
+ADMINISTRATORS:  uschwick jbl aelin 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 60241 && cpuf > 0.3 && swp>500)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: ams1nd
+  -- AMS 1nd queue
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 90   10  Open:Active    1800    -    -    - 23190 21392  1798     0     0    0
+
+DEFAULT LIMITS:
+ RUNLIMIT                
+ 1440.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ RUNLIMIT                
+ 1441.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -            83
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_AMSPROD/ u_va/   
+HOSTS:  g_amsprod/ 
+ADMINISTRATORS:  uschwick jbl aelin 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 1441 && cpuf > 0.3 && swp>500)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: cmscafalcamille
+  -- Queue for cmscafalcamillipeade nodes. Very restricted access. CPU limit: 1 normalized CPU day. 50% eff
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 90   10  Open:Active       -    -    -    -     0     0     0     0     0    0
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 30240.0 min of KSI2K
+
+ RUNLIMIT                
+ 40160.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 30245.0 min of KSI2K
+
+ RUNLIMIT                
+ 40165.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ ALCA_MILLEPEDE/   
+HOSTS:  g_cmscafexclusive/ g_cmscafshared/ 
+ADMINISTRATORS:  uschwick jbl cmsprod 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 40170)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: cmsexpress
+  -- Private queue for CMS Repack activity - CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 90   10  Open:Active       -  100    -    -     0     0     0     0     0    0
+
+ CPULIMIT                
+ 1440.0 min of KSI2K
+
+ RUNLIMIT                
+ 2880.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ ALCA_EXPRESS/   
+HOSTS:  g_cmsexpress/ g_cmscaf/ 
+ADMINISTRATORS:  uschwick jbl cmsprod 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 20160)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: cmsrepack
+  -- Private queue for CMS Repack activity - CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 51   10  Open:Active       -  400    -    -     0     0     0     0     0    0
+Interval for a host to accept two jobs is 120 seconds
+
+ CPULIMIT                
+ 10080.0 min of KSI2K
+
+ RUNLIMIT                
+ 20160.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_CMSREPACK u_INT/   
+HOSTS:  g_share/ 
+ADMINISTRATORS:  uschwick jbl cmsprod 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 20160)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: cmst0
+  -- Queue for CMS T0, restricted access, CPU limit: 1 week
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 50   10  Open:Active       -    -    -    -     0     0     0     0     0    0
+
+ CPULIMIT                
+ 10080.0 min of KSI2K
+
+ RUNLIMIT                
+ 20160.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_CMSREPACK u_INT/ u_ITDCCMS/   
+HOSTS:  g_share/ 
+ADMINISTRATORS:  uschwick jbl cmsprod 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 20160) && mem > 1024 && swp > 1024 ] order [jobslots] rusage [jobslots=1]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_dteam
+  -- GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 47   10  Open:Active       -    -    -    -     0     0     0     0     0    0
+
+ CPULIMIT                
+ 30.0 min of KSI2K
+
+ RUNLIMIT                
+ 30.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_DTEAM/   
+HOSTS:  g_share/ g_shareshort/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 30 && swp>500 && maxmem>=1000)] order[-joblong] rusage[joblong=1]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_lep
+  -- GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 47   10  Open:Active       -    -    -    -     0     0     0     0     0    0
+
+ CPULIMIT                
+ 30.0 min of KSI2K
+
+ RUNLIMIT                
+ 30.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             0
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: grid_L3SGM u_INT/ grid_DELPHI/ grid_DELPHISGM/ grid_DELPHIPRD/ grid_ALEPH/ grid_ALEPHSGM/ grid_ALEPHPRD/ grid_OPAL/ grid_OPALSGM/ grid_OPALPRD/ grid_L3/ grid_L3PRD/   
+HOSTS:  g_share/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 30 && swp>500 && maxmem>=1000)] order[-joblong] rusage[joblong=1]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_2nh_dteam
+  -- GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 47   10  Open:Active       -    -    -    -     0     0     0     0     0    0
+
+ CPULIMIT                
+ 120.0 min of KSI2K
+
+ RUNLIMIT                
+ 120.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             0
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_DTEAM/   
+HOSTS:  g_share/ g_shareshort/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 120 && swp>500 && maxmem>=1000)] order[ut:mem]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: 8nm
+  -- Public queue - CPU limit: (8 KSI2K minutes).  This is the default queue.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 46   10  Open:Active       -  200    -    -     8     0     8     0     0    0
+Interval for a host to accept two jobs is 0 seconds
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 8.0 min of KSI2K
+
+ RUNLIMIT                
+ 36.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 9.0 min of KSI2K
+
+ RUNLIMIT                
+ 37.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: all  
+HOSTS:  g_share/ g_shareshort/ g_atlascaturgent/ 
+ADMINISTRATORS:  uschwick jbl 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 81 && swp>1300)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_2nh_lhcb
+  -- GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 45   10  Open:Active       -    -    -    -    26    26     0     0     0    0
+
+ CPULIMIT                
+ 120.0 min of KSI2K
+
+ RUNLIMIT                
+ 2880.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             0
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_DTEAM/ grid_LHCB/ grid_LHCBPRD/ grid_LHCBSGM/ grid_LHCBPLT/   
+HOSTS:  g_share/ g_shareshort/ 
+ADMINISTRATORS:  uschwick jbl joel phicharp 
+RES_REQ:  select[(lftm > 2880 && swp>1000 && maxmem>=1500)] rusage[pool=20000]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_2nh_cms
+  -- GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 45   10  Open:Active       -    -    -    -    60    60     0     0     0    0
+
+ CPULIMIT                
+ 120.0 min of KSI2K
+
+ RUNLIMIT                
+ 2880.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             0
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_DTEAM/ grid_CMS/ grid_CMSPRD/ grid_CMSSGM/ grid_CMSPLT/   
+HOSTS:  g_share/ g_shareshort/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 2880)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_atlas_test
+  -- ATLAS Grid tests
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 45   10  Open:Active    2000    -    -    -     0     0     0     0     0    0
+
+ CPULIMIT                
+ 5760.0 min of KSI2K
+
+ RUNLIMIT                
+ 5760.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             0
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_ATLASPLT/   
+HOSTS:  g_share/ g_shareshort/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 5760 && swp>1900 && maxmem>=1900)] rusage[mem=1900:pool=20000:atliob=1] order[atliob:ut:mem]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_2nh_atlas
+  -- GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 45   10  Open:Active       -    -    -    -    29    29     0     0     0    0
+
+ CPULIMIT                
+ 120.0 min of KSI2K
+
+ RUNLIMIT                
+ 2880.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             0
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_ATLAS/ grid_DTEAM/ grid_ATLASPRD/ grid_ATLASSGM/ grid_ATLASPLT/   
+HOSTS:  g_share/ g_shareshort/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 2880)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_lhcb
+  -- GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 44   10  Open:Active       -    -    -    -  3864   195  3669     0     0    0
+
+ CPULIMIT                
+ 11520.0 min of KSI2K
+
+ RUNLIMIT                
+ 20162.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -           641
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_DTEAM/ grid_LHCB/ grid_LHCBPRD/ grid_LHCBSGM/ grid_LHCBPLT/   
+HOSTS:  lxbst1433 lxbst1439 lxbst1247 p05496706u36213 p05496706q40412 p05496706u70050 p05496706q89314 p05496706p68001 lxbsu0533 lxbst0913 lxbsu0524 lxbsu0534 lxbsu0536 lxbst1438 lxbsu0537 lxbsu0525 p05496706u23195 lxbst1434 lxbst1436 lxbsu0538 lxbst0813 lxbst1437 lxbst1432 lxbst0947 p05496706q78650 lxbsu0535 lxbst15r22 lxbst15r15 p05496706p20207 p01001532755008 p05496706e41688 p01001532591902 p01001532213238 p01001532627396 lxbst15r10 p05496706n45731 p05496706p24365 lxbst15r16 lxbsu2913 p01001532554893 p05795827n84219 p01001532820424 p01001532233337 lxbsu2307 p01001532579886 p01001532278092 p01001532785207 p01001532281615 p01001532822771 lxbsu0641 lxbsu0638 p01001532860816 lxbst15r38 p01001532262608 p01001532913864 p01001532603032 p01001532865983 p01001532762272 p05795827m87802 lxbst15r05 p01001532620371 p01001532881865 lxbst15r03 lxbst1147 lxbst15r40 p01001532265841 p05792984w12644 p01001532708281 lxbsu0542 p01001532693511 lxbst15r28 p05795827n96246 p05792984w43974 p01001532843950 p01001532782045 lxbst1441 p05792984u38351 lxbst15r21 p01001532916319 lxbsu0626 p05795827r51754 p01001532144568 p05792984u16281 p01001532708721 p05795827s63678 p05792984a28053 p01001532885286 p01001532830301 lxbsu2301 lxbst15r07 lxfssm4008 p05496706h23432 p01001532229591 p05496706k14773 lxbsu2401 lxbst2312 lxbst2305 p01001532829167 p01001532906770 p05496706h21990 p01001532133512 p05792984u34138 p01001532185342 lxbsu2105 lxbst15r45 p01001532207321 p01001532115830 p01001532756194 p01001532786076 lxbst15r04 p01001532728584 p05496706e37669 p05496706m70932 p05792984g68225 lxbst15r36 lxbst15r26 lxbst15r30 p01001532794132 lxbst15r34 p01001532836406 lxbst15r27 lxbst15r44 p05496706f25925 p05496706m66902 p05496706p04406 p05795827s51628 p05496706h42641 lxbsu2914 lxbst15r11 lxbst2703 p01001532668097 lxbst15r20 p01001532571384 lxbst2704 p01001532826806 p01001532095287 lxbst15r12 p01001532938656 lxbsu0540 lxbsq2611 lxbst15r09 p01001532278977 p01001532267383 p01001532265153 p01001532134826 lxbsu0642 lxbsu2710 p01001532283682 p01001532884974 p01001532106192 p05496706j74086 p01001532647337 p05792984a09721 p01001532281300 p01001532288657 p01001532839829 p01001532247516 p01001532218399 lxbst15r13 p01001532654742 lxbst15r02 p05795827w13811 lxmaster22 p05795827w09667 p01001532193397 p05795827s50470 p05792984a24589 p01001532749120 p01001532555532 lxbsu0627 p05792984g24987 lxbsu0541 p05792984a35804 p01001532145077 lxbst15r25 p01001532897352 p05792984w34970 lxbsu3033 p05496706h43438 p01001532869968 p01001532833463 p01001532600509 p05496706j68144 p01001532864152 p01001532164874 p05795827v99756 lxbst15r23 p01001532721039 p01001532133883 lxbst15r37 lxbst15r14 p01001532724387 p01001532875892 lxbst2316 p01001532550717 p01001532246094 p01001532867916 p01001532943672 p01001532787297 lxbst15r08 p01001532272147 p05795827q95769 p01001532588281 p05795827s46895 p01001532885923 p05795827m90733 p05795827w14841 p01001532867710 p05792984g62148 p01001532574744 lxbsu2306 p01001532265159 p01001532745719 lxbsu0625 p01001532084301 p01001532813056 p05795827r35012 lxbst2314 p01001532578839 lxbst15r43 p01001532825887 p01001532767589 lxbsu2114 p01001532211961 lxbsu2412 lxbsu0628 p01001532612136 lxbst1435 p05496706m72148 p05496706p09556 lxbsu2104 p01001532268662 p01001532157049 lxbst15r35 p01001532766697 p01001532134838 p01001532797155 p01001532661885 lxbsu2605 lxbst1440 p05795827r40105 p01001532877460 lxbsu2407 lxbsu0637 p01001532811334 p01001532562287 p05792984w50892 p05792984u21199 b646ad94f3 b6ad1b26a3 b638f7f25a b600e4a648 b6e936d4ef b66b48eee7 b634113021 b6e7068d9e b6ae043001 b6e3359fd2 b689e39442 b64b9c0356 b6f2ffdc01 b6ee2c87af b6b52c3733 b654899e1f b6e2fda08c b68ba2851f b6b890381b b60fd0258e b6ec4a1f3f b6e64ee218 b62b6385a8 b6f18e83a1 b6ae35d18d b6046658df b64eb3a558 b6fc025e6b b6db74f8fa b6e1adaf68 b6d09376b3 b655deda2d b6a3b85adb b6f80c2504 b61632398b b6e496854d b67a010a1f b68bd115fb b66e72ee91 b69a732a5c b689243588 b6273c2bf2 b6621bf284 b6b741171c b6d17036f2 b677481cf7 b657a149ed b6a0a23f13 b68c8362e7 b62d7d300c b6b789e79a b6abe10072 b676833712 b62c66e017 b6da43d0b4 b6da603def b625a02bc8 b6ea7528b1 b61fc0826e b683745c82 b6bed42182 b6434a4a1c b62a86259d b659c0eae3 b6ad21da72 b6a0fd6998 b605cbc825 b689047126 b6b9b1e011 b68583c786 b6a5a535e1 b6698b9bfa b65db0a8a8 b608483a80 b66dfc98ea b6f8298c14 b68eb35083 b6e9e480c9 b611a58094 b668424ae9 b606527f7d b65d4e07f3 b67c24c6a7 b6558110b7 b6037714c2 b613c68b9e b686bdc2d8 b627d9c864 b62c108b6d b69a49d335 b6ca2c7087 b6c56c1fa6 b64c086303 b6e7724375 b69e2edeae b6da06cee5 b6f3e16180 b629ee2afc b61bcee1a5 b6daaaa1f2 b67924669e b6cae45b0f b6f3eee56f b6d69a77db b6ca042af2 b6ee8e893b b607af9898 b60d046e02 b6a3c10e34 b61758eab6 b6914c2146 b6292cecd5 b66e1fe3e3 b64bd26898 b6dd4069f5 b63a31d58d b674dd7516 b688dc7e2f b685b16f92 b6466cec74 b69686e431 b64b453290 b6176df230 b6eb7ca802 b6bd9d1329 b6de10c9cd b627302082 b68707d4e8 b63f772f66 b6d32b4ccb b6e21d8000 b699509fc0 b681e4b710 b69b02f5b9 b67710d556 b6cdaeed61 b6f58b0d4b b641352a46 b6bb071171 b67575f98a b68b8286f7 b630db1ccf b6336767d0 b6b98d880c b6637adc30 b64ac8d81c b67b718081 b6a7a4af8d b66a15b368 b69adff279 b64acd1143 b654e66815 b63ca9c851 b64322e657 b6311db8a4 b6fc256c01 b61706d63b b669008eeb b6a4fc8d35 b600eddc6e b6a35c4e9f b6792d45bb b6f356ac4c b65ee5b77f b6b5ce10c8 b635e50bf2 b6cb6d2b19 b6d769b8c2 b63c30e708 b64434e558 b6d7c737eb b6f4bee833 b6ae182445 b6a445b431 b63d8a6b2e b67810aecc b653efd70c b69776f49b b6aea0f7ef b6eafb1451 b61f2bb969 b6bec9b907 b6a3acef4b b6b093d1a5 b663b361ef b612fbe399 b6abc31a73 b6f09a206b b67c11b2d4 b69881523d b64b0030f8 b6fb1e1c75 b6591edb6a b6e6c5c0c5 b6f0750d9d b6550a62f4 b64bc1304d b60c049e41 b647a4f9d9 b655edb1f2 b6b74392cf b6b970d477 b618def42b b6156bfeab b6307f5ef1 b646c06e69 b6a33acabe b6dd3b8351 b63867a802 b63aec016e b6c0988117 b669350903 b6184853a4 b640187e7e b619978c25 b6c6748260 b6b03e3616 b6efde806c b646fc632e b6b4fa0890 b6b563b0d3 b633652e43 b6adf6a027 b6d87d1cf9 b67b57fe43 b68bc4f392 b6daa98292 b60c2fc53e b69d444164 b63c9d0901 b61163b451 b6e87cd4d4 b6e29311ef b6e1ca53a1 b6af9e7d8f b67db42649 b6b97c7206 b672997f69 b6c7334e5c b690dec6f0 b6e3b3fe7b b6e7a3df77 b6b42efcf3 b62b21e394 b67ca6a754 b691503885 b65154e053 b6a63e4fd2 b6e12fedc8 b6cfb5c729 b6ca8a313d b63379946e b6e95d5dad b6d3f49d26 b6d52b7800 b6ea3ef581 b6b70d5894 b6c7a18a53 b678d93896 b6d49b3b96 b66bfb84e9 b620dfcfc3 b668735d18 b61ceaabd5 b6b0157c98 b6226515ef b695183668 b6fa5e115e b6bcbbb463 b68e13a0bb b6d4ed2dc4 b66493daa1 b6ab189a86 b656802cba b68e97b919 b69e7bd11d b69e5b5c2a b6916ca95a b6aaf41f0a b67911b085 b6cdee8431 b647235a32 b64e86cbc6 b67b7637c9 b6e462539f b65f55e455 b6230a0372 b62004beee b65314d2e7 b69eef8499 b6cad10554 b633c249e9 b66dbf7ad3 b6a062bcbd b6b2b23696 b667c2c2f4 b6552f7b2b b60ceca818 b66e9c8990 b6a41a6877 b66337f64a b6c5078651 b671964067 b68ad7789f b6b7f38e6d b65b1e1b6d b61644280b b674f4dc6e b6ed791ec0 b615e4aa1a b695ae9f36 b60702731d b6c1bee6bd b65300b008 b68390190f b6de083c3d b68e3acdb8 b60799b20c b6ef3982d7 b65539db58 b6efa5a5bf b6116998fa b6905786ba b6a2e3cbfd b611c9b631 b678c421be b60959d58a b6e435f7c8 b638f664b1 b663fde5e9 b67ee98cc2 b61c2964f9 b6321eae71 b6cf119937 b6b70ebcde b6930e3193 b69ae4bf92 b6b0a24ab0 b668a3e02d b675edd57d b6a098855d b631ef6c44 b6fb6a472a b6c38b58e6 b6c0dc9fdf b60eea2d99 b61513191b b68214f5a7 b6816f1131 b6fa5831c5 b625b1f14e b66c257560 b6115bf402 b6aeff8336 b697052d83 b6a6511fee b6815e5ead b6444b6ec2 b6307806cd b63684f076 b6b0eccd60 b6a7b92a2b b6333043d4 b64a52074f b681fc7f79 b6b2fd4e60 b6ae8316ad b69b7d0977 b69236f0f0 b65f139937 b6bfc58ab0 b6d3926690 b681ba2713 b6df6c5ad6 b67d197200 b6ffa397d2 b6d61441f0 b6788a85b3 b631305a70 b60d524012 b631120a35 b6a9fa85d7 b6b74b42c6 b64ccd962e b617808173 b68d673462 b6e836d973 b6d46d8119 b61bb9722a b68443b798 b6fa4a668f b643917722 b6ad0fb693 b61ea69631 b60082999f b6b7664b2a b6af45e633 b6b6a640b2 b69380697f b6dbe214c9 b6e5bb7d41 b6ac19bd3a b6e24c98d7 b6d67fa3f0 b63d10c78a b6b55ededd b6de3b88da b66b63ef37 b608ce6b4e b686cfec7b b6f902f625 b627b59192 b65aab677f b69e17921e b6a47e757d b6fbbde2a4 b6b80b872f b6de08850a b6e964ee2d b6ce94512f b634ecb681 b61c717b23 b6bc98697a b629d8853e b67b7137c5 b6a08bb0cb b6d149a518 b6bf2cfe53 b6bb7739f5 b6aeeb83b2 b618621004 b6666e3eb7 b697021ffa b6a52ddf9f b6741203b0 b6f59466b2 b6fac2f716 b6b6b11bc6 b664adf7dc b65e65c992 b6fbf806b2 b61fd9207d b6d961c214 b65aac5613 b6750ca869 b63a6a6d87 b6ec7a5f9b b6cf0dc257 b6e1976c20 b65321944f b64262c3c0 b637008f22 b67903c8f2 b6de88753e b6527650e5 b6e598a117 b6a0ac8831 b68ef12d08 b673a49aeb b69472b93a b6d823004a b6084e44ca b6a55a3a76 b6acde688e b62540da7f b65573753a b63525e2fb b65b87af28 b607831b5b b61d24dcd8 b652b6d73b b64f2b9dc6 b61cbc1aa4 b6aa8bda43 b693df213a b685bfadf0 b6ad6e9f22 b6eecb391e b61dd5e7b2 b66ebc5eb2 b6b9c4edeb b6c729ad10 b6aa1b35be b65fe51bbc b6a7df2c20 b67d009fd8 b6c899311e b69391939b b65f5f0d48 b67801de95 b623f4733f b692460bee b600847854 b6c2e3e08a b679a96e77 b6d71af0b6 b631c14bbd b61da6caa1 b62985d371 b6ec3c3186 b69d182b4c b61be66339 b6eafac106 b686380aa9 b6b37c9c80 b641f49da2 b65891cdd0 b663c75468 b6fd0e6fc1 b6d9eb473c b622875458 b6352ca2ca b6b5ab17eb b6d2ae75cc b651370960 b67a5b2193 b60f03ba66 b67161ebc2 b6adb3e091 b64fb47858 b684ae08c8 b6aa0d2204 b658550433 b6df82a93f b6c8728fe3 b6806eaf56 b6ff8a24ef b69fbe60dd b6464ecfdb b68ce5a5ad b6b3536097 b6127d74e7 b676f58918 b64a54f487 b64d86247f b657072352 b69d9d9c05 b661f64aab b670545b1a b6fd44385a b67b0a3d3a b67b9cd038 b6f4e6bc85 b675b06a69 b6e8c592e0 b6e4ee876d b6f21d4b6d b6ba39ea23 b6be96c7ec b6b5ba1286 b69c53829e b6f1aac679 b6473e667f b64e468daf b652eca780 b695347a75 b6e14a6641 b69b909841 b660362019 b63f41d1e8 b6857fc37a b6a6f22cee b6d3868e19 b6e1af51bb b620c6d681 b657d4c852 b67114ae59 b6ae4d5116 b612db8c72 b6b37e2f5c b6a80f436d b6d27e9c03 b6388428b0 b6ac05debb b6acdfe2b7 b658939c05 b6b69a184f b69a12e2a9 b6a30db65d b646caef56 b607ffabb8 b62f5874cc b68434051e b65007b752 b617ab856a b6a5982574 b618d38578 b62e254c30 b6927da292 b685596c53 b682791008 b6988e6a12 b632a8abe1 b61066252e b6005f270a b68295a599 b680ba7207 b6fe865729 b6c9c50aeb b6ea94cf97 b633ac8205 b6b1198e3f b62ad3becd b6cbe22b00 b63191faea b6906b4ac9 b6db81fe84 b6de6faea3 b69bd09f06 b603d72d0b b630c0ae2e b64498c93a b6f62b734f b61e9cec32 b661fafe0a b6be79ed86 b606562765 b6ff773776 b6a9e1e7df b6e06af02d b6dfbfc5c7 b6bbc0a26c b653d147b9 b6b01ff016 b62bdd7edc b6c0d7f005 b6b35596c6 b6565c38ea b64c5cef0e b6a78c7ede b61e134976 b6365fc9c6 b6bde00f04 b61992ef97 b693c4e2f9 b6ec530c67 b6bbca0068 b6d649af23 b60ecbb24d b66ff0c619 b6ee35a199 b69c1ebaff b6f8c8463d b6aa4bd1b1 b6f01bec74 b6b6a9e98d b686001581 b664fe05c1 b6f119fbb0 b6eaa1782e b60c13b0dc b6fb423f1e b6868c9aef b6910043c1 b669995196 b6d1aa4533 b633201968 b66dbc8420 b68f98b4f9 b63cb32fbb b65cf81843 b645a09a05 b67db15da4 b6ffacfd2e b60ab2ade3 b61cf7212c b600889a04 b6698512cc b66c113400 b6c2b09f3f b6b73a9216 b620630efe b6f40c2545 b6ab83a5e4 b68c721972 b6e98ba5b6 b6df1273bb b64c5f83e4 b67ec264e5 b6d964b0c0 b6934ce7f3 b69ba7c845 b669d8cfa3 b6359d480e b6e7ce4c2d b6bf89a8c3 b64f249f9f b6f33eb9e8 b6c1805c97 b6ce642603 b66afc457c b6413e3304 b64d7d8541 b683984d71 b6c3448f5d b6909e65f3 b64124ec2d b6f0bb6def b619c90302 b6a4f0690c b6d74989de b65af48f46 b67d676428 b6900f12ed b6d1a7dabe b6d0f54824 b6ec28b2eb b66129db8c b61b4f617a b625fd33d4 b66f72c008 b6e923422f b60c964be3 b6001ccd4c b686d0bed5 b65801eb3d b62479ef2a b690e42866 b69a354eb4 b656ddf8a4 b6155ea5d1 b66ff4922a b65b74d2e6 b61f1c3cf8 b6e33e2e0c b6e7808bfb b6cec69407 b6f63bc53c b61764287a b635aaeed3 b6bd5c42ae b6ecfdf021 b63fbe7c20 b6b6f71c75 b6210225ed b690af68b4 b62ccf027a b610030448 b657d4d3ec b69b70df65 b626bc159f b68000e9fa b6ff8d9f29 b63e8c5017 b6ab8db406 b6f5161e20 b642f01163 b6279d1fc7 b698cb128c b6c4f04a68 b694e46c69 b6fb2337d1 b6f2341aa9 b660fee127 b6a2d62418 b6b876aae3 b62cdd611c b6c79c0da6 b6f3db5e8d b6502380fc b619d464e6 b61b315837 b69802a452 b6f9c88718 b6af290ffc b6b9ad4f86 b6ba023b4b b619272767 b6a738919e b6ce5b05bb b6b0525161 b6c6a6faa2 b6347f1d10 b6b78757c7 b6a2366322 b6256d029a b63ff73a79 b6a62488ee b68f38f614 b6ed241517 b61fd9ba01 b652e66317 b66d881734 b65799e3a0 b6c189bbfc b69b1722c5 b6dd5d9449 b696f1f7cd b63307cebd b6f0bfe9a5 b60fe86b1c b67f7417c8 b6a7e88ef8 b619bca8fc b688aa6079 b61c9d25fe b679270185 b638c3a79b b64ae0892a b668af7746 b69c5bd55f b6ee30617d b6790bf6ff b63837dddf b6caea67d5 b6a63a6c3b b6fc4527cb b6dbf26a79 b6664e4c42 b6c77b34f5 b6e6220525 b679aa76d4 b65ecb62b5 b6dfa1fdcf b64490975d b6612b92d0 b6a226f294 b64c9aad8f b683968325 b6f83e4a5f b6eddbca3c b66d6934d9 b6a9a53218 b6a4bf0e53 b61b278f91 b6817e2680 b63a837685 b693cdfef8 b655253700 b697d76d4c b638c47d9b b608aefab9 b65b7d99d9 b634ced475 b6a4678657 b69280e7bc b6186f203e b6117b38ca b63a1dd4c9 b6df2670a3 b609427848 b645b5e496 b6438bfd62 b687ee4355 b6aa8acf90 b6a858d9bc b6f663b4e8 b6f10c8476 b64f3cd1eb b64e90cef7 b6bf50d3bc b69c5a0b9c b6f02976b2 b6bee56dad b6a6a8dcc1 b6df85586b b6cab9076a b6320bd13b b6ddcec0ba b6f424e6df b6307511da b64a634bea b6bcb49068 b6e0b2c65f b6fdf06661 b695e55f68 b6b0e77a62 b6b2bfe702 b6eb55277d b636815b88 b6e5124e51 b65ba1defe b6df020edf b64a573b50 b6e41baab6 b65b8fb3c0 b6aed406bd b6c6c34107 b6c03bc9db b61792ada9 b64a395dcd b6d6c394fa b6a1757d01 b688835cee b6189d3b05 b6d0014378 b65aeacc02 b629073a5a b662f3e6af b61c519b33 b6f0803922 b6b99f9f5c b6cc78663d b65435e0c6 b62a6d1010 b66a84ffc8 b6fd747157 b6391a4b19 b6ae8d8d95 b6f54c3136 b66e049cf8 b634cbe03d b63990a6c9 b6aa9320ae b6524e1486 b65b8d696b b62d7c4a99 b655084252 b693d9d9b1 b699566047 b63202489b b60891419e b600464665 b6b50730cc b604166e8a b604a66b3b b6e2ba945a b638b0ee54 b6ac1b343a b68ccc340e b6682d1005 b62321d1b3 b65c0a45e6 b6e84d70d9 b6ee0f8324 b627223c55 b6b2959791 b660dfe36f b63f2039a9 b6659dec11 b6abd9c25b b6eb1075ab b60a3914f3 b6d5700776 b62e4d2b04 b6937b1b21 b6197d164f b65f4a4a44 b6e5dd982f b6e69fc0a9 b6dbd306d1 b64815d5a5 b646c66c0d b66d198374 b6e1b50dbb b6710a88da b6c25a27a4 b6c34e5a4c b695af90d5 b6bbff0131 b698feadfa b6d28e0f76 b66cb37c74 b6c296c296 b64c7c9428 b6830d609c b6b81e1796 b6bf180248 b636fcdc5f b618611b0b b665b31722 b61780937a b69e8e2039 b6e9145680 b666b7955d b6e0c9fdaa b6ea41439d b66597a5ce b65cecf7c9 b6c4e31c33 b6acc22420 b645343a95 b6df98ea4d b6a07eaae3 b6fd993d21 b6fd7d501d b65d092ec6 b6e32acf9b b666fdc0a0 b68bc26015 b6862bb645 b67882be38 b6a8235bf1 b61a89b4f1 b6c467bf53 b6677e0e96 b6ca973362 b6cff6f7d6 b69683ade4 b6fada660c b63b6d5314 b612010e8c b61d950cde b6d8425e39 b61895c430 b663163a39 b6fb9bfc95 b639a089cb b667a63528 b67d161d9f b6483fc478 b6da50bfb7 b6a0d38743 b6e0e8de68 b6e5083c5c b64a6a2a9c b6a8c81f9c b6d1b457d4 b64f0f53c1 b65e6b8655 b67fc5e6d9 b613bba2be b6f8667f01 b6b3ff7c13 b6c0b12e16 b6c1c41c8f b60573003d b6aa673b75 b649013599 b617d91517 b629741656 b645a56c0f b6e5a9a912 b6c95bd754 b647afaa13 b6eaa9f0cf b64999544a b6e0a9f5cc b6480329f2 b67b99a2cd b6770c0993 b6d4435191 b6db2f7bef b630ec5ef6 b6167c0b93 b6ad5f8f33 b6190b0316 b6f3fb431b b6da473e2d b674d250a2 b69654e58c b6214e7244 b6a7daf595 b662a77fcc b61b2af86d b683f68820 b66d5634e3 b63e7c7ef5 b63371c3ba b68a5f7771 b6a455fff2 b6fa2d0368 b66281d2bb b6dda61d93 b62d8468f8 b65ac4b36c b69cd6576a b6a5409bc7 b6703db92e b63f4e82ca b6ed654c44 b65aacf7a6 b63c99ec0e b6434457ea b63f0af571 b63205ae38 b69240881b b6470a4ec2 b6f86572bc b604d5d5c0 b62ee8dd1c b6a2ad65ec b6d5a18ef6 b621c21d62 b6a3c5fee5 b6c04731a6 b6cdd663e3 b6d913e55a b6721035c4 b69216428f b6534a852a b6fb773430 b6c74607a0 b6869a03fc b61e9c2870 b6baaee44b b6bfac3e4e b64d363063 b6688e704c b6e11ae69d b6a22c5214 b6d606d5d7 b679b0abb4 b61c13b32b b6a9bea3c4 b6a1f49cb5 b67aaeaeb4 b6a4197c2d b679215ed3 b697a05127 b6249c48ef b6a3d464f7 b696b599d3 b663a446d8 b6ce331390 b645538257 b60e5dbdf4 b64a632507 b6a1068e32 b6b7a71a20 b684d4587c b6877f9826 b6fe40076d b6fc13e4a6 b6eb068287 b65874e24c b6c7167e58 b614c1aa0d b629d688f8 b60f7faeee b6252849a3 b6e2e5bc41 b62e6e0fac b644280440 b602d0e16e b6351eba16 b61698fc35 b6f9614387 b661c5e443 b602e7d60a b69054b06e b6f5149bfc b64f27fb3e b6bb8d6392 b6e219b95e b6254a8ab4 b6974fd675 b6c2d0000d b634ca0465 b676303612 b65d407f63 b6763268a1 b686fc67f3 b6ffcefd7a b67bed343d b6c027bdf4 b60e40823a b6a336bdb1 b68d25070b b6e59d5810 b6b1b07fd2 b66f1f3b81 b604551718 b67badd6e6 b6a91b2bb7 b6652cb8f4 b636e99015 b6cb964470 b67a7cb2e0 b63e64e010 b6477852f6 b6b14a0c37 b6f53900e0 b6209a5318 b61e40fd45 b6b2146fdd b6b74ce952 b63376f6eb b624375e08 b62a45b58e b6ee53662c b6470354fa b6837b7572 b605fad0c9 b673c228ea b6808ea96f b6818eee9a b6679782ed b6b42f41ff b6b8181aa6 b67f194fae b69fa354fa b6c7d554f6 b6d18d4e4d b6a2583479 b6c9e68304 b6c5a7b734 b6b0d4616a b64c05d0b5 b6d5fd5ef7 b6a2fbd732 b69648e7e6 b6969017c1 b6c5369180 b6705fa341 b6f6a59a61 b69bff00b8 b65d009f78 b650743e87 b65714bc42 b6d74f1058 b6ccbca24f b64236b1ca b67ad137b8 b60a18cd33 b629751882 b6af65d017 b65458df96 b6fd8efe01 b65928ed7e b641b9bcc4 b613133bff b65e5a8d99 b6580a3007 b6e4981435 b68d092bec b6ca278669 b60ee4fcd0 b6fcdd454b b66ad32984 b6fea6f424 b67815c984 b6e3118f0a b659510e81 b6f139798a b67b2b16a9 b6591feb4c b6c56236fd b6a7cd3093 b6c00de76d b632bf472f b6d9ef7007 b6f9cae167 b68607205c b68173f445 b661461173 b64ed1002b b6f5e0be0c b6ccca1f60 b68849c2b4 b640448061 b6d8557e62 b6681ff5c4 b620f07514 b609e9285f b6ab2efb75 b64468d184 b6ab1db893 b6cdfc332c b6bc83ee1c b619034a91 b6bea76679 b65748b04e b698f3170b b6c7e7868d b63ddd6ea2 b629a30c5e b60642624c b6a41c83db b631789786 b629269bcd b6e096893f b649cfedc1 b615c53c31 b6667eab1f b6851e14a4 b6a229993e b6c1b52fe6 b6a7e52c14 b6e7063d65 b682696827 b6720a2f36 b6605dd73c b68b6b031d b6114e722a b64630e2c9 b674aff0e5 b668280cdd b6baaf076c b6b4517f66 b6e09a12ea b61f5c5f17 b6ca5686fe b6ba293f60 b64927a072 b62a555c28 b61bfb998c b6b4f2cf50 b6abffd54d b651eb63f3 b6d6406f48 b6d109371a b6f370ea7d b642ef2784 b6b82909b0 b6cb7f9868 b6138443ab b68192857a b64c417541 b607254ba6 b6bfd5e371 b6db5dd269 b615935e2d b6ac1ee387 b64b0f79be b606a59e02 b6d3e70e69 b6c2244c4c b6342aa3ea b6521bbde6 b6767cc13b b6ac9e036f b679f00ae3 b6940fa4cf b6ed8c9be6 b6c5368965 b62e6724e9 b6f5c6c524 b6dab20916 b67d3f6592 b6c93efbce b6d26d83ca b6718d84f6 b6076d921e b6a819a11f b6161f8a0e b6d69d7911 b6b10cd75f b6b985bbf0 b60f419bef b636a27ce1 b673d1fdc5 b625f12969 b6cad98bf4 b6b130baf9 b6025d53b2 b67be299d3 b623840f88 b6be2b6c1c b632023440 b6082ef8e9 b65208ff43 b66e850ee3 b6ce9813b2 b6d50038f7 b621c7fbb6 b6f31279f2 b6182a4348 b63c9db48a b699f4b3ab b68d321081 b61789c8f1 b687500979 b6064d7f2f b6dbfbf1d6 b65a480930 b66087a3c1 b691251455 b62997335a b6e0b1801b b6366ee203 b6feeeeb4c b6db211da4 b65a368c59 b6216ffcb7 b6100d5cc7 b6a53c6767 b6a6503cc4 b6763c48b3 b6c40e2ebb b6df04961c b6fcc68de3 b6004aebc6 b67dde9940 b6b6a76e96 b62ecad511 b68cdeb17f b680ffa0ff b67ea450dd b6212e9a0f b694cb6942 b6df2c6ffa b6ea131ecb b61e00b24b b63dd155d0 b64da9a6f8 b617721a0a b67647d212 b6e45940cd b664aa6ba6 b67c89c35d b6bb1df04e b6a12a29af b65b7e4a68 b6847a62da b6f717d2a3 b6fcbbeaf3 b6640d2005 b6220b285c b61c75a039 b69400f167 b66834a10b b64f25c50f b69d9e8b8b b6254e7a20 b6f4b8096e b60b9490ee b6a3ddd176 b68ea0152d b6e20a6479 b6a3cde5a9 b6ff192125 b6f2dff289 b62ebebe3c b66d146cbe b672cde1f9 b683dfa4d6 b6f8d97e8b b6a88e957a b6d65f91b0 b6b4072ef8 b65dcbd9e9 b6a77e661c b620516b92 b61162fae1 b65d2407e7 b6de0e86bb b682d2b747 b619e0fcda b650e3fe4e b6ae3423b7 b6fdfbde91 b6e1f90e9c b699f0ff87 b60cdfebb0 b6771c9ba9 b6da215b1a b682041bed b6da9af2fa b668334960 b61a23d509 b68d9a4b52 b649e9906f b681bcd1d0 b6eac08e0b b62b860f4a b65ad3d47d b6d6250930 b69df99cba b674b1091b b6da9a81b5 b615723836 b6bcba1a2d b6434174c9 b63f7d27af b6b23bfad5 b67afaf0ab b6e1b3aeb0 b6f4de719b b603b431f2 b65e6c5d95 b62f6c90f0 b6acbd61cb b6a0c673d7 b63a326cb3 b657999c48 b6fec0aa7d b68bff3d9b b61c3ae10a b65dde5704 b6d0e69f11 b6805e5d42 b6541cbaa5 b6bff447ce b6f74b28bb b68698e102 b67fd06fa6 b6ebeb9c2c b6c55480c2 b6507c9d66 b642e84c54 b6046dfefe b6912f8375 b6317eee5e b6e4a87dfd b6ae98ec36 b6c3ad171b b69296f6e9 b67bd6668e b69822f0d2 b6ba6df9e7 b6c567423c b69b89947e b6aa0bfee9 b6b6f9b35e b6fd70a40f b6196c7701 b6bda46c0c b6cf53ebfa b6b24cfd23 b687fe5bec b608895327 b6ccd05410 b6f255f17e b609ca3c43 b62e329dfb b6b13f26fc b68d5d3f41 b6d4eee47d b6a4eb8eaf b686a230d7 b60918f52c b642f51000 b6579fb1d4 b66a501ced b6638547e8 b66964fe1c b656848052 b6f12e25b0 b671e4bde7 b66bd5f1a8 b67fcb1d87 b6822382ed b67f79e4d9 b660577002 b674887b6d b69227ebdc b6f4b57a5f b6201e313b b65c79e206 b666972257 b69d1180b5 b6cd4ca94c b64a214b14 b635182c75 b689bed757 b6a22811ee b6ce103832 b6a40f7788 b6c5ccc896 b6c6d3011b b69e79d9e6 b6dd114c30 b67a3362c9 b624cc899d b6c0af3c71 b62464e3bc b61f0d4b06 b67bd8008c b60fa2181d b635bc1f82 b663c12c49 b6c9309c10 b6a6112dbc b69468c06b b62bb15da3 b62fc537b6 b6c9c82962 b644351354 b6ce039760 b601522d69 b6e7a86015 b6b3963e83 b619c2bc2d b6a8717f9a b629fee539 b655421de0 b68a3359f4 b67490e633 b65353975c b6e3f0118d b6cb436c80 b6923c8218 b6d1cbc4d9 b6424d4cd0 b6e3806a12 b6c92966d6 b609ab4c5e b6f3f4590b b69b147a30 b6bce02faa b6375a630c b6c7abf3f0 b6ffe3d053 b6ba73289d b666484a76 b6ee5dc941 b6eaf58705 b692ac7951 b62746e91d b6b2eee6fc b673702816 b610c15c39 b6a2da01ed b62bd9cad0 b679d405ea b6582219b9 b6ba90d84e b668b90208 b69e419531 b63809c188 b6396d3539 b652e438af b6e9358cd5 b69547db9a b62c4f31f0 b68f1d5fa6 b6aed60605 b65c0ae64c b6f9cf649d b626f7318e b6f858fb2c b618b2fcc1 b6ef8afe7c b6c1543f30 b64958b7f5 b645fee986 b60640f27d b6a725c2a9 b68ef7b9fa b61b2b26ae b6c420eef7 b68d889f1d b61483d5bb b6b0a7717d b661a1ec1b b650d1542b b65f666650 b6ab0817f1 b620f2f9f7 b60a3fee07 b6bd388d2c b6152380e9 b6efb78112 b6b2d77934 b62b786549 b65d9c48ca b68bfc3262 b602252273 b62a34fb55 b645bf879c b6b2d75c7c b6380f9c8c b622996211 b68562e4bc b6341ad834 b6af96e689 b63cf65491 b68a8d430f b6e175a0f1 b6abcbb5c8 b69de3708d b6c6b43f07 b60b293585 b66f38c29f b6a3b1915c b698c6a2c4 b658c1d67e b65487954c b6ab44a067 b6b6737d6a b6791cbe7d b67be973fd b6198f830a b60b5b9601 b68ad662bf b6c3a23b35 b672d98ce0 b612b06021 b678d32025 b6c55014f9 b6db9302ad b6dda60415 b660e09bd3 b6937b348d b61163f7c4 b689d18b44 b699c02d15 b65a71dd99 b6ba2e4aab b6982d32da b6cd9dc3ae b6c9a8d293 b68a4f1b4b b64af5aef1 b6a06e9056 b6b31041b0 b60eb89b6b b6cbb33660 b6e23aa5fc b6fdbf5b37 b6bd323d80 b6ff67b00b b6790194f5 b60440863a b69bf17442 b6c95c56eb b6d33f5516 b6cbc92886 b6bc1844d8 b6fa20e0ca b6bda63e4a b6ecc35985 b638785126 b6350aa985 b6b9612f30 b66e64a16a b62d21e061 b691b90674 b61a2db3a3 b672f50181 b67f1258b4 b6b4158131 b666c94e05 b6e1ca36c3 b6ff635c9a b6e505c176 b6beb0293e b68f559b24 b6e38d93bd b615b035cf b6b0bdc359 b679f1d0ef b6da65ab9e b6fc166ef6 b6e5744692 b67c6d0b73 b65e4987b9 b68c95ae60 b69c858f0b b6c899f55a b663600064 b6c06384b6 b63f632fb5 b67a348f93 b61e33ed2c b65dc1e7f9 b67edb082c b603a21b68 b600d8113d b645b542be b605b50da8 b600cba043 b616c15ed5 b6ed2d1906 b616be0440 b6af073e87 b6e8348988 b6e1af98e2 b67a276ffc b6b257f629 b68b81ce53 b61d1b81e0 b6a36041a7 b64223d32c b6e13d4260 b607025c02 b63acdda3c b68b2dfee5 b6122cba98 b68a053726 b67231c7e5 b6b9c616e7 b67e888a02 b6bd2898ae b61c8d6940 b62bfb45cc b6773a5611 b6bc15ecd0 b64e0db046 b66378f085 b63b9043a7 b6e284d6f3 b63146a8fb b65bb2364b b6c6b1e343 b6095fb51e b669d3652a b67c1af0d0 b60b0db8cf b6e6102a0c b6667f81e8 b62b864626 b6937d3623 b65882787d b684f1a4eb b677fe84c3 b6887b904f b65ca21c75 b69dd8a140 b6d86e3621 b6a4315a18 b672953085 b6706e9dd7 b609bf7667 b6582ade7f b67459adb6 b6904361b0 b662d36a55 b651ca6c9d b6f18f7f01 b6bcb6f595 b66882eb38 b61fa29bcb b6f434f7b7 b6f1a44e8e b675088387 b662e0accd b631ed6fb3 b6dc0445a5 b61e494956 b6afe693fa b636e7807b b69a3263e5 b6f2dd1641 b6959ec05f b6e9cf474d b65da0b612 b633601501 b61bb32a8e b65efd6b92 b6a21aa51f b6ad4f1480 b6cc49c8af b6d41efeb0 b6dd1423f8 b6aaa030b8 b637a861ce b6e380aa42 b686973af2 b6884b0c05 b62970acbb b6ad2d01c8 b67b24435b b63946f451 b6117d7847 b65d156d2a b685c071ad b64fa59fb7 b60a48adef b6f2ede711 b6886f7878 b635aba841 b665489ac4 b6c5486f03 b6061ebfb0 b6b8c200e1 b642ff8c15 b6e8cfa4d1 b6ceacbd8a b64acf50e9 b61c1d7a9b b63567cfdc b639ae1654 b6b4ea20fe b6afd4d7f2 b607440446 b6c4b30768 b620d01c28 b6a01fd427 b657fa720a b65b8c9ad8 b61917a6bf b6e97ef2ac b6e335ee7b b65e1d35e5 b6b34be3b8 b64854ba17 b678e0c1ab b6075909c0 b6b484a391 b65b93cfb2 b69b2bb134 b6d2cb608c b64413336b b66d3dfef0 b6b43dc425 b661333d83 b65efd716d b64200cb26 b609315ef9 b6ac48654d b6eadc5022 b6a6013b03 b66611fdf5 b64172d1e3 b6c1cc502d b653bb1802 b6914a0ba4 b65cd9de6e b69fb80826 b627472068 b6ce70839a b6164a59d5 b68f557a4b b6736d386a b69e280fdc b6bbbdf002 b63c18bb10 b607c44b04 b6c911c993 b66325ddf4 b613d4d612 b602ea5419 b67a6470e0 b6eb83116b b6972f91d4 b6858d9cc3 b64e873a7f b642bfa0dd b6951b7dae b6bfaad6a6 b6cf5aa173 b648901099 b6298d071f b617699347 b62483c82d b6cc6ca81d b67ee8cd88 b6d4773940 b63121785f b6cb3e0fe0 b6ca02cc9b b602e036bc b6ce930ab0 b644130475 b60ddead06 b60f79b4a4 b6ec42b6c4 b601400a49 b6d1a6ed8b b62e2e1205 b6f56df989 b6b52f55cb b6e0492104 b6bc111f42 b6d3dd736e b69a564a09 b6f2b4d8cb b62df37c73 b65c4be02f b6d2012a4a b667eb3114 b6389a5dfe b6ee516976 b6aed4b520 b62fa6de15 b65e4c5104 b6c2f3346f b648a92373 b6e72eb73b b682d57f29 b6736b36a6 b6b277df0e b6e6230bed b62c54221d b6bdd10491 b691a044d9 b673772a9c b693b76c42 b64ba4b5a0 b66a368123 b656696b4a b6de815102 b6ffff0cca b6fd6d40fc b6e9b8186c b616e5ec1b b6ba2753cf b6ec9d67df b62db78504 b6aeb8ff11 b647f6076a b6b224504d b6ad608205 b6cfe26f4a b64a437cc7 b68d16c89f b6977a5467 b6c172c29f b67cc79825 b682eb1f79 b668604650 b6331d0168 b68ff1d105 b627e3ef04 b668ca338f b6b0ae9375 b662238437 b62e31048a b60c7d47b7 b6472186d9 b61fd80d9d b6da1d3667 b669f6d996 b6c569485e b654239ea3 b6ca3ba6ee b69db1af5a b694b9f50e b6271d0a46 b69c265e02 b65daa15bf b64e0d7e93 b6864ad902 b64c13f638 b6da5a8239 b690d0c121 b63664085e b69c093643 b6931890fb b62179180e b6688bb93f b6792cb039 b64b33b4ae b6ea2f6982 b69c0abf48 b62d10ebd8 b6e44c4999 b698b35a85 b678848f6f b667b382d8 b609704720 b6f0def8b6 b68cb36c99 b69b2e2436 b6d497f78f b63cb2ed08 b6d96321b2 b69b07d704 b6a22cb2b9 b6c27840e3 b67e988648 b67ad6e001 b6e4c371d5 b6ac5ecb06 b64e72f060 b6232fd1a8 b61c6b93d6 b63a8a55b2 b68277b700 b617e208eb b6141416f6 b60419dfb1 b6cbcbab0c b6076a86a0 b63a2bcdee b6b7b77fe2 b6e1fae8a1 b6ae2b177b b6ac9fce8f b63f1b18ca b6d709c5a0 b6853743dc b6ccb2a945 b67d253f12 b6e302ac49 b6e1f310da b68c2a5b01 b6c0ea3a06 b63c4bc822 b6e459c31c b6eaf7e9fb b6d1a872dc b61580e31c b6966ec26a b6a4471b5e b6b8876434 b6f0f4fccd b6d338dddf b66546f1e2 b6dc020e6d b6f51eefbf b68e5faf3c b67b3998dd b6bf2a8aed b62cba01df b6a0c065eb b6ed8ba28d b6ac661c76 b6eed45857 b66e5db0d6 b61414799c b6d3ec1176 b632691b95 b661d6cb2b b62ead35ef b640e48647 b6f1c14591 b6b2bf9279 b634f51083 b64a5459a3 b61aaa0802 b64e9ec85d b60ccb8152 b6dda1a4d3 b6b14120d5 b6399a4296 b680428b8c b698db887b b65116b592 b63c2c1f3c b6f1d3b46c b6236196e9 b69a087619 b692cadc0f b6a3db4efd b6181305de b6f489fc86 b674f58a70 b6375ab116 b6dc03bdd8 b6ddbeda9d b6820669ee b66b1a3988 b69df6bb4b b6bbdd02d2 b6ef82b4e9 b633fe56df b695eb9595 b6a193743e b66bf5f6db b613112704 b6f301810d b6f7bc813d b6db1135b9 b66f400629 b6d44c30dd b6bc4d94d1 b62a6a591e b6b2573222 b6dedf146c b6563dec9d b6e067bbf1 b63997bf9c b69c18e05d b6dbc827a3 b63360e329 b66e519184 b6843b0c72 b6e2c10d68 b6a37937ce b667a62bab b63f5713fc b638ce9c40 b6651f0b8d b629fd8424 b62da8d03e b621581423 b692173daa b6e92ba0c1 b6c506b281 b6bf1bb9ad b63a96ce3b b6b58f3632 b696d9de33 b638975208 b6762dff8b b6f62b9a35 b6bcc5fb1c b68d1e1fb9 b66e7ce7f9 b6fda09791 b6f033ee73 b6453fee69 b6643f6b9b b67106dbfc b6f534c269 b6ebff237d b60259f9cd b6a3ded94e b622c2af39 b6aa3fa0a0 b6961b4c54 b689cf22ce b6732f01a9 b6105e0aca b6b4f19c89 b6c12ff6c2 b612773f31 b6c3f151c9 b6de842110 b6416924bd b605284794 b6bb9590c8 b649d5575d b6f8dad229 b6cf590a7e b61d937447 b64bd9b415 b657f23f3b b6704c6760 b6281319bd b68fbe1a78 b67f463c38 b6cda17b81 b624b55676 b63d095056 b658253ec6 b668db6160 b6fab15b77 b6a2d2820c b684c32b66 b6771a1ce3 b61a200308 b6f0aca567 b657bcd45b b6a466ad58 b6692a4136 b65099d0f2 b6272c76b7 b63c830082 b67b185640 b6274ebd11 b6fce1e9ed b64c82498c b6d9487bf0 b69cd14cb6 b6e0a82780 b6e09b6459 b661e99607 b676d6b5d4 b6ddbaaaff b6ccff932d b6c6a377be b6cc28a0bc b6508ab682 b67b85644c b624c8aeda b6160c8b60 b681fd3b0e b6bf381e4c b648f85c88 b6a351ce0f b699ac1880 b67a792529 b652efe935 b6ad29c822 b62c4422f0 b6acefefda b68f7c9b3d b624b6125b b651bfee34 b60ff280ee b6e15454ab b6f61f53ef b6a2bb83c8 b6bb7b728b b6a86a96da b60232013b b61b2e8a27 b66fbf9428 b67770b6a0 b6a6266634 b68567c88b b63ea5c68c b62e9f240b b6b17751ad b67f818ae3 b672a15c2e b6d9db984a b69471af11 b6ea97458b b692bb522b b62107bdba b6a0e69763 b60c3938f1 b64b0a60da b6aa74d859 b683675d4b b68ed8e407 b6ac69781a b6be99e7fa b689dfe533 b6ca5fb472 b6175af6d2 b6db593fdd b6a7a07cb1 b6f6689d88 b61d2aa940 b642a89885 b6fcc6c94e b6cad1ecae b69dfcad48 b654b3f537 b67120e7d3 b61f0f4e7d b6a5c6bdd7 b68d4c4de7 b6db90b0d5 b676fd507a b6fcf54aba b61da89cd0 b6359f8198 b67ecbd1c2 b6d6156e5f b69c5bcbde b6eed3c97c b68bd54786 b6ab2ce65a b6cd7b34d0 b6fe635163 b637c0eaf6 b65e55d3b5 b6f545eff3 b6c0fe5505 b63ff0a8af b6d6201020 b646fe51c3 b6451d2fb4 b68fd277b1 b66b370509 b6f1c72044 b64161ccf5 b6a7f453ac b6f2d20f21 b60b2e1624 b622559881 b6df913e6c b64a2392de b68ac8b058 b64fb36244 b654d06a72 b67e43d51d b688dc6fe0 b64afc093f b60bd29208 b6a0e6fd03 b6f015ce96 b6fe0195c6 b693a3962c b6f44767c7 b620b15c7d b6c99184f7 b6aa066cd9 b6832838fd b6be6e4df6 b65c0fdacd b696ee19b2 b675ae366c b6471aa713 b6939aeea5 b656b0b118 b6c707994b b68a953f8d b639dd8aca b68f369932 b6443b28f8 b6b044ded6 b6365f080e b60564a70e b6d89f1aff b66624ec2b b6318f2282 b6776584e3 b69fff2fd2 b69828fc73 b6a6e40bbc b6bc2a3c47 b698146c02 b61357ee30 b69653b30c b69cb48c33 b65af295f7 b657892aa9 b6f9a74d68 b6362f6cff b6b7d878bf b631b41d90 b611432e53 b63bb66278 b6840178d7 b6dad381be b63aff4b78 b62bdb7ab2 b61d9fdb8d b6953dfbfb b6dc4a0a91 b697de280b b6584e7568 b69043c2a7 b65a36d6e1 b668ab5ba9 b6d0376658 b6382a9b12 b6c7cec61c b6e57ee7f1 b64b274610 b61690295c b6dcaa8c26 b646b26c1e b6201b6cae b6cd7637da b68f5e123b b639a8a7b1 b6a93eca1f b6266697fa b6fc3f0276 b6c2f7361a b6cd017155 b66d957214 b6244d8fe4 b652da63e7 b6dcb96bf0 b6d7eb79ef b65262ae7f b6a75132a0 b6a757bd47 b6f24d5ab2 b64aa5f70d b6731b8b19 b699168ea4 b6bf0435b5 b625c20913 b6457f082c b68ac74822 b65f04fb60 b6eb397009 b6ef28dbe8 b66f8b3668 b63805704a b665f43895 b66a62eb5d b622b8e23b b6892a41b2 b6737b00d7 b6ba06e498 b6b9ed8303 b60ea53005 b6bdce12d8 b649b8c0f6 b64c3110d8 b6357d5c21 b650d667a2 b62817bfcc b6a39cdcec b66bd214fe b62b182a32 b6274710f3 b68ab40fc6 b6b9efea8e b6cb4e7589 b64db5d35f b658c19231 b69c6acfad b629df2e76 b66b0b3945 b6a0aeb459 b68d489b2d b6c82e47ab b6cdd21bef b6edca760e b69a75c389 b6f61de9eb b609309a41 b64051c5e3 b6b839fcc5 b6d428b584 b6481427db b606f5068d b613b07bb1 b6a090b68f b6c27b85e9 b65741c4c9 b636a5c1e3 b693a2b822 b6acb854a7 b6800626df b6a2bc7ed8 b6c3956ed5 b63588b55e b6e173f842 b6211325ed b6abb02fa8 b67e0b08ba b61183ba7c b6f432527d b655521790 b68f5906e2 b665f3c05e b630e5b2c3 b6bad9566e b6964d651d b67da44099 b63b6e4082 b647e17138 b695c83da2 b63698f366 b65f03584f b69a6b6355 b6b6b0bec0 b628370775 b68da4f52c b66c3a7a44 b6bafb2a7a b6c045efc2 b642077a17 b69066c743 b6113effda b6b1576a51 b6f1131a97 b6e5863393 b68129f1ae b6c990ba46 b6f656b141 b66492bd26 b6232f6abb b60ff39574 b6e708e232 b6f6465d68 b655dcd72d b6d849899a b6ce6cd735 b6d65e8949 b6bdc95339 b6747bf373 b6bff6997e b6ac5056dc b6d875a836 b617c05019 b61f669a2e b61a185444 b6442f25ea b67a675703 b6cf637a58 b6ddbdf42b b629b8025a b62cc6b2b0 b69c1feeb0 b673a2378a b6cddacd7b b6c33c63ce b6153add3b b664a20ba9 b64e51529e b6a447b33a b6bee1b0e5 b6ea23a3d7 b6ad9cb1cc b6c28f8c83 b6ccf3dfc3 b6a44f7ad5 b6329ba387 b6819df1e2 b62de5ec37 b67bbc203e b632d52cce b656dd21dc b6d8d8d950 b6f0e54032 b6024cda7e b6a335901b b620c450ff b6af84c945 b65eb90f13 b6da96ff6f b6f2e0ba4a b607e1b9d2 b69763dc77 b669007eec b615a435ef b6394284bf b6d6134a37 b6c1bbeb16 b68e5ff65e b6b15a14d6 b645fc9531 b65148bcce b6461e95c9 b6053dc8d5 b6d4f46fca b6ea8aa6a0 b63747bb08 b631ab22a2 b675750b7f b6761fcc17 b6ba8e80ec b6cd1a2470 b650fc1c49 b6e18c2625 b6c5012124 b6bf97a0ba b644ee8b60 b6cc6967cd b69cb981d1 b653a85ebd b6bfa93404 b63a956428 b6d968709d b662f3b65d b649218ee9 b6a18e25e4 b6592c39de b691a45207 b6e3b94321 b6afb602b0 b675e05703 b6fb2bca69 b6abfb9375 b671cb92c7 b645986507 b6c0c3478d b6feb4110c b6577c569f b6c3ad8da0 b6b20d6cb8 b6a0dd894a b62675977b b66e160f21 b62069d7fb b6d18f81e8 b6857ade2c b659f4075e b63ed3673a b6043e6678 b69ae42890 b62a4018c6 b6a8e8af51 b60aa1a3bc b6c8750585 b6e132b410 b689be37e9 b669288a96 b6e0bbe47a b622b1cfdc b6cbe6759e b6a2e53d3d b6de9bbd1c b6d5076b4b b62813572d b63a40694a b64af8d66d b6a133ce2e b6fbfe336c b69aadc1b4 b6b2c7119b b6e91e3562 b6cd359525 b6c039f7d9 b61de92160 b6e16e751d b6e0da7ac0 b64d4140ca b6524444cc b6e0a5def8 b668e82ab6 b6023ce497 b69eba8ede b639aeed88 b6b000d698 b6e1c6583f b6dea1aaad b611f6fbe6 b683b54616 b6353f24ed b64b2e9418 b67d410c36 b6b18039fc b624fa2e67 b6138925e3 b6de85d366 b6693c1613 b606b72366 b643f70547 b6729d8526 b6389dfda3 b6120b3a7d b647b36a82 b6e6303e80 b6b59cefb3 b6aa5b8137 b68937e140 b6b2d3a366 b6e66d58cd b6b8c56400 b6b01c29aa b680230df3 b6286391cc b6590ff54a b69987c5b0 b6815b6199 b60043450b b616ce9dd1 b65d21c8be b6fafab4a7 b68ef1adab b64c3b80f0 b626a2adea b6172925c7 b642ab5e83 b667f1412c b67c263862 b6fbe16ac6 b6f1217b2d b61f1291b4 b64d099979 b68eb327dd b69f915228 b659d0a977 b6d25a5e24 b6e02d3a60 b6f1586317 b6acc29565 b6c7afbc6f b66cf75e03 b6745d2eb7 b6aed9a32b b691248a17 b6c6bea764 b69d6885d8 b6025a631b b653d4a147 b658399590 b65d0bd7a3 b693df79dc b660cdc249 b68854da8f b646335fb6 b660f0efb7 b6262b3d60 b6e377cc26 b6d3793871 b65e770ea0 b6175c1ec2 b67b2fce7f b64022d1e4 b6d4b08b9b b68a72b63d b6dd942f91 b6136735c8 b624512f25 b62dee98dc b64f62f384 b6b295f799 b6017c4f94 b681e480bd b6f41ca60f b640febf22 b6a5b88291 b6ae1d6364 b647d1eefd b6dd913b51 b6b7dd796f b61770c240 b6edf77c40 b6e7e02898 b67c13a943 b6f6c0b7ec b6cbffea6c b6bdc8210a b6f631d25b b636b028ea b63d15e822 b6cbba849a b6e5d2993b b662e66c0c b64a180a01 b665da4e62 b6dde18c41 b65194ab28 b645add75c b6de69dbc1 b68a486070 b6bfd5188e b6bf20fd2a b6d5ff2a15 b662251c6a b6881cb86f b69e5b6d1a b65b134846 b65cdfc20e b627669b95 b611d9a545 b69289ac6a b6e2fb8414 b69e442a66 b62e21dc8d b6d9743a31 b62721163d b6b48c1cd2 b6de00e789 b69703400e b636f67ca8 b686b45ea6 b68db561f3 b68d774e7f b6344e95ec b6fb856717 b62236cb2f b67ebd9488 b66eae402c b692ea6473 b61ff5a82e b6d02c19fe b6d6f8533c b6cabfe620 b6d8ed454c b64c895f22 b6d50565cd b63f858c64 b6dc7c3d44 b6b44a5510 b6d0cd32ff b680d31ad6 b6c2c24493 b6cc44da38 b6ced91596 b6c1d44bcd b65fd61efd b612352899 b662086ac5 b6ad474692 b610d5ad71 b647077463 b638e40658 b6b1344e46 b630900968 b63a17153c b6b6fafda9 b68a5c8ef6 b695d02aec b640644bc7 b698f6a879 b6aee2db86 b667502c1e b6bb0c40b9 b68b0fbf73 b64e0d909a b6866db3b9 b6ac488c4f b679e867a4 b67c0e90d4 b6b7567336 b6b2ce763b b6ef9cb439 b6b43c5a39 b6a629d5f9 b6ffa87596 b617386832 b6c7d977ad b6623caac9 b688548cfd b666696438 b682e6f242 b6bf7a60b6 b6f1086edb b6c77346fa b63dc6b119 b6f3e9d96b b69a942986 b695ca6ef4 b648994fae b63c24747a b61ec71c40 b6958bb298 b637663f97 b628f77931 b6e330a10a b66801fe63 b62927c9be b68323871b b6a2855358 b64b72402a b6d22859b3 b6510a822f b6f41eb153 b6a8127402 b68a5658a6 b66cabc3f8 b678ff5e85 b6a16bba79 b6ed11c8a7 b6e0015096 b6bff0d654 b608509e10 b6a928a388 b69af428c2 b636f8fede b64ec1ebec b623c06f43 b6a5294e82 b66b0b976c b695d5a6d1 b65f11b643 b60493a0c5 b69759d2e9 b6f85bbbba b6aa1b3cfb b6cb01cd69 b65211d0f3 b69467172b b69f7524bf b6aab8dc17 b67926634d b6681682af b6dd549ee8 b6c6e6859a b6e0a0b222 b6b8f3b9de b6ab30e471 b6ad646752 b665646a28 b60e642f1b b6d536249c b6359d50b5 b6f4198404 b6f48c7ff6 b60eeec62a b6d8eb8e55 b69a1aa212 b63ee4b954 b69499aa8d b652e9c173 b67661a8ca b6e4e951d5 b673e998ff b67970867c b611157778 b6409912d0 b68709c0b9 b63892578b b636e9a64d b67016221e b643bca531 b6bed0edab b6516815c0 b6b392e988 b6b71ff061 b60ba57969 b6e3a7e0b0 b678e69a3d b697260a37 b686702823 b6e4ddb23a b6ed179d02 b66c79303a b64e8c85b1 b6e83ac6d4 b6d053a212 b626f17fb5 b677e373c3 b6f1b18013 b6eddfe04e b69f6666ef b6da47ff28 b6530e5d9d b622203ec7 b6b454d08e b69b8099b7 b6663084d8 b6d5a5406e b6b6fa6e3f b6437101ed b6cf8c5463 b64c1d6798 b6caa6bf73 b6c4c6a5a9 b6a079d410 b6e5b3ca80 b669bc6777 b6a1c7daa8 b6d22403c6 b68913ce94 b62726e355 b67af0481a b6b3ab447b b697141a77 b6dcd85581 b61d9650fb b689c13cae b64a90c411 b6c18c182b b6b3d71dfa b6577f1eef b6983d7aab b6d20c6fc8 b6d8fd282a b6d5412d2e b6943618b2 b63187e7b2 b622f30094 b6654405d2 b6910ff154 b664cead8b b627825b4a b6a132b42b b62154ea58 b6a24b25d8 b65f41b00e b6cf398077 b6cb46397d b6c3c86fa0 b6ee3fc91c b6d6786946 b6c25f5181 b69d880ec5 b6b46ae2a5 b61bc262b3 b6e05de971 b637b8582e b6b542d0f1 b6422d1af0 b65d9894d9 b619b1cb83 b6d4784bfe b6c9be44c9 b601314ad9 b6d0b59a1e b6cc45ffea b63cf32327 b6466de150 b6ed593dda b6407dc3e0 b6575d8b70 b68a66fa2f b66b4858b5 b6ce4a4b80 b67e596b69 b6859eb974 b6bc17d1e5 b667cda06b b67e37fa3f b662b6252f b60bbed5a9 b67203f75d b642be6491 b630b7ff68 b6eabf11a7 b6f7b8dfce b6926077b5 b62e5288d9 b6c6f66a36 b66e20b644 b6458212e5 b6cbd4ac31 b6116550a8 b6993e6895 b63fae062b b63624d91f b665cf07ab b6945a98ce b6462f18ac b6550a7aab b628ebcaa5 b678dfd18b b6d629eec6 b68d9d547c b615ee1990 b6a30a6b5e b60fe355e1 b6a4cf064b b6bb08057c b6eaa50d9f b62b2661e8 b691936b6e b61e3a534a b6a6f3e653 b6af225831 b6a8bece61 b658c49c2b b6a1cc5199 b6011c237c b643cd7dc3 b6f985d0a0 b6d1c15df6 b6c563daa0 b6d5cfad13 b6cad54dba b619aaa999 b626c8208c b69e3a31c0 b63fa93b0b b632698b5d b6dc103cd3 b6f66b25a2 b6c80601a0 b601f68c8f b630fb1f18 b69f6dc9f3 b66b56d752 b67d439ea5 b657d47d0b b65254459f b63b17c2df b66478a33a b6d0e1b6bc b63322d218 b673f78218 b616a08c70 b6b0e7ba6f b62b592aab b6fc7a66cf b61c2e5668 b63b2c9b39 b6fe62f574 b6dd74ab2d b67a6a6217 b6541bfc92 b658fb3678 b64c5b67ec b61f61d3ad b698a22a3e b6705694d9 b6af2dbb16 b6b09ba966 b64a2e4430 b67eeb2063 b69a4e7f30 b6e36aae1a b64f8e903f b6fc17df0c b69e990c9c b698c8826a b64d98eef6 b6e56d2433 b6200b9b88 b67c17976d b606991fcb b66151dc4b b66ec9ce53 b676801dd2 b6710acfc9 b69523fee5 b6522d22c3 b6c670157c b6d52b68e0 b6e6020266 b66afff07a b6e26bb81b b60d801626 b641bad1c9 b62e500a0a b683b3d40c b6c8412845 b6eb2cd9df b63fa5a766 b687fe369f b6d57a813e b647e17beb b6fe4c7979 b6b397b0d6 b615fccfb1 b6618214fd b674aa98a4 b69aafa143 b6b98c2918 b6d7246d37 b69349bada b646f56144 b6869311ab b6297f82ac b6223e8a95 b6e838f112 b6cc326a3b b66def16ce b65f1b8636 b68b5434ab b649d7552c b6b884d740 b6eefe210c b6d25748a4 b683bafbd3 b68a6dffec b6fbb84965 b68578687a b69b92afd1 b64edc0bc7 b661862305 b66d1b263b b60c00e05f b698957e21 b6c45a8a56 b6bc96e81f b6e3f90722 b6384bc3ad b693698709 b647226d87 b60945925d b68e3d35de b62a92c616 b692b13c1d b60bb71f45 b6fa12c170 b6396015fb b63e5237ec b677912f23 b699fb1fb7 b6cf2a88fd b6a18d4ebe b6365d2400 b6ecb0e728 b658ed17e0 b669e1763c b62441911d b6936b2dcc b624181d04 b6aec3c932 b6fda7b17e b66f8d281e b61ca64123 b65a6cbd82 b64c823833 b63d225068 b62028de91 b6a6cdd9ce b682729bb6 b619d9b419 b63f2bbafd b6584a2005 b6ce01170a b6966bd3fa b6fdf1829e b668d66d9f b6ae04ae6f b6c41e893f b69ce3c812 b62f0004fa b6d0a4116c b6abbfd047 b6eeea7ace b65b964c23 b67a0942c9 b652013448 b6a9dfb2b9 b64c71bdd9 b6aedcf1a6 b6bd5ceacd b6d856c2b0 b68008d072 b6be81aec5 b6afe53753 b68bfe204e b6bbdef0fa b6299bbe78 b6c76afa18 b6e0b5636e b62b6dff4a b6acb691a2 b6c149af51 b68ada11d7 b69a4b2338 b62266b611 b6b2152627 b635ef6906 b646876eaf b6d9f7161d b62c7b8290 b676ea5dbb b63d8eaf1c b630e14f85 b6e2e7c932 b611646aa1 b699483a7b b60a229420 b69c698b7c b64c357611 b6250ccfcb b6f1ae755e b6248c25d6 b6d621b544 b68a2fce2b b630d49e4c b6f677f7db b6e37a6518 b644c919fc b6d8e966cf b66fab09f5 b60495f2ca b6ab5a464e b6de6a592a b6c09ab62e b623f50b7d b65f97e9c0 b64c7f9eb1 b6e3aca4e5 b64cb1b965 b68fb093f9 b66cdb0604 b6ebf4e702 b6dfb64615 b62760472c b60aec9caa b68ab08c55 b65933f286 b67eaa90f3 b653ce6315 b6c5913955 b670cb6a6b b6658a3cb9 b64bf1da82 b6cdf4cd24 b6d53fec30 b6bdbbc913 b611f819ce b6de28f4d8 b6657c4c91 b69464d824 b69357b2e1 b6517af167 b6d9ea2f1f b65fc1f6bf b69f391d7b b6abaad236 b68757f93f b69e8a6dc3 b65a029d56 b618eb83f5 b67e56e331 b6e915f8b5 b60b598273 b6a3bd90b5 b63918fe26 b6b72ea96f b6a8b7fa7e b6407518cc b63b752405 
+ADMINISTRATORS:  uschwick jbl joel phicharp 
+RES_REQ:  select[(lftm > 30240 && swp>1000 && maxmem>=1500)] order[-joblong] rusage[joblong=1:pool=20000]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: 1nh
+  -- Public queue - CPU limit: (1 KSI2K hour).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 42   10  Open:Active       - 10000    -    -   258    15   243     0     0    0
+Interval for a host to accept two jobs is 0 seconds
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 60.0 min of KSI2K
+
+ RUNLIMIT                
+ 600.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 61.0 min of KSI2K
+
+ RUNLIMIT                
+ 601.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             1
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: all  
+HOSTS:  g_share/ g_shareshort/ g_atlascaturgent/ 
+ADMINISTRATORS:  uschwick jbl 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 601 && swp>1300)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_cms
+  -- GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 40   10  Open:Active       -    -    -    -  9988  4175  5813     0     0    0
+
+ CPULIMIT                
+ 10080.0 min of KSI2K
+
+ RUNLIMIT                
+ 30240.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -          5813
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_DTEAM/ grid_CMS/ grid_CMSPRD/ grid_CMSSGM/ grid_CMSPLT/   
+HOSTS:  g_sharelong/ g_share/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 30240)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_atlas
+  -- GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 40   10  Open:Active       -    -    -    -  8390  5666  2724     0     0    0
+
+ CPULIMIT                
+ 17280.0 min of KSI2K
+
+ RUNLIMIT                
+ 17280.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -            24
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_ATLAS/ grid_DTEAM/ grid_ATLASPRD/ grid_ATLASSGM/ grid_ATLASPLT/   
+HOSTS:  g_sharelong/ g_share/ 
+ADMINISTRATORS:  uschwick jbl nairz digirola 
+RES_REQ:  select[(lftm > 8640)] rusage[pool=20000:atliob=1:joblong=1] order[atliob:joblong]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_unosat
+  -- GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 40   10  Open:Active       -    -    -    -     0     0     0     0     0    0
+
+ CPULIMIT                
+ 10080.0 min of KSI2K
+
+ RUNLIMIT                
+ 30240.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             0
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_UNOSAT/ grid_DTEAM/   
+HOSTS:  g_sharelong/ g_share/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 30240 && swp>500 && maxmem>=1000)] order[-joblong] rusage[joblong=1]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_eela
+  -- GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 40   10  Open:Active       -    -    -    -     0     0     0     0     0    0
+
+ CPULIMIT                
+ 10080.0 min of KSI2K
+
+ RUNLIMIT                
+ 30240.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             0
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_EELA/ grid_DTEAM/   
+HOSTS:  g_sharelong/ g_share/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 30240 && swp>500 && maxmem>=1000)] order[-joblong] rusage[joblong=1]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_alice
+  -- GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 40   10  Open:Active       -    -    -    -     1     0     1     0     0    0
+
+ CPULIMIT                
+ 10080.0 min of KSI2K
+
+ RUNLIMIT                
+ 30240.0 min of KSI2K
+
+ MEMLIMIT
+ 6000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             0
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_ALICE/ grid_ALICEPRD/ grid_ALICESGM/ grid_ALICEPLT/ grid_DTEAM/   
+HOSTS:  g_sharelong/ g_share/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 30240)] order[-joblong] rusage[joblong=1,pool=10000]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_1nd_alice
+  -- GRID COMPUTING QUEUE; CPU limit: (1 KSI2K day).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 40   10  Open:Active       -    -    -    - 23808  2261 21547     0     0    0
+
+ CPULIMIT                
+ 2880.0 min of KSI2K
+
+ RUNLIMIT                
+ 5760.0 min of KSI2K
+
+ MEMLIMIT
+ 6000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -          2914
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_ALICE/ grid_ALICEPRD/ grid_ALICESGM/ grid_ALICEPLT/ grid_DTEAM/   
+HOSTS:  g_share/ g_shareshort/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 2160)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_na48
+  -- NA48 GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 40   10  Open:Active       -    -    -    -     0     0     0     0     0    0
+
+ CPULIMIT                
+ 10080.0 min of KSI2K
+
+ RUNLIMIT                
+ 30240.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             0
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_NA48/ grid_NA48SGM/ grid_DTEAM/   
+HOSTS:  g_sharelong/ g_share/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 30240 && swp>500 && maxmem>=1000)] order[-joblong] rusage[joblong=1]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_geant4
+  -- GEANT4 GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 40   10  Open:Active       -    -    -    -     4     0     4     0     0    0
+
+ CPULIMIT                
+ 10080.0 min of KSI2K
+
+ RUNLIMIT                
+ 30240.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             4
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_GEANT4/ grid_DTEAM/   
+HOSTS:  g_sharelong/ g_share/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 30240 && swp>500 && maxmem>=1000)] order[-joblong] rusage[joblong=1]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_gear
+  -- VO.GEAR.CERN.CH GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 40   10  Open:Active       -    -    -    -     0     0     0     0     0    0
+
+ CPULIMIT                
+ 10080.0 min of KSI2K
+
+ RUNLIMIT                
+ 30240.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             0
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_GEAR/ grid_DTEAM/   
+HOSTS:  g_sharelong/ g_share/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 30240 && swp>500 && maxmem>=1000)] order[-joblong] rusage[joblong=1]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_sixt
+  -- VO.SIXT.CERN.CH GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 40   10  Open:Active       -    -    -    -     0     0     0     0     0    0
+
+ CPULIMIT                
+ 10080.0 min of KSI2K
+
+ RUNLIMIT                
+ 30240.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             0
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_SIXT/ grid_DTEAM/   
+HOSTS:  g_sharelong/ g_share/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 30240 && swp>500 && maxmem>=1000)] order[-joblong] rusage[joblong=1]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_gin
+  -- GEAR GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 40   10  Open:Active       -    -    -    -     0     0     0     0     0    0
+
+ CPULIMIT                
+ 10080.0 min of KSI2K
+
+ RUNLIMIT                
+ 30240.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             0
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_GIN/ grid_DTEAM/   
+HOSTS:  g_sharelong/ g_share/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 30240 && swp>500 && maxmem>=1000)] order[-joblong] rusage[joblong=1]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_ilc
+  -- VO.GEAR.CERN.CH GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 40   10  Open:Active       -    -    -    -  1081   888   193     0     0    0
+
+ CPULIMIT                
+ 10080.0 min of KSI2K
+
+ RUNLIMIT                
+ 30240.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -            46
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_ILC/ grid_ILCPLT/ grid_DTEAM/   
+HOSTS:  g_sharelong/ g_share/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 30240 && swp>500 && maxmem>=1000)] order[-joblong] rusage[joblong=1]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: grid_compass
+  -- COMPASS GRID COMPUTING QUEUE; CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 40   10  Open:Active       -    -    -    -     0     0     0     0     0    0
+
+ CPULIMIT                
+ 10080.0 min of KSI2K
+
+ RUNLIMIT                
+ 30240.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -             0
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ grid_DTEAM/ grid_COMPASS/ grid_COMPASSPRD/   
+HOSTS:  g_sharelong/ g_share/ 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 30240 && swp>500 && maxmem>=1000)] order[-joblong] rusage[joblong=1]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: 8nh
+  -- Public queue - CPU limit: (8 KSI2K hours).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 24   10  Open:Active       -    -    -    - 28271 27575   696     0     0    0
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 480.0 min of KSI2K
+
+ RUNLIMIT                
+ 3200.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 481.0 min of KSI2K
+
+ RUNLIMIT                
+ 3201.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -           241
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: all  
+HOSTS:  g_share/ g_shareshort/ g_atlascaturgent/ 
+ADMINISTRATORS:  uschwick jbl 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 3201 && swp>1300)] order[joblong]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: wisctop
+  -- Wisconsin high priority
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 24   10  Open:Active     100    -    -    -     0     0     0     0     0    0
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 2880.0 min of KSI2K
+
+ RUNLIMIT                
+ 14400.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 2881.0 min of KSI2K
+
+ RUNLIMIT                
+ 14401.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ u_ATLASWISC/   
+HOSTS:  g_share/ g_shareshort/ 
+ADMINISTRATORS:  uschwick jbl wguan shsun 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 14401 && swp > 1300)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+PREEMPTION:  PREEMPTIVE 
+
+-------------------------------------------------------------------------------
+
+QUEUE: 1nd
+  -- Public queue - CPU limit: (1 KSI2K day).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 23   10  Open:Active       -    -    -    - 51631 49175  2456     0     0    0
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 1440.0 min of KSI2K
+
+ RUNLIMIT                
+ 7200.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 1441.0 min of KSI2K
+
+ RUNLIMIT                
+ 7201.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -           193
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: all  
+HOSTS:  g_share/ g_atlascaturgent/ g_shareshort/ 
+ADMINISTRATORS:  uschwick jbl 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 7201 && cpuf > 0.3 && swp>1300)] order[joblong]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: wischigh
+  -- Wisconsin high priority
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 23   10  Open:Active     150    -    -    -     0     0     0     0     0    0
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 2880.0 min of KSI2K
+
+ RUNLIMIT                
+ 14400.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 2881.0 min of KSI2K
+
+ RUNLIMIT                
+ 14401.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ u_ATLASWISC/   
+HOSTS:  g_share/ g_shareshort/ 
+ADMINISTRATORS:  uschwick jbl wguan shsun 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 14401 && swp > 1300)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+PREEMPTION:  PREEMPTIVE PREEMPTABLE
+
+-------------------------------------------------------------------------------
+
+QUEUE: cmscaf1nh
+  -- Queue for cmscaf nodes. Very restricted access. CPU limit: 1 normalized CPU hour. 50% eff
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 23   10  Open:Active       - 1000    -    -     0     0     0     0     0    0
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 60.0 min of KSI2K
+
+ RUNLIMIT                
+ 120.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 65.0 min of KSI2K
+
+ RUNLIMIT                
+ 130.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ u_CMSCOMM/ u_CMSPHYS/ u_CMSALCA/   
+HOSTS:  g_cmscaf/ g_cmscafshared/ 
+ADMINISTRATORS:  uschwick jbl cmsprod 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 130)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: 2nd
+  -- Public queue - CPU limit: (2 KSI2K day).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 22   10  Open:Active       -    -    -    - 19467 18190  1277     0     0    0
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 2880.0 min of KSI2K
+
+ RUNLIMIT                
+ 14400.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 2881.0 min of KSI2K
+
+ RUNLIMIT                
+ 14401.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -           142
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: all  
+HOSTS:  g_sharelong/ g_share/ 
+ADMINISTRATORS:  uschwick jbl 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 14401 && cpuf > 0.3 && swp>500)] order[joblong]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: wisc
+  -- Wisconsin
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 22   10  Open:Active     800    -    -    -     2     0     2     0     0    0
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 2880.0 min of KSI2K
+
+ RUNLIMIT                
+ 14400.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 2881.0 min of KSI2K
+
+ RUNLIMIT                
+ 14401.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ u_ATLASWISC/   
+HOSTS:  g_share/ g_shareshort/ 
+ADMINISTRATORS:  uschwick jbl wguan shsun 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 14401 && swp > 1300)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+PREEMPTION:  PREEMPTABLE
+
+-------------------------------------------------------------------------------
+
+QUEUE: cmscaf1nd
+  -- Queue for cmscaf nodes. Very restricted access. CPU limit: 1 normalized CPU day. 50% eff
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 22   10  Open:Active       - 1000    -    -    34     2    32     0     0    0
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 1440.0 min of KSI2K
+
+ RUNLIMIT                
+ 2880.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 1441.0 min of KSI2K
+
+ RUNLIMIT                
+ 2890.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ u_CMSCOMM/ u_CMSPHYS/ u_CMSALCA/   
+HOSTS:  g_cmscaf/ g_cmscafshared/ 
+ADMINISTRATORS:  uschwick jbl cmsprod 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 2890)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: 1nw
+  -- Public queue - CPU limit: (1 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 21   10  Open:Active    5000    -    -    - 19116 18425   691     0     0    0
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 10080.0 min of KSI2K
+
+ RUNLIMIT                
+ 30240.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 10081.0 min of KSI2K
+
+ RUNLIMIT                
+ 30241.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -            23
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: all  
+HOSTS:  g_sharelong/ g_share/ 
+ADMINISTRATORS:  uschwick jbl 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 30241 && swp>500)] order[-joblong] rusage[joblong=1]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: 2nw
+  -- Public queue - CPU limit: (2 KSI2K week).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 21   10  Open:Active    4500    -    -    -  7557  4524  3033     0     0    0
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 20080.0 min of KSI2K
+
+ RUNLIMIT                
+ 60240.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 20081.0 min of KSI2K
+
+ RUNLIMIT                
+ 60241.0 min of KSI2K
+
+ MEMLIMIT
+ 4000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+JOB EXCEPTION PARAMETERS 
+             OVERRUN(min) UNDERRUN(min) IDLE(cputime/runtime)
+ Threshold         -         -          0.50
+      Jobs         -         -            15
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: all  
+HOSTS:  g_sharelong/ g_share/ 
+ADMINISTRATORS:  uschwick jbl 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 60241 && cpuf > 0.3 && swp>500)] order[-joblong] rusage[joblong=1]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: cmscaf1nw
+  -- Queue for cmscaf nodes. Very restricted access. CPU limit: 1 normalized CPU week. 50% eff
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 20   10  Open:Active       -   20    -    -     2     0     2     0     0    0
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 10080.0 min of KSI2K
+
+ RUNLIMIT                
+ 20160.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 10085.0 min of KSI2K
+
+ RUNLIMIT                
+ 20170.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ u_CMSCOMM/ u_CMSPHYS/ u_CMSALCA/   
+HOSTS:  g_cmscaf/ 
+ADMINISTRATORS:  uschwick jbl cmsprod 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 20170)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: lhcbt3
+  -- Queue for LHCb T3 nodes. Restricted access. CPU limit: 1 week
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 20   10  Open:Active       -  200    -    -     0     0     0     0     0    0
+
+ CPULIMIT                
+ 50400.0 min of KSI2K
+
+ RUNLIMIT                
+ 30240.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ u_LHCBT3/   
+HOSTS:  g_lhcbt3/ 
+ADMINISTRATORS:  uschwick jbl 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 30240)] order[ut:mem]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: engpara
+  -- Dedicated queue for parallel engineering jobs
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 20    0  Open:Active       -    -    -    -     0     0     0     0     0    0
+
+DEFAULT LIMITS:
+ RUNLIMIT                
+ 20160.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ RUNLIMIT                
+ 20160.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ u_ENGPARA/   
+HOSTS:  g_eng/ 
+ADMINISTRATORS:  uschwick jbl hoimyr 
+RES_REQ:  select[(lftm > 20160)] order[ut:mem]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: spacecharge
+  -- Dedicated queue for parallel space charge jobs
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 20    0  Open:Active       -    -    -    -  1212    12  1200     0     0    0
+
+DEFAULT LIMITS:
+ RUNLIMIT                
+ 20160.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ RUNLIMIT                
+ 20160.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ u_ENGPARA/   
+HOSTS:  g_spacecharge/ 
+ADMINISTRATORS:  uschwick jbl hoimyr 
+RES_REQ:  select[(lftm > 20160)] order[ut:mem]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: cfd
+  -- Dedicated queue for CFD
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 20    0  Open:Active       -    -    -    -     0     0     0     0     0    0
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 483840.0 min of KSI2K
+
+ RUNLIMIT                
+ 30240.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 483850.0 min of KSI2K
+
+ RUNLIMIT                
+ 30250.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ u_CFD/   
+HOSTS:  g_cfd/ g_sharelong/ 
+ADMINISTRATORS:  uschwick jbl hoimyr 
+RES_REQ:  select[(lftm > 30250)] order[ut:mem]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: eng
+  -- Dedicated queue for engineering resources
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 20    0  Open:Active       -    -    -    -     0     0     0     0     0    0
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 483840.0 min of KSI2K
+
+ RUNLIMIT                
+ 30240.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 483850.0 min of KSI2K
+
+ RUNLIMIT                
+ 30250.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ u_CFD/   
+HOSTS:  g_eng/ g_sharelong/ 
+ADMINISTRATORS:  uschwick jbl hoimyr 
+RES_REQ:  select[(lftm > 30250)] order[ut:mem]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: cmsrelval
+  -- Another queue for csa07 nodes. CMSSCA07 restricted access. CPU limit: 1 week Requested by Christoph Paus
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 15   10  Open:Active     500 1000    -    -     0     0     0     0     0    0
+
+ CPULIMIT                
+ 10080.0 min of KSI2K
+
+ RUNLIMIT                
+ 20120.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_CMSREPACK u_INT/ u_ITDCCMS/   
+HOSTS:  g_share/ 
+ADMINISTRATORS:  uschwick jbl cmsprod 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 20120)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: atlasrttshort
+  -- ATLAS RTT Short Queue - CPU limit: (1 KSI2K hour).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+ 10   10  Open:Active       -    -    -    -     3     0     3     0     0    0
+Interval for a host to accept two jobs is 0 seconds
+
+ CPULIMIT                
+ 60.0 min of KSI2K
+
+ RUNLIMIT                
+ 1200.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ u_ATLASRTT/   
+HOSTS:  g_atlasrtt6/ 
+ADMINISTRATORS:  uschwick jbl 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 1200 && swp>1300)] order[ut:mem:tmp]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: atlasb1
+  -- ATLAS CAF queue
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+  7   10  Open:Active       -    -    -    -     2     0     2     0     0    0
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 14400.0 min of KSI2K
+
+ RUNLIMIT                
+ 14400.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 14402.0 min of KSI2K
+
+ RUNLIMIT                
+ 14402.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ u_ATLASIDALI/ u_ATLASID/ u_ATLASTILE/ u_ATLASMUON/ u_ATLASMUCP/ u_ATLASLAR/ u_ATLASGENERAL/ u_ATLASLARCAL/ u_ATLASIDCAL/ u_ATLASTRIG/ u_ATLASFWD/   
+HOSTS:  g_atlasb1/ 
+ADMINISTRATORS:  uschwick jbl 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 14400)] order [jobslots] rusage[jobslots=1]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: atlasb1_long
+  -- ATLAS CAF queue
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+  7   10  Open:Active     120    -    -    -    33     0    33     0     0    0
+
+DEFAULT LIMITS:
+ CPULIMIT                
+ 14400.0 min of KSI2K
+
+ RUNLIMIT                
+ 14400.0 min of KSI2K
+
+MAXIMUM LIMITS:
+ CPULIMIT                
+ 14402.0 min of KSI2K
+
+ RUNLIMIT                
+ 14402.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ u_ATLASIDALI/ u_ATLASID/ u_ATLASTILE/ u_ATLASMUON/ u_ATLASMUCP/ u_ATLASLAR/ u_ATLASGENERAL/ u_ATLASLARCAL/ u_ATLASIDCAL/ u_ATLASTRIG/ u_ATLASFWD/   
+HOSTS:  g_atlasb1/ 
+ADMINISTRATORS:  uschwick jbl 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 14400)] order [jobslots] rusage[jobslots=1]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: atlasrttmedium
+  -- ATLAS RTT Medium Queue - CPU limit: (8 KSI2K hours).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+  6   10  Open:Active       -    -    -    -    54     0    54     0     0    0
+Interval for a host to accept two jobs is 0 seconds
+
+ CPULIMIT                
+ 480.0 min of KSI2K
+
+ RUNLIMIT                
+ 9600.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ u_ATLASRTT/   
+HOSTS:  g_atlasrtt6/ 
+ADMINISTRATORS:  uschwick jbl 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 9600 && swp>1300)] order[ut:mem:tmp]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: atlasrttlong
+  -- ATLAS RTT Long Queue - CPU limit: (72 KSI2K hours).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+  6   10  Open:Active       -    -    -    -   280     0   280     0     0    0
+Interval for a host to accept two jobs is 0 seconds
+
+ CPULIMIT                
+ 4320.0 min of KSI2K
+
+ RUNLIMIT                
+ 4330.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ u_ATLASRTT/   
+HOSTS:  g_atlasrtt6/ 
+ADMINISTRATORS:  uschwick jbl 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 86400 && swp>1300)] order[ut:mem:tmp]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: atlasrttperf
+  -- ATLAS RTT Performance Test Queue - CPU limit: (72 KSI2K hours).
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+  6   10  Open:Active       -    -    -    -     0     0     0     0     0    0
+Interval for a host to accept two jobs is 0 seconds
+
+ CPULIMIT                
+ 4320.0 min of KSI2K
+
+ RUNLIMIT                
+ 4330.0 min of KSI2K
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_INT/ u_ATLASRTT/   
+HOSTS:  lxbsu2406 p05792984g45992 
+ADMINISTRATORS:  uschwick jbl 
+REQUEUE_EXIT_VALUES:  EXCLUDE( 240 )
+RES_REQ:  select[(lftm > 86400 && swp>1300)] order[ut:mem:tmp]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+
+-------------------------------------------------------------------------------
+
+QUEUE: systest
+  -- Queue for internal testing purposes
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV 
+  1   15  Open:Active    1000    -    -    1     0     0     0     0     0    0
+
+ CPULIMIT                
+ 15.0 min of KSI2K
+
+ RUNLIMIT                
+ 60.0 min of KSI2K
+
+ PROCLIMIT               
+ 1
+
+ CORELIMIT MEMLIMIT
+      0 K  2000000 K 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+             lftm    pool maxpool  ccload    ccio 
+ loadSched     -       -       -       -       -  
+ loadStop      -       -       -       -       -  
+
+SCHEDULING POLICIES:  NO_INTERACTIVE
+
+USERS: u_TEST/   
+HOSTS:  all 
+ADMINISTRATORS:  uschwick jbl 
+RES_REQ:  select[(lftm > 0)]
+JOB_STARTER:  /usr/local/lsf/etc/job_starter '%USRCMD'
+

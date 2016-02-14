@@ -54,12 +54,18 @@ public:
     v_HGCALHE_v6=31,
     v_HGCALBE_v6=32,
     v_HGCAL_v6=33,
-    v_HGCALEE_v624=34,
+    v_HGCALEE_v624_cnncal=34,
     v_HGCALEE_v618=35,
     v_HGCAL_v624=36,
     v_HGCAL_v618=37,
     v_HGCALHE_v624=38,
-    v_HGCALHE_v618=39
+    v_HGCALHE_v618=39,
+    v_HGCALEE_v624_frac1=40,
+    v_HGCALEE_v624_frac75=41,
+    v_HGCALEE_v624_frac50=42,
+    v_HGCALEE_v624_frac25=43,
+    v_HGCALEE_v624_flat=44,
+    v_HGCALEE_v624_syst_opt=45
   };
 
   enum DetectorModel {
@@ -74,7 +80,8 @@ public:
    */
   DetectorConstruction(G4int ver=DetectorConstruction::v_CALICE, 
 		       G4int mod=DetectorConstruction::m_SIMPLE_20,
-		       std::string absThickW="1.75,1.75,1.75,1.75,1.75,2.8,2.8,2.8,2.8,2.8,4.2,4.2,4.2,4.2,4.2",
+		       std::string absThickW="2.6,2.6,2.6,2.6,3.6,3.6,3.6,3.6,4.2,4.2,4.2,4.2",
+		       std::string absThickWCu="1.0,1.0,1.0,1.0,1.75,1.75,1.75,1.75,2.2,2.2,2.2,2.2",
 		       std::string absThickPb="1,1,1,1,1,2.1,2.1,2.1,2.1,2.1,4.4,4.4,4.4,4.4",
 		       std::string dropLayer="");
 
@@ -114,6 +121,7 @@ public:
   void SetDetModel(G4int model);
 
   void SetWThick(std::string thick);
+  void SetWCuThick(std::string thick);
   void SetPbThick(std::string thick);
   void SetDropLayers(std::string layers);
 
@@ -148,6 +156,7 @@ private:
   bool addPrePCB_;
 
   std::vector<G4double> absThickW_;
+  std::vector<G4double> absThickWCu_;
   std::vector<G4double> absThickPb_;
   std::vector<G4bool> dropLayer_;
 

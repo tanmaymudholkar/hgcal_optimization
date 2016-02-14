@@ -29,10 +29,10 @@ parser.add_option('-S', '--no-submit'   ,    action="store_true",  dest='nosubmi
 
 enlist=[0]
 if opt.dogun : 
-    #enlist=[3,5,7,10,20,30,40,50,60,70,80,90,100,125,150,175,200]
+    enlist=[3,7,20,35,50]
     #enlist=[2,5,10,20,40,60,80,100,150,200]
-    enlist=[3,5,10,30,50,70,100,200]
-    #enlist=[16,82,160]
+    #enlist=[3,5,10,30,50,70,100,200]
+    #enlist=[16,82]
 
 #hgg seeds
 #for seed in 1417791355 1417791400 1417791462 1417791488 1417791672 1417791741 1417791747 1417791766 1417791846
@@ -67,34 +67,34 @@ label=''
 #label='v5_18'
 
 
-granularity='0-20:4,21-63:6'
-noise='0-63:0.12'
-threshold='0-63:2'
+# granularity='0-20:4,21-63:6'
+# noise='0-63:0.12'
+# threshold='0-63:2'
 
-if (opt.version==8) :
-    granularity='0-20:4,21-30:6'
-    noise='0-30:0.14'
-    threshold='0-30:2'
-elif opt.version<20 :
-    granularity='0-19:4,20-29:4'
-    noise='0-29:0.14'
-    threshold='0-29:2'
-elif (opt.version==21 or opt.version==24):
-    granularity='0-23:6,24-33:8'
-    noise='0-33:0.14'
-    threshold='0-33:2'
-elif opt.version==22:
-    granularity='0-9:8'
-    noise='0-9:0.14'
-    threshold='0-9:2'
-elif opt.version==23:
-    granularity='0-53:12'
-    noise='0-53:0.12'
-    threshold='0-53:2'
-elif opt.version>24:
-    granularity='0-29:4,30-53:4,54-65:8'
-    noise='0-53:0.14,54-65:0.2'
-    threshold='0-53:2,54-65:4'
+# if (opt.version==8) :
+#     granularity='0-20:4,21-30:6'
+#     noise='0-30:0.14'
+#     threshold='0-30:2'
+# elif opt.version<20 :
+#     granularity='0-19:4,20-29:4'
+#     noise='0-29:0.14'
+#     threshold='0-29:2'
+# elif (opt.version==21 or opt.version==24):
+#     granularity='0-23:6,24-33:8'
+#     noise='0-33:0.14'
+#     threshold='0-33:2'
+# elif opt.version==22:
+#     granularity='0-9:8'
+#     noise='0-9:0.14'
+#     threshold='0-9:2'
+# elif opt.version==23:
+#     granularity='0-53:12'
+#     noise='0-53:0.12'
+#     threshold='0-53:2'
+# elif opt.version>24:
+#     granularity='0-29:4,30-53:4,54-65:8'
+#     noise='0-53:0.14,54-65:0.2'
+#     threshold='0-53:2,54-65:4'
 
 for et in enlist :
 
@@ -129,29 +129,30 @@ for et in enlist :
     if et>0 : outTag='%s_et%d'%(outTag,et)
     if opt.eta>0 : outTag='%s_eta%3.3f'%(outTag,opt.eta) 
     if (opt.run>=0) : outTag='%s_run%d'%(outTag,opt.run)
+    scriptFile.write('scp -i /afs/cern.ch/user/t/tmudholk/.ssh/id_dsa PFcal.root tmudholk@cms02.phys.cmu.edu:/export/cmss2/tmudholk/HGCal/HGcal_%s.root\n'%(outTag))
     scriptFile.write('mv PFcal.root HGcal_%s.root\n'%(outTag))
     scriptFile.write('localdir=`pwd`\n')
-    #scriptFile.write('%s/userlib/bin/digitizer 0 $localdir/HGcal_%s.root $localdir/ %s %s %s 0 | tee %s\n'%(os.getcwd(),outTag,granularity,noise,threshold,outlog))
+    #scriptFile.write('%s/userlib/bin/digitizer 0 $localdir/HGcal_%s.root $localdir/ %s %s %s 3 0 | tee %s\n'%(os.getcwd(),outTag,granularity,noise,threshold,outlog))
     scriptFile.write('echo "--Local directory is " $localdir >> g4.log\n')
     scriptFile.write('ls * >> g4.log\n')
-    if len(opt.eos)>0:
-        scriptFile.write('grep "alias eos=" /afs/cern.ch/project/eos/installation/cms/etc/setup.sh | sed "s/alias /export my/" > eosenv.sh\n')
-        scriptFile.write('source eosenv.sh\n')
-        scriptFile.write('$myeos mkdir -p %s\n'%eosDir)
-        scriptFile.write('cmsStage -f HGcal_%s.root %s/HGcal_%s.root\n'%(outTag,eosDir,outTag))
-        scriptFile.write('if (( "$?" != "0" )); then\n')
-        scriptFile.write('echo " --- Problem with copy of file PFcal.root to EOS. Keeping locally." >> g4.log\n')
-        scriptFile.write('else\n')
-        scriptFile.write('eossize=`$myeos ls -l %s/HGcal_%s.root | awk \'{print $5}\'`\n'%(eosDir,outTag))
-        scriptFile.write('localsize=`ls -l HGcal_%s.root | awk \'{print $5}\'`\n'%(outTag))
-        scriptFile.write('if (( "$eossize" != "$localsize" )); then\n')
-        scriptFile.write('echo " --- Copy of sim file to eos failed. Localsize = $localsize, eossize = $eossize. Keeping locally..." >> g4.log\n')
-        scriptFile.write('else\n')
-        scriptFile.write('echo " --- Size check done: Localsize = $localsize, eossize = $eossize" >> g4.log\n')
-        scriptFile.write('echo " --- File PFcal.root successfully copied to EOS: %s/HGcal_%s.root" >> g4.log\n'%(eosDir,outTag))
-        scriptFile.write('rm HGcal_%s.root\n'%(outTag))
-        scriptFile.write('fi\n')
-        scriptFile.write('fi\n')
+    # if len(opt.eos)>0:
+    #     scriptFile.write('grep "alias eos=" /afs/cern.ch/project/eos/installation/cms/etc/setup.sh | sed "s/alias /export my/" > eosenv.sh\n')
+    #     scriptFile.write('source eosenv.sh\n')
+    #     scriptFile.write('$myeos mkdir -p %s\n'%eosDir)
+    #     scriptFile.write('cmsStage -f HGcal_%s.root %s/HGcal_%s.root\n'%(outTag,eosDir,outTag))
+    #     scriptFile.write('if (( "$?" != "0" )); then\n')
+    #     scriptFile.write('echo " --- Problem with copy of file PFcal.root to EOS. Keeping locally." >> g4.log\n')
+    #     scriptFile.write('else\n')
+    #     scriptFile.write('eossize=`$myeos ls -l %s/HGcal_%s.root | awk \'{print $5}\'`\n'%(eosDir,outTag))
+    #     scriptFile.write('localsize=`ls -l HGcal_%s.root | awk \'{print $5}\'`\n'%(outTag))
+    #     scriptFile.write('if (( "$eossize" != "$localsize" )); then\n')
+    #     scriptFile.write('echo " --- Copy of sim file to eos failed. Localsize = $localsize, eossize = $eossize. Keeping locally..." >> g4.log\n')
+    #     scriptFile.write('else\n')
+    #     scriptFile.write('echo " --- Size check done: Localsize = $localsize, eossize = $eossize" >> g4.log\n')
+    #     scriptFile.write('echo " --- File PFcal.root successfully copied to EOS: %s/HGcal_%s.root" >> g4.log\n'%(eosDir,outTag))
+    #     scriptFile.write('rm HGcal_%s.root\n'%(outTag))
+    #     scriptFile.write('fi\n')
+    #     scriptFile.write('fi\n')
         #scriptFile.write('cmsStage -f DigiPFcal.root %s/Digi_%s.root\n'%(eosDir,outTag))
         #scriptFile.write('if (( "$?" != "0" )); then\n')
         #scriptFile.write('echo " --- Problem with copy of file DigiPFcal.root to EOS. Keeping locally." >> g4.log\n')
@@ -167,7 +168,7 @@ for et in enlist :
         #scriptFile.write('fi\n')
         #scriptFile.write('fi\n')
     #else:
-        #scriptFile.write('mv DigiPFcal.root Digi_%s.root\n'%(nvtx,outTag))
+        #scriptFile.write('mv DigiPFcal.root Digi_%s.root\n'%(outTag))
 
     #for nvtx in nvtxlist:
         #scriptFile.write('%s/userlib/bin/digitizer 0 $localdir/HGcal_%s.root $localdir/ %s %s %s %d %s | tee %s\n'%(os.getcwd(),outTag,granularity,noise,threshold,nvtx,INPATHPU,outlog))

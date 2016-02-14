@@ -130,7 +130,7 @@ public:
       indices_[5] = 52;
       indices_[6] = 52;
     }
-    else if (versionNumber == 34){
+    else if (versionNumber == 34 || versionNumber == 40 || versionNumber == 41 || versionNumber == 42 || versionNumber == 43 || versionNumber == 44 || versionNumber == 45){
       indices_[0] = 0;
       indices_[1] = 8;
       indices_[2] = 16;
@@ -139,6 +139,7 @@ public:
       indices_[5] = indices_[3];
       indices_[6] = indices_[3];
     }
+
     else if (versionNumber == 35){
       indices_[0] = 0;
       indices_[1] = 6;

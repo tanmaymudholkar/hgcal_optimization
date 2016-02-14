@@ -29,11 +29,13 @@ using namespace std;
 //
 DetectorConstruction::DetectorConstruction(G4int ver, G4int mod,
 					   std::string absThickW,
+					   std::string absThickWCu,
 					   std::string absThickPb,
 					   std::string dropLayer) : 
   version_(ver), model_(mod), addPrePCB_(false)
 {
   SetWThick(absThickW);
+  SetWCuThick(absThickWCu);
   SetPbThick(absThickPb);
   SetDropLayers(dropLayer);
 
@@ -62,7 +64,7 @@ DetectorConstruction::DetectorConstruction(G4int ver, G4int mod,
 	break;
       }
 
-    case v_HGCALEE_v6: case v_HGCAL_v6: case v_HGCALEE_v624: case v_HGCALEE_v618: case v_HGCAL_v624: case v_HGCAL_v618:
+    case v_HGCALEE_v6: case v_HGCAL_v6: case v_HGCALEE_v618: case v_HGCAL_v624: case v_HGCAL_v618:// case v_HGCALEE_v624:
       {
 	G4cout << "[DetectorConstruction] starting v_HCALEE_v6"<< G4endl;
 	G4double airThick = 3*mm;
@@ -71,7 +73,8 @@ DetectorConstruction::DetectorConstruction(G4int ver, G4int mod,
 	G4double wThick = 2.*mm;
 	G4double wcuThick = 0.6*mm;
 
-        if(version_ == v_HGCALEE_v624 || version_ == v_HGCAL_v624){
+        //if(version_ == v_HGCALEE_v624 || version_ == v_HGCAL_v624){
+	if(version_ == v_HGCAL_v624){
              Nmodule = 3;
 	     wThick = 2.6*mm;
 	     wcuThick = 1.*mm;
@@ -133,7 +136,7 @@ DetectorConstruction::DetectorConstruction(G4int ver, G4int mod,
 	lThickL[2] = 2.8*mm;
 	lThickR[0] = 1.2*mm;
 	lThickR[2] = 1.2*mm;
-        if(version_ == v_HGCALEE_v624 || version_ == v_HGCAL_v624){
+        if(version_ == v_HGCAL_v624){
             Nmodule=4;
             lThickL[2] = 3.6*mm;
             lThickR[0] = 1.75*mm;
@@ -185,6 +188,554 @@ DetectorConstruction::DetectorConstruction(G4int ver, G4int mod,
 
 	break;
       }
+
+      case v_HGCALEE_v624_cnncal:
+      {
+      	G4cout << "[DetectorConstruction] starting v_HGCALEE_v6"<< G4endl;
+      	G4double airThick = 3*mm;
+      	G4double pcbThick = 2*mm;
+        unsigned Nmodule=4;
+      	G4double wThick = 2.*mm;
+      	G4double wcuThick = 0.6*mm;
+
+      	Nmodule = 3;
+      	wThick = 2.6*mm;
+      	wcuThick = 1.*mm;
+	
+      	std::vector<G4double> lThickL;
+      	std::vector<std::string> lEleL;
+        lThickL.push_back(100.*mm);lEleL.push_back("NeutMod");
+      	lThickL.push_back(2.*mm);lEleL.push_back("Al");
+      	lThickL.push_back(26.*mm);lEleL.push_back("Foam");
+      	lThickL.push_back(2.*mm);lEleL.push_back("Al");
+      	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+      	lThickL.push_back(wThick);lEleL.push_back("W");
+      	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+      	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+      	lThickL.push_back(airThick);lEleL.push_back("Air");
+      	lThickL.push_back(pcbThick);lEleL.push_back("PCB");
+      	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+      	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+      	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+
+      	std::vector<G4double> lThickR;
+      	std::vector<std::string> lEleR;
+      	lThickR.push_back(wcuThick);lEleR.push_back("WCu");
+      	lThickR.push_back(6*mm);lEleR.push_back("Cu");
+      	lThickR.push_back(wcuThick);lEleR.push_back("WCu");
+      	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+      	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+      	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+      	lThickR.push_back(pcbThick);lEleR.push_back("PCB");
+      	lThickR.push_back(airThick);lEleR.push_back("Air");
+
+      	m_caloStruct.push_back( SamplingSection(lThickL,lEleL) );
+      	m_caloStruct.push_back( SamplingSection(lThickR,lEleR) );
+
+      	lThickL.clear();
+      	lEleL.clear();
+      	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+      	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+      	lThickL.push_back(wThick);lEleL.push_back("W");
+      	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+      	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+      	lThickL.push_back(airThick);lEleL.push_back("Air");
+      	lThickL.push_back(pcbThick);lEleL.push_back("PCB");
+      	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+      	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+      	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+      	for(unsigned i=0; i<Nmodule; i++) {
+      	  m_caloStruct.push_back( SamplingSection(lThickL,lEleL) );
+      	  m_caloStruct.push_back( SamplingSection(lThickR,lEleR) );
+      	}
+
+        Nmodule=4;
+      	lThickL[2] = 3.6*mm;
+      	lThickR[0] = 1.75*mm;
+      	lThickR[2] = 1.75*mm;
+        
+      	for(unsigned i=0; i<Nmodule; i++) {
+      	  m_caloStruct.push_back( SamplingSection(lThickL,lEleL) );
+      	  m_caloStruct.push_back( SamplingSection(lThickR,lEleR) );
+      	}
+
+        Nmodule=4;
+      	lThickL[2] = 4.2*mm;
+      	lThickR[0] = 2.2*mm;
+      	lThickR[2] = 2.2*mm;
+        
+      	for(unsigned i=0; i<Nmodule; i++) {
+      	  m_caloStruct.push_back( SamplingSection(lThickL,lEleL) );
+      	  m_caloStruct.push_back( SamplingSection(lThickR,lEleR) );
+      	}
+	
+      	break;
+      }
+
+      case v_HGCALEE_v624_syst_opt:
+      {
+    	G4cout << "[DetectorConstruction] starting v_HCALEE_v6_syst_opt"<< G4endl;
+    	G4double airThick = 3*mm;
+    	G4double pcbThick = 2*mm;
+    	
+	std::vector<G4double> lThickL;
+    	std::vector<std::string> lEleL;
+        lThickL.push_back(100.*mm);lEleL.push_back("NeutMod");
+    	lThickL.push_back(2.*mm);lEleL.push_back("Al");
+    	lThickL.push_back(26.*mm);lEleL.push_back("Foam");
+    	lThickL.push_back(2.*mm);lEleL.push_back("Al");
+    	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+    	lThickL.push_back(absThickW_[0]);lEleL.push_back("W");
+    	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+    	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+    	lThickL.push_back(airThick);lEleL.push_back("Air");
+    	lThickL.push_back(pcbThick);lEleL.push_back("PCB");
+    	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+    	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+    	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+
+    	std::vector<G4double> lThickR;
+    	std::vector<std::string> lEleR;
+    	lThickR.push_back(absThickWCu_[0]);lEleR.push_back("WCu");
+    	lThickR.push_back(6*mm);lEleR.push_back("Cu");
+    	lThickR.push_back(absThickWCu_[0]);lEleR.push_back("WCu");
+    	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+    	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+    	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+    	lThickR.push_back(pcbThick);lEleR.push_back("PCB");
+    	lThickR.push_back(airThick);lEleR.push_back("Air");
+
+    	m_caloStruct.push_back( SamplingSection(lThickL,lEleL) );//d0
+    	m_caloStruct.push_back( SamplingSection(lThickR,lEleR) );//d1
+
+    	lThickL.clear();
+    	lEleL.clear();
+    	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+    	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+    	lThickL.push_back(absThickW_[1]);lEleL.push_back("W");
+    	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+    	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+    	lThickL.push_back(airThick);lEleL.push_back("Air");
+    	lThickL.push_back(pcbThick);lEleL.push_back("PCB");
+    	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+    	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+    	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+    	for(unsigned module_counter=1; module_counter<=11; module_counter++) {
+    	  lThickL[2] = absThickW_[module_counter];
+    	  lThickR[0] = absThickWCu_[module_counter];
+    	  lThickR[2] = absThickWCu_[module_counter];
+    	  m_caloStruct.push_back( SamplingSection(lThickL,lEleL) );//d2,4,6,8,10,12,14,16,18,20,22
+    	  m_caloStruct.push_back( SamplingSection(lThickR,lEleR) );//d3,5,7,9,11,13,15,17,19,21,23
+    	}
+	
+    	break;
+      }
+
+    case v_HGCALEE_v624_frac1:
+      {
+    	G4cout << "[DetectorConstruction] starting v_HCALEE_v6"<< G4endl;
+    	G4double airThick = 3*mm;
+    	G4double pcbThick = 2*mm;
+    	G4double minlength_firstlayer_W = 2.383*mm;
+    	G4double maxlength_firstlayer_W = 3.467*mm;
+    	G4double minlength_firstlayer_WCu = 0.562*mm;
+    	G4double maxlength_firstlayer_WCu = 1.650*mm;
+    	G4double available_length_W = 41.6*mm;
+    	G4double available_length_WCu = 0.5*39.6*mm;
+
+    	double fraction_of_mins = 1.0;
+    	G4double length_firstlayer_W = fraction_of_mins*minlength_firstlayer_W + (1.0-fraction_of_mins)*maxlength_firstlayer_W;
+    	G4double length_firstlayer_WCu = fraction_of_mins*minlength_firstlayer_WCu + (1.0-fraction_of_mins)*maxlength_firstlayer_WCu;
+    	double slope_W = 2*available_length_W/(11.0*12) - 2*length_firstlayer_W/(11.0);
+    	double intercept_W = length_firstlayer_W;
+    	double slope_WCu = 2*available_length_WCu/(11.0*12) - 2*length_firstlayer_WCu/(11.0);
+    	double intercept_WCu = length_firstlayer_WCu;
+	
+    	G4double Wthick[12];
+    	G4double WCuthick[12];
+
+    	for(int layer_counter = 0; layer_counter < 12; layer_counter++) {
+    	  Wthick[layer_counter] = slope_W*layer_counter + intercept_W;
+    	  WCuthick[layer_counter] = slope_WCu*layer_counter + intercept_WCu;
+    	}
+	
+    	std::vector<G4double> lThickL;
+    	std::vector<std::string> lEleL;
+        lThickL.push_back(100.*mm);lEleL.push_back("NeutMod");
+    	lThickL.push_back(2.*mm);lEleL.push_back("Al");
+    	lThickL.push_back(26.*mm);lEleL.push_back("Foam");
+    	lThickL.push_back(2.*mm);lEleL.push_back("Al");
+    	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+    	lThickL.push_back(Wthick[0]);lEleL.push_back("W");
+    	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+    	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+    	lThickL.push_back(airThick);lEleL.push_back("Air");
+    	lThickL.push_back(pcbThick);lEleL.push_back("PCB");
+    	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+    	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+    	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+
+    	std::vector<G4double> lThickR;
+    	std::vector<std::string> lEleR;
+    	lThickR.push_back(WCuthick[0]);lEleR.push_back("WCu");
+    	lThickR.push_back(6*mm);lEleR.push_back("Cu");
+    	lThickR.push_back(WCuthick[0]);lEleR.push_back("WCu");
+    	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+    	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+    	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+    	lThickR.push_back(pcbThick);lEleR.push_back("PCB");
+    	lThickR.push_back(airThick);lEleR.push_back("Air");
+
+    	m_caloStruct.push_back( SamplingSection(lThickL,lEleL) );//d0
+    	m_caloStruct.push_back( SamplingSection(lThickR,lEleR) );//d1
+
+    	lThickL.clear();
+    	lEleL.clear();
+    	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+    	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+    	lThickL.push_back(Wthick[1]);lEleL.push_back("W");
+    	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+    	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+    	lThickL.push_back(airThick);lEleL.push_back("Air");
+    	lThickL.push_back(pcbThick);lEleL.push_back("PCB");
+    	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+    	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+    	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+    	for(unsigned module_counter=1; module_counter<=11; module_counter++) {
+    	  lThickL[2] = Wthick[module_counter];
+    	  lThickR[0] = WCuthick[module_counter];
+    	  lThickR[2] = WCuthick[module_counter];
+    	  m_caloStruct.push_back( SamplingSection(lThickL,lEleL) );//d2,4,6,8,10,12,14,16,18,20,22
+    	  m_caloStruct.push_back( SamplingSection(lThickR,lEleR) );//d3,5,7,9,11,13,15,17,19,21,23
+    	}
+	
+    	break;
+      }
+
+    case v_HGCALEE_v624_frac75:
+      {
+	G4cout << "[DetectorConstruction] starting v_HCALEE_v6"<< G4endl;
+	G4double airThick = 3*mm;
+	G4double pcbThick = 2*mm;
+	G4double minlength_firstlayer_W = 2.383*mm;
+	G4double maxlength_firstlayer_W = 3.467*mm;
+	G4double minlength_firstlayer_WCu = 0.562*mm;
+	G4double maxlength_firstlayer_WCu = 1.650*mm;
+	G4double available_length_W = 41.6*mm;
+	G4double available_length_WCu = 0.5*39.6*mm;
+
+	double fraction_of_mins = 0.75;
+	G4double length_firstlayer_W = fraction_of_mins*minlength_firstlayer_W + (1.0-fraction_of_mins)*maxlength_firstlayer_W;
+	G4double length_firstlayer_WCu = fraction_of_mins*minlength_firstlayer_WCu + (1.0-fraction_of_mins)*maxlength_firstlayer_WCu;
+	double slope_W = 2*available_length_W/(11.0*12) - 2*length_firstlayer_W/(11.0);
+	double intercept_W = length_firstlayer_W;
+	double slope_WCu = 2*available_length_WCu/(11.0*12) - 2*length_firstlayer_WCu/(11.0);
+	double intercept_WCu = length_firstlayer_WCu;
+	
+	G4double Wthick[12];
+	G4double WCuthick[12];
+
+	for(int layer_counter = 0; layer_counter < 12; layer_counter++) {
+	  Wthick[layer_counter] = slope_W*layer_counter + intercept_W;
+	  WCuthick[layer_counter] = slope_WCu*layer_counter + intercept_WCu;
+	}
+	
+	std::vector<G4double> lThickL;
+	std::vector<std::string> lEleL;
+        lThickL.push_back(100.*mm);lEleL.push_back("NeutMod");
+	lThickL.push_back(2.*mm);lEleL.push_back("Al");
+	lThickL.push_back(26.*mm);lEleL.push_back("Foam");
+	lThickL.push_back(2.*mm);lEleL.push_back("Al");
+	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+	lThickL.push_back(Wthick[0]);lEleL.push_back("W");
+	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+	lThickL.push_back(airThick);lEleL.push_back("Air");
+	lThickL.push_back(pcbThick);lEleL.push_back("PCB");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+
+	std::vector<G4double> lThickR;
+	std::vector<std::string> lEleR;
+	lThickR.push_back(WCuthick[0]);lEleR.push_back("WCu");
+	lThickR.push_back(6*mm);lEleR.push_back("Cu");
+	lThickR.push_back(WCuthick[0]);lEleR.push_back("WCu");
+	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+	lThickR.push_back(pcbThick);lEleR.push_back("PCB");
+	lThickR.push_back(airThick);lEleR.push_back("Air");
+
+	m_caloStruct.push_back( SamplingSection(lThickL,lEleL) );//d0
+	m_caloStruct.push_back( SamplingSection(lThickR,lEleR) );//d1
+
+	lThickL.clear();
+	lEleL.clear();
+	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+	lThickL.push_back(Wthick[1]);lEleL.push_back("W");
+	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+	lThickL.push_back(airThick);lEleL.push_back("Air");
+	lThickL.push_back(pcbThick);lEleL.push_back("PCB");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	for(unsigned module_counter=1; module_counter<=11; module_counter++) {
+	  lThickL[2] = Wthick[module_counter];
+	  lThickR[0] = WCuthick[module_counter];
+	  lThickR[2] = WCuthick[module_counter];
+	  m_caloStruct.push_back( SamplingSection(lThickL,lEleL) );//d2,4,6,8,10,12,14,16,18,20,22
+	  m_caloStruct.push_back( SamplingSection(lThickR,lEleR) );//d3,5,7,9,11,13,15,17,19,21,23
+	}
+		
+	break;
+      }
+
+    case v_HGCALEE_v624_frac50:
+      {
+	G4cout << "[DetectorConstruction] starting v_HCALEE_v6"<< G4endl;
+	G4double airThick = 3*mm;
+	G4double pcbThick = 2*mm;
+	G4double minlength_firstlayer_W = 2.383*mm;
+	G4double maxlength_firstlayer_W = 3.467*mm;
+	G4double minlength_firstlayer_WCu = 0.562*mm;
+	G4double maxlength_firstlayer_WCu = 1.650*mm;
+	G4double available_length_W = 41.6*mm;
+	G4double available_length_WCu = 0.5*39.6*mm;
+
+	double fraction_of_mins = 0.5;
+	G4double length_firstlayer_W = fraction_of_mins*minlength_firstlayer_W + (1.0-fraction_of_mins)*maxlength_firstlayer_W;
+	G4double length_firstlayer_WCu = fraction_of_mins*minlength_firstlayer_WCu + (1.0-fraction_of_mins)*maxlength_firstlayer_WCu;
+	double slope_W = 2*available_length_W/(11.0*12) - 2*length_firstlayer_W/(11.0);
+	double intercept_W = length_firstlayer_W;
+	double slope_WCu = 2*available_length_WCu/(11.0*12) - 2*length_firstlayer_WCu/(11.0);
+	double intercept_WCu = length_firstlayer_WCu;
+	
+	G4double Wthick[12];
+	G4double WCuthick[12];
+
+	for(int layer_counter = 0; layer_counter < 12; layer_counter++) {
+	  Wthick[layer_counter] = slope_W*layer_counter + intercept_W;
+	  WCuthick[layer_counter] = slope_WCu*layer_counter + intercept_WCu;
+	}
+	
+	std::vector<G4double> lThickL;
+	std::vector<std::string> lEleL;
+        lThickL.push_back(100.*mm);lEleL.push_back("NeutMod");
+	lThickL.push_back(2.*mm);lEleL.push_back("Al");
+	lThickL.push_back(26.*mm);lEleL.push_back("Foam");
+	lThickL.push_back(2.*mm);lEleL.push_back("Al");
+	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+	lThickL.push_back(Wthick[0]);lEleL.push_back("W");
+	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+	lThickL.push_back(airThick);lEleL.push_back("Air");
+	lThickL.push_back(pcbThick);lEleL.push_back("PCB");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+
+	std::vector<G4double> lThickR;
+	std::vector<std::string> lEleR;
+	lThickR.push_back(WCuthick[0]);lEleR.push_back("WCu");
+	lThickR.push_back(6*mm);lEleR.push_back("Cu");
+	lThickR.push_back(WCuthick[0]);lEleR.push_back("WCu");
+	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+	lThickR.push_back(pcbThick);lEleR.push_back("PCB");
+	lThickR.push_back(airThick);lEleR.push_back("Air");
+
+	m_caloStruct.push_back( SamplingSection(lThickL,lEleL) );//d0
+	m_caloStruct.push_back( SamplingSection(lThickR,lEleR) );//d1
+
+	lThickL.clear();
+	lEleL.clear();
+	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+	lThickL.push_back(Wthick[1]);lEleL.push_back("W");
+	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+	lThickL.push_back(airThick);lEleL.push_back("Air");
+	lThickL.push_back(pcbThick);lEleL.push_back("PCB");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	for(unsigned module_counter=1; module_counter<=11; module_counter++) {
+	  lThickL[2] = Wthick[module_counter];
+	  lThickR[0] = WCuthick[module_counter];
+	  lThickR[2] = WCuthick[module_counter];
+	  m_caloStruct.push_back( SamplingSection(lThickL,lEleL) );//d2,4,6,8,10,12,14,16,18,20,22
+	  m_caloStruct.push_back( SamplingSection(lThickR,lEleR) );//d3,5,7,9,11,13,15,17,19,21,23
+	}
+	
+	break;
+      }
+      
+    case v_HGCALEE_v624_frac25:
+      {
+	G4cout << "[DetectorConstruction] starting v_HCALEE_v6"<< G4endl;
+	G4double airThick = 3*mm;
+	G4double pcbThick = 2*mm;
+	G4double minlength_firstlayer_W = 2.383*mm;
+	G4double maxlength_firstlayer_W = 3.467*mm;
+	G4double minlength_firstlayer_WCu = 0.562*mm;
+	G4double maxlength_firstlayer_WCu = 1.650*mm;
+	G4double available_length_W = 41.6*mm;
+	G4double available_length_WCu = 0.5*39.6*mm;
+
+	double fraction_of_mins = 0.25;
+	G4double length_firstlayer_W = fraction_of_mins*minlength_firstlayer_W + (1.0-fraction_of_mins)*maxlength_firstlayer_W;
+	G4double length_firstlayer_WCu = fraction_of_mins*minlength_firstlayer_WCu + (1.0-fraction_of_mins)*maxlength_firstlayer_WCu;
+	double slope_W = 2*available_length_W/(11.0*12) - 2*length_firstlayer_W/(11.0);
+	double intercept_W = length_firstlayer_W;
+	double slope_WCu = 2*available_length_WCu/(11.0*12) - 2*length_firstlayer_WCu/(11.0);
+	double intercept_WCu = length_firstlayer_WCu;
+	
+	G4double Wthick[12];
+	G4double WCuthick[12];
+
+	for(int layer_counter = 0; layer_counter < 12; layer_counter++) {
+	  Wthick[layer_counter] = slope_W*layer_counter + intercept_W;
+	  WCuthick[layer_counter] = slope_WCu*layer_counter + intercept_WCu;
+	}
+	
+	std::vector<G4double> lThickL;
+	std::vector<std::string> lEleL;
+        lThickL.push_back(100.*mm);lEleL.push_back("NeutMod");
+	lThickL.push_back(2.*mm);lEleL.push_back("Al");
+	lThickL.push_back(26.*mm);lEleL.push_back("Foam");
+	lThickL.push_back(2.*mm);lEleL.push_back("Al");
+	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+	lThickL.push_back(Wthick[0]);lEleL.push_back("W");
+	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+	lThickL.push_back(airThick);lEleL.push_back("Air");
+	lThickL.push_back(pcbThick);lEleL.push_back("PCB");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+
+	std::vector<G4double> lThickR;
+	std::vector<std::string> lEleR;
+	lThickR.push_back(WCuthick[0]);lEleR.push_back("WCu");
+	lThickR.push_back(6*mm);lEleR.push_back("Cu");
+	lThickR.push_back(WCuthick[0]);lEleR.push_back("WCu");
+	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+	lThickR.push_back(pcbThick);lEleR.push_back("PCB");
+	lThickR.push_back(airThick);lEleR.push_back("Air");
+
+	m_caloStruct.push_back( SamplingSection(lThickL,lEleL) );//d0
+	m_caloStruct.push_back( SamplingSection(lThickR,lEleR) );//d1
+
+	lThickL.clear();
+	lEleL.clear();
+	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+	lThickL.push_back(Wthick[1]);lEleL.push_back("W");
+	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+	lThickL.push_back(airThick);lEleL.push_back("Air");
+	lThickL.push_back(pcbThick);lEleL.push_back("PCB");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	for(unsigned module_counter=1; module_counter<=11; module_counter++) {
+	  lThickL[2] = Wthick[module_counter];
+	  lThickR[0] = WCuthick[module_counter];
+	  lThickR[2] = WCuthick[module_counter];
+	  m_caloStruct.push_back( SamplingSection(lThickL,lEleL) );//d2,4,6,8,10,12,14,16,18,20,22
+	  m_caloStruct.push_back( SamplingSection(lThickR,lEleR) );//d3,5,7,9,11,13,15,17,19,21,23
+	}
+	
+	break;
+      }
+
+    case v_HGCALEE_v624_flat:
+      {
+	G4cout << "[DetectorConstruction] starting v_HCALEE_v6"<< G4endl;
+	G4double airThick = 3*mm;
+	G4double pcbThick = 2*mm;
+	G4double minlength_firstlayer_W = 2.383*mm;
+	G4double maxlength_firstlayer_W = 3.467*mm;
+	G4double minlength_firstlayer_WCu = 0.562*mm;
+	G4double maxlength_firstlayer_WCu = 1.650*mm;
+	G4double available_length_W = 41.6*mm;
+	G4double available_length_WCu = 0.5*39.6*mm;
+
+	double fraction_of_mins = 0;
+	G4double length_firstlayer_W = fraction_of_mins*minlength_firstlayer_W + (1.0-fraction_of_mins)*maxlength_firstlayer_W;
+	G4double length_firstlayer_WCu = fraction_of_mins*minlength_firstlayer_WCu + (1.0-fraction_of_mins)*maxlength_firstlayer_WCu;
+	double slope_W = 2*available_length_W/(11.0*12) - 2*length_firstlayer_W/(11.0);
+	double intercept_W = length_firstlayer_W;
+	double slope_WCu = 2*available_length_WCu/(11.0*12) - 2*length_firstlayer_WCu/(11.0);
+	double intercept_WCu = length_firstlayer_WCu;
+	
+	G4double Wthick[12];
+	G4double WCuthick[12];
+
+	for(int layer_counter = 0; layer_counter < 12; layer_counter++) {
+	  Wthick[layer_counter] = slope_W*layer_counter + intercept_W;
+	  WCuthick[layer_counter] = slope_WCu*layer_counter + intercept_WCu;
+	}
+	
+	std::vector<G4double> lThickL;
+	std::vector<std::string> lEleL;
+        lThickL.push_back(100.*mm);lEleL.push_back("NeutMod");
+	lThickL.push_back(2.*mm);lEleL.push_back("Al");
+	lThickL.push_back(26.*mm);lEleL.push_back("Foam");
+	lThickL.push_back(2.*mm);lEleL.push_back("Al");
+	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+	lThickL.push_back(Wthick[0]);lEleL.push_back("W");
+	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+	lThickL.push_back(airThick);lEleL.push_back("Air");
+	lThickL.push_back(pcbThick);lEleL.push_back("PCB");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+
+	std::vector<G4double> lThickR;
+	std::vector<std::string> lEleR;
+	lThickR.push_back(WCuthick[0]);lEleR.push_back("WCu");
+	lThickR.push_back(6*mm);lEleR.push_back("Cu");
+	lThickR.push_back(WCuthick[0]);lEleR.push_back("WCu");
+	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+	lThickR.push_back(0.1*mm);lEleR.push_back("Si");
+	lThickR.push_back(pcbThick);lEleR.push_back("PCB");
+	lThickR.push_back(airThick);lEleR.push_back("Air");
+
+	m_caloStruct.push_back( SamplingSection(lThickL,lEleL) );//d0
+	m_caloStruct.push_back( SamplingSection(lThickR,lEleR) );//d1
+
+	lThickL.clear();
+	lEleL.clear();
+	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+	lThickL.push_back(Wthick[1]);lEleL.push_back("W");
+	lThickL.push_back(0.5*mm);lEleL.push_back("CFMix");
+	lThickL.push_back(0.5*mm);lEleL.push_back("Cu");
+	lThickL.push_back(airThick);lEleL.push_back("Air");
+	lThickL.push_back(pcbThick);lEleL.push_back("PCB");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	lThickL.push_back(0.1*mm);lEleL.push_back("Si");
+	for(unsigned module_counter=1; module_counter<=11; module_counter++) {
+	  lThickL[2] = Wthick[module_counter];
+	  lThickR[0] = WCuthick[module_counter];
+	  lThickR[2] = WCuthick[module_counter];
+	  m_caloStruct.push_back( SamplingSection(lThickL,lEleL) );//d2,4,6,8,10,12,14,16,18,20,22
+	  m_caloStruct.push_back( SamplingSection(lThickR,lEleR) );//d3,5,7,9,11,13,15,17,19,21,23
+	}
+	
+	break;
+      }
+
 
     case v_HGCALEE_v5: case v_HGCALEE_v5_gap4: case v_HGCAL_v5: case v_HGCAL_v5_gap4:
       {
@@ -461,6 +1012,7 @@ void DetectorConstruction::buildHGCALFHE(const unsigned aVersion){
   if(version_==v_HGCAL_v5_gap4) airThick = 4*mm;
   std::vector<G4double> lThick;
   std::vector<std::string> lEle;
+  //if(aVersion==6 || aVersion==624 || aVersion==6240 || aVersion==6241 || aVersion==6242 || aVersion==618) {
   if(aVersion==6 || aVersion==624 || aVersion==618) {
     airThick = 3*mm;
     G4double pcbthick = 2*mm;
@@ -704,7 +1256,7 @@ void DetectorConstruction::UpdateCalorSize(){
     m_maxEta = 3.7;
     m_z0pos = 2990;//3170;
     if (version_ == v_HGCALEE_v5 || version_ == v_HGCAL_v5 || version_ == v_HGCALEE_v5_gap4 || version_ == v_HGCAL_v5_gap4) m_z0pos = 2990;//3170;
-    else if (version_ == v_HGCALEE_v6 || version_ == v_HGCAL_v6 || version_ == v_HGCALEE_v624 || version_ == v_HGCALEE_v618) m_z0pos = 3070;
+    else if (version_ == v_HGCALEE_v6 || version_ == v_HGCAL_v6 || version_ ==  v_HGCALEE_v624_cnncal || version_ == v_HGCALEE_v624_syst_opt || version_ == v_HGCALEE_v624_frac1 || version_ == v_HGCALEE_v624_frac75 || version_ == v_HGCALEE_v624_frac50 || version_ == v_HGCALEE_v624_frac25 || version_ == v_HGCALEE_v624_flat || version_ == v_HGCALEE_v618) m_z0pos = 3070;
   }
   else m_CalorSizeXY=200;
 
@@ -876,6 +1428,20 @@ void DetectorConstruction::SetWThick(std::string thick)
   for (unsigned iE(0); iE<vec.size(); ++iE){//loop on elements
     std::istringstream(vec[iE])>>absThickW_[iE];
     std::cout << absThickW_[iE] << " ";
+  }
+  std::cout << std::endl;
+}
+
+void DetectorConstruction::SetWCuThick(std::string thick)
+{
+  if (thick.size() <= 0) return;
+  std::cout << " -- Setting WCu thick to " << thick << std::endl;
+  std::vector<std::string> vec;
+  boost::split(vec, thick, boost::is_any_of(","));
+  absThickWCu_.resize(vec.size(),0);
+  for (unsigned iE(0); iE<vec.size(); ++iE){//loop on elements
+    std::istringstream(vec[iE])>>absThickWCu_[iE];
+    std::cout << absThickWCu_[iE] << " ";
   }
   std::cout << std::endl;
 }
