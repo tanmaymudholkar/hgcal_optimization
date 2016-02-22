@@ -1,0 +1,95 @@
+#include<string>
+#include<iostream>
+#include<fstream>
+#include<sstream>
+#include<cmath>
+#include<stdlib.h>
+
+#include "TFile.h"
+#include "TTree.h"
+#include "TF1.h"
+#include "TH1F.h"
+#include "TH2F.h"
+#include "TCanvas.h"
+#include "TStyle.h"
+#include "TString.h"
+#include "TChain.h"
+#include "TSystem.h"
+#include "TGraphErrors.h"
+#include "TVector.h"
+#include "TRandom3.h"
+
+#include "/export/home/yijianz/research/HGCstandalone/userlib/include/HGCSSEvent.hh"
+#include "/export/home/yijianz/research/HGCstandalone/userlib/include/HGCSSInfo.hh"
+#include "/export/home/yijianz/research/HGCstandalone/userlib/include/HGCSSRecoHit.hh"
+#include "/export/home/yijianz/research/HGCstandalone/userlib/include/HGCSSSimHit.hh"
+#include "/export/home/yijianz/research/HGCstandalone/userlib/include/HGCSSSamplingSection.hh"
+#include "/export/home/yijianz/research/HGCstandalone/userlib/include/HGCSSGenParticle.hh"
+
+const int layers=24; //global variable
+const int drops=6;
+
+typedef struct fitformula{
+   double alpha;// energy loss propto coeff
+   double beta; // energy loss log coeff
+   double gamma; //particle production rate propto coeff
+   double Elfit[layers+1-drops];
+   double Nlfit[layers+1-drops];
+}fitformula;
+
+void initialformula(double alpha, double beta, double gamma, double initialE, std::vector<double> weights, fitformula &fit){
+   fit.alpha=alpha;
+   fit.beta=beta;
+   fit.gamma=gamma;
+   fit.Elfit[0]=initialE;
+   fit.Nlfit[0]=1;
+   for(unsigned ilayer=1; ilayer<=layers-drops; ilayer++){
+     fit.Nlfit[ilayer]=fit.Nlfit[ilayer-1]*(1+gamma*weights[ilayer-1]/sqrt(fit.Nlfit[ilayer-1]/fit.Elfit[ilayer-1]));
+     fit.Elfit[ilayer]=fit.Elfit[ilayer-1]-alpha*weights[ilayer-1]*fit.Nlfit[ilayer]*log(beta*fit.Elfit[ilayer-1]/fit.Nlfit[ilayer]);
+   }
+}
+
+
+void prediction(){
+   TCanvas *myc= new TCanvas("myc","myc",1000,1000);
+   myc->Divide(2,1);
+   double et_values_array[] = {3,5,7,10,20,30,40,50,60,70,80,90,100,125,150,175,200};
+   const int et_counter=1;//et=5
+   double initialE=et_values_array[et_counter]*cosh(2.1);
+
+    std::vector<double> et_values(et_values_array,et_values_array+sizeof(et_values_array)/sizeof(double));
+    std::vector<double> layer_array,weights;
+    int linenu=0;
+    ifstream f_layer_weights;
+    f_layer_weights.open("weights_v34new.dat");
+    std::string line;
+    double weight;
+    if (f_layer_weights.is_open()) {
+    while (getline(f_layer_weights,line)) {
+      layer_array.push_back(double(linenu++));
+      weight = std::atof(line.c_str());
+      weights.push_back(weight);
+      
+      }
+    }
+   TVectorD Tlayer_array(layer_array.size(),&layer_array[0]);
+   TVectorD Tweights(weights.size(),&weights[0]);
+   fitformula fit;
+   initialformula(6E-4,2.1E3,10.1,initialE,weights,fit);
+   std::vector<double> loss;
+   for(unsigned i=0; i<layer_array.size()-2; i++)
+       loss.push_back(fit.Elfit[i]-fit.Elfit[i+1]);
+    TVectorD TNlfit(layers+1-drops,fit.Nlfit);
+    TVectorD TElfit(layers+1-drops,fit.Elfit);
+    TVectorD Tloss(layers+1-drops-1,&loss[0]);
+    TGraph *nlgraph=new TGraph(Tlayer_array,TNlfit);
+    TGraph *elgraph=new TGraph(Tlayer_array,TElfit);
+    TGraph *losslgraph=new TGraph(Tlayer_array,Tloss);
+    myc->cd(1);
+    elgraph->SetTitle("Energy remaining before crossing each layer");
+    elgraph->Draw("AC*");
+    myc->cd(2);
+    losslgraph->SetTitle("Energy loss in each layer");
+    losslgraph->Draw("AC*");
+    myc->SaveAs("prediction:et5,eta2.1.pdf");
+}

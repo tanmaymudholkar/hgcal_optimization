@@ -1,0 +1,814 @@
+  *******************************************
+  *                                         *
+  *        W E L C O M E  to  R O O T       *
+  *                                         *
+  *   Version   5.34/14  16 December 2013   *
+  *                                         *
+  *  You are welcome to visit our Web site  *
+  *          http://root.cern.ch            *
+  *                                         *
+  *******************************************
+
+ROOT 5.34/14 (heads/v5-34-00-patches@v5-34-13-131-gd110ad3, Jan 07 2014, 00:12:00 on linuxx8664gcc)
+
+CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
+Type ? for help. Commands must be C++ statements.
+Enclose multiple statements between { }.
+
+Processing plotE_resolution_standard.C++(34,"version34","export_dir\/version34")...
+Info in <TUnixSystem::ACLiC>: creating shared library /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_standard_C.so
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:11:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_standard.C:23,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_standard_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_standard_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh: In member function ‘void HGCSSSimHit::setLayer(const unsigned int&, const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘silayer’ shadows a member of 'this' [-Wshadow]
+   inline void setLayer(const unsigned & layer, const unsigned & silayer){
+                                                                         ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_standard.C:23:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_standard_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_standard_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::energy(const double&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:65:45: warning: declaration of ‘energy’ shadows a member of 'this' [-Wshadow]
+   inline void energy(const double & energy) {
+                                             ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::adcCounts(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:85:52: warning: declaration of ‘adcCounts’ shadows a member of 'this' [-Wshadow]
+   inline void adcCounts(const unsigned & adcCounts){
+                                                    ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::layer(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:93:44: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+   inline void layer(const unsigned & layer){
+                                            ^
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_standard.C:26:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_standard_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_standard_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh: In member function ‘double HGCSSGenParticle::eta() const’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh:80:12: warning: declaration of ‘theta’ shadows a member of 'this' [-Wshadow]
+     double theta = acos(fabs(zpos_)/sqrt(zpos_*zpos_+xpos_*xpos_+ypos_*ypos_));
+            ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh: In member function ‘double HGCSSGenParticle::phi() const’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh:91:12: warning: declaration of ‘x’ shadows a member of 'this' [-Wshadow]
+     double x = xpos_;
+            ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh:92:12: warning: declaration of ‘y’ shadows a member of 'this' [-Wshadow]
+     double y = ypos_;
+            ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh: In member function ‘void HGCSSGenParticle::setPosition(const double&, const double&, const double&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh:99:81: warning: declaration of ‘z’ shadows a member of 'this' [-Wshadow]
+   inline void setPosition(const double & x, const double & y, const double & z) {
+                                                                                 ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh:99:81: warning: declaration of ‘y’ shadows a member of 'this' [-Wshadow]
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh:99:81: warning: declaration of ‘x’ shadows a member of 'this' [-Wshadow]
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh: In member function ‘void HGCSSGenParticle::setMomentum(const double&, const double&, const double&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh:105:84: warning: declaration of ‘pz’ shadows a member of 'this' [-Wshadow]
+   inline void setMomentum(const double & px, const double & py, const double & pz) {
+                                                                                    ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh:105:84: warning: declaration of ‘py’ shadows a member of 'this' [-Wshadow]
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh:105:84: warning: declaration of ‘px’ shadows a member of 'this' [-Wshadow]
+et3 eta2.1
+cellSize is 2.5
+versionNumber is 34
+model is 2
+ -- Processing event 0
+Warning in <TStreamerInfo::BuildCheck>: 
+   The StreamerInfo of class HGCSSRecoHit read from file export_dir/version34/Digi__version34_model2_BOFF_et3_eta2.100.root
+   has the same version (=1) as the active class but a different checksum.
+   You should update the version to ClassDef(HGCSSRecoHit,2).
+   Do not try to write objects with the current class definition,
+   the files will not be readable.
+
+Warning in <TStreamerInfo::CompareContent>: The following data member of
+the in-memory layout version 1 of class 'HGCSSRecoHit' is missing from 
+the on-file layout version 1:
+   double time_; //
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=58.9203 FROM MINOS     STATUS=SUCCESSFUL     31 CALLS         299 TOTAL
+                     EDM=5.00401e-13    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     4.92089e+01   2.03391e+00  -1.83552e-02   9.95639e-05
+   2  Mean         5.92564e+02   1.36408e+00  -5.21923e-03  -3.47957e-04
+   3  Sigma        3.96120e+01   1.02963e+00   1.02963e+00  -8.65850e-02
+checking ... number of ds of f is 41
+Info in <TCanvas::Print>: png file plot_standard_version34_resolutions_et3_eta2.100.png has been created
+et5 eta2.1
+cellSize is 2.5
+versionNumber is 34
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=46.9385 FROM MINOS     STATUS=SUCCESSFUL     21 CALLS         289 TOTAL
+                     EDM=1.60497e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     4.86137e+01   1.96835e+00  -1.99036e-02   5.33993e-06
+   2  Mean         9.74804e+02   1.80309e+00   1.87044e-03   5.63507e-05
+   3  Sigma        5.41048e+01   1.35943e+00   1.35943e+00  -2.69938e-02
+checking ... number of ds of f is 43
+Info in <TCanvas::Print>: png file plot_standard_version34_resolutions_et5_eta2.100.png has been created
+et7 eta2.1
+cellSize is 2.5
+versionNumber is 34
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=43.8757 FROM MINOS     STATUS=SUCCESSFUL     27 CALLS         413 TOTAL
+                     EDM=7.05687e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     4.80247e+01   1.99117e+00   2.45839e+00   1.21664e-04
+   2  Mean         1.36393e+03   2.11895e+00   8.13497e-02  -1.62202e-03
+   3  Sigma        6.40007e+01   1.70827e+00   1.70827e+00   2.79198e-02
+checking ... number of ds of f is 45
+Info in <TCanvas::Print>: png file plot_standard_version34_resolutions_et7_eta2.100.png has been created
+et10 eta2.1
+cellSize is 2.5
+versionNumber is 34
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=41.9516 FROM MINOS     STATUS=SUCCESSFUL     21 CALLS         275 TOTAL
+                     EDM=3.80845e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     4.67307e+01   1.92129e+00  -1.47946e-02   6.98571e-05
+   2  Mean         1.94010e+03   2.73731e+00  -8.77636e-03  -1.16990e-04
+   3  Sigma        8.01290e+01   2.10354e+00   2.10354e+00  -5.84052e-02
+checking ... number of ds of f is 44
+Info in <TCanvas::Print>: png file plot_standard_version34_resolutions_et10_eta2.100.png has been created
+et20 eta2.1
+cellSize is 2.5
+versionNumber is 34
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=67.6875 FROM MINOS     STATUS=SUCCESSFUL     20 CALLS         261 TOTAL
+                     EDM=9.55172e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     4.63471e+01   2.02763e+00  -7.48628e-03   7.36725e-04
+   2  Mean         3.87967e+03   3.84379e+00  -4.22447e-02   1.40034e-04
+   3  Sigma        1.11648e+02   3.28359e+00   3.28359e+00   7.33781e-02
+checking ... number of ds of f is 46
+Info in <TCanvas::Print>: png file plot_standard_version34_resolutions_et20_eta2.100.png has been created
+et30 eta2.1
+cellSize is 2.5
+versionNumber is 34
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=24.7629 FROM MINOS     STATUS=SUCCESSFUL     21 CALLS         242 TOTAL
+                     EDM=4.05397e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     7.17088e+01   2.91267e+00  -2.54905e-02   5.62872e-05
+   2  Mean         5.81955e+03   4.48772e+00   2.17820e-02   6.50057e-05
+   3  Sigma        1.37200e+02   3.49832e+00   3.49832e+00  -9.06533e-02
+checking ... number of ds of f is 32
+Info in <TCanvas::Print>: png file plot_standard_version34_resolutions_et30_eta2.100.png has been created
+et40 eta2.1
+cellSize is 2.5
+versionNumber is 34
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=18.7561 FROM MINOS     STATUS=SUCCESSFUL     21 CALLS         432 TOTAL
+                     EDM=1.36658e-14    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     5.62360e+01   2.31492e+00  -1.66600e-02   5.30138e-05
+   2  Mean         7.74241e+03   5.64426e+00  -1.57152e-02  -5.58736e-05
+   3  Sigma        1.71800e+02   4.58317e+00   4.58317e+00   3.20466e-02
+checking ... number of ds of f is 40
+Info in <TCanvas::Print>: png file plot_standard_version34_resolutions_et40_eta2.100.png has been created
+et50 eta2.1
+cellSize is 2.5
+versionNumber is 34
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=33.1456 FROM MINOS     STATUS=SUCCESSFUL     41 CALLS         250 TOTAL
+                     EDM=5.60012e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     5.50639e+01   2.26528e+00  -8.00151e-03   1.01273e-04
+   2  Mean         9.67820e+03   6.17499e+00   3.05416e-03  -4.11381e-05
+   3  Sigma        1.86194e+02   4.94834e+00   4.94834e+00   6.27658e-02
+checking ... number of ds of f is 39
+Info in <TCanvas::Print>: png file plot_standard_version34_resolutions_et50_eta2.100.png has been created
+et60 eta2.1
+cellSize is 2.5
+versionNumber is 34
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=46.5877 FROM MINOS     STATUS=SUCCESSFUL     41 CALLS         228 TOTAL
+                     EDM=1.12024e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     5.66025e+01   2.32697e+00  -9.57313e-03   2.35425e-05
+   2  Mean         1.16225e+04   6.88117e+00  -1.03718e-02  -1.14930e-05
+   3  Sigma        1.99175e+02   5.19869e+00   5.19869e+00   1.45361e-01
+checking ... number of ds of f is 37
+Info in <TCanvas::Print>: png file plot_standard_version34_resolutions_et60_eta2.100.png has been created
+et70 eta2.1
+cellSize is 2.5
+versionNumber is 34
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=25.6711 FROM MINOS     STATUS=SUCCESSFUL     27 CALLS         414 TOTAL
+                     EDM=1.08231e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     6.39435e+01   2.69490e+00  -3.78142e-04   1.31753e-05
+   2  Mean         1.35442e+04   7.83534e+00   2.85672e-02  -1.70437e-05
+   3  Sigma        2.38886e+02   6.65486e+00   6.65486e+00   3.32052e-02
+checking ... number of ds of f is 37
+Info in <TCanvas::Print>: png file plot_standard_version34_resolutions_et70_eta2.100.png has been created
+et100 eta2.1
+cellSize is 2.5
+versionNumber is 34
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=38.3216 FROM MINOS     STATUS=SUCCESSFUL     21 CALLS         257 TOTAL
+                     EDM=2.8645e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     9.04551e+01   3.70725e+00  -3.79651e-02  -2.60994e-08
+   2  Mean         1.93367e+04   9.75346e+00  -3.73942e-03   2.95987e-07
+   3  Sigma        2.97589e+02   7.46435e+00   7.46435e+00  -1.80601e-02
+checking ... number of ds of f is 30
+Info in <TCanvas::Print>: png file plot_standard_version34_resolutions_et100_eta2.100.png has been created
+et125 eta2.1
+cellSize is 2.5
+versionNumber is 34
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=30.6438 FROM MINOS     STATUS=SUCCESSFUL     21 CALLS         388 TOTAL
+                     EDM=4.9787e-14    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.00557e+02   4.29350e+00  -2.22984e-02   6.80069e-05
+   2  Mean         2.41486e+04   1.11821e+01   4.13529e-02   3.65134e-05
+   3  Sigma        3.35064e+02   9.48454e+00   9.48454e+00  -3.63928e-02
+checking ... number of ds of f is 28
+Info in <TCanvas::Print>: png file plot_standard_version34_resolutions_et125_eta2.100.png has been created
+et150 eta2.1
+cellSize is 2.5
+versionNumber is 34
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=34.2165 FROM MINOS     STATUS=SUCCESSFUL     21 CALLS         210 TOTAL
+                     EDM=8.44524e-12    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     5.30757e+01   2.18375e+00  -1.93720e-02   5.73848e-05
+   2  Mean         2.89606e+04   1.24845e+01  -4.18822e-02  -2.63142e-05
+   3  Sigma        3.76273e+02   9.69400e+00   9.69400e+00   5.29618e-02
+checking ... number of ds of f is 42
+Info in <TCanvas::Print>: png file plot_standard_version34_resolutions_et150_eta2.100.png has been created
+
+****************************************
+Minimizer is Linear
+Chi2                      =      30.3069
+NDf                       =           11
+p0                        =      11.8406   +/-   0.970768    
+p1                        =      46.6247   +/-   0.0102271   
+checking ... number of ds of f is 11
+Info in <TCanvas::Print>: pdf file plot_standard_version34_calibration_fit_eta2.100.pdf has been created
+ FCN=16.4377 FROM MINOS     STATUS=SUCCESSFUL     35 CALLS         257 TOTAL
+                     EDM=8.61317e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  stoch_term   2.50261e-01   3.04773e-03  -1.45938e-07  -4.70079e-04
+   2  const_term   8.58950e-03   3.92573e-04   2.62984e-08  -4.51641e-03
+   3  noise_term   8.80147e-06   1.20735e-01   1.20735e-01  -5.72802e-05
+checking ... number of ds of f is 10
+Info in <TCanvas::Print>: pdf file plot_standard_version34_resolutions_versus_energy_standalone_withnoise__eta2.100.pdf has been created
+
+ FCN=16.4377 FROM MINOS     STATUS=SUCCESSFUL     26 CALLS         133 TOTAL
+                     EDM=5.06913e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  stoch_term   2.50261e-01   3.04469e-03   4.20316e-05   3.68242e-03
+   2  const_term   8.58958e-03   3.92437e-04   3.92437e-04   1.60918e-02
+checking ... number of ds of f is 11
+Info in <TCanvas::Print>: pdf file plot_standard_version34_resolutions_versus_energy_standalone__eta2.100.pdf has been created
+
+  *******************************************
+  *                                         *
+  *        W E L C O M E  to  R O O T       *
+  *                                         *
+  *   Version   5.34/14  16 December 2013   *
+  *                                         *
+  *  You are welcome to visit our Web site  *
+  *          http://root.cern.ch            *
+  *                                         *
+  *******************************************
+
+ROOT 5.34/14 (heads/v5-34-00-patches@v5-34-13-131-gd110ad3, Jan 07 2014, 00:12:00 on linuxx8664gcc)
+
+CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
+Type ? for help. Commands must be C++ statements.
+Enclose multiple statements between { }.
+
+Processing plotE_resolution_standard.C++(30,"version30","export_dir\/version30")...
+Info in <TUnixSystem::ACLiC>: creating shared library /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_standard_C.so
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:11:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_standard.C:23,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_standard_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_standard_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh: In member function ‘void HGCSSSimHit::setLayer(const unsigned int&, const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘silayer’ shadows a member of 'this' [-Wshadow]
+   inline void setLayer(const unsigned & layer, const unsigned & silayer){
+                                                                         ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_standard.C:23:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_standard_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_standard_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::energy(const double&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:65:45: warning: declaration of ‘energy’ shadows a member of 'this' [-Wshadow]
+   inline void energy(const double & energy) {
+                                             ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::adcCounts(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:85:52: warning: declaration of ‘adcCounts’ shadows a member of 'this' [-Wshadow]
+   inline void adcCounts(const unsigned & adcCounts){
+                                                    ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::layer(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:93:44: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+   inline void layer(const unsigned & layer){
+                                            ^
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_standard.C:26:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_standard_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_standard_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh: In member function ‘double HGCSSGenParticle::eta() const’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh:80:12: warning: declaration of ‘theta’ shadows a member of 'this' [-Wshadow]
+     double theta = acos(fabs(zpos_)/sqrt(zpos_*zpos_+xpos_*xpos_+ypos_*ypos_));
+            ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh: In member function ‘double HGCSSGenParticle::phi() const’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh:91:12: warning: declaration of ‘x’ shadows a member of 'this' [-Wshadow]
+     double x = xpos_;
+            ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh:92:12: warning: declaration of ‘y’ shadows a member of 'this' [-Wshadow]
+     double y = ypos_;
+            ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh: In member function ‘void HGCSSGenParticle::setPosition(const double&, const double&, const double&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh:99:81: warning: declaration of ‘z’ shadows a member of 'this' [-Wshadow]
+   inline void setPosition(const double & x, const double & y, const double & z) {
+                                                                                 ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh:99:81: warning: declaration of ‘y’ shadows a member of 'this' [-Wshadow]
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh:99:81: warning: declaration of ‘x’ shadows a member of 'this' [-Wshadow]
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh: In member function ‘void HGCSSGenParticle::setMomentum(const double&, const double&, const double&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh:105:84: warning: declaration of ‘pz’ shadows a member of 'this' [-Wshadow]
+   inline void setMomentum(const double & px, const double & py, const double & pz) {
+                                                                                    ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh:105:84: warning: declaration of ‘py’ shadows a member of 'this' [-Wshadow]
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSGenParticle.hh:105:84: warning: declaration of ‘px’ shadows a member of 'this' [-Wshadow]
+et3 eta2.1
+cellSize is 2.5
+versionNumber is 30
+model is 2
+ -- Processing event 0
+Warning in <TStreamerInfo::BuildCheck>: 
+   The StreamerInfo of class HGCSSRecoHit read from file export_dir/version30/Digi__version30_model2_BOFF_et3_eta2.100.root
+   has the same version (=1) as the active class but a different checksum.
+   You should update the version to ClassDef(HGCSSRecoHit,2).
+   Do not try to write objects with the current class definition,
+   the files will not be readable.
+
+Warning in <TStreamerInfo::CompareContent>: The following data member of
+the in-memory layout version 1 of class 'HGCSSRecoHit' is missing from 
+the on-file layout version 1:
+   double time_; //
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=46.9137 FROM MINOS     STATUS=SUCCESSFUL     41 CALLS         350 TOTAL
+                     EDM=8.22874e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     4.78777e+01   1.99400e+00  -6.16739e-03   1.66151e-05
+   2  Mean         6.28594e+02   1.29538e+00   8.71676e-04  -7.53299e-05
+   3  Sigma        3.86036e+01   1.05096e+00   1.05096e+00  -3.32463e-03
+checking ... number of ds of f is 42
+Info in <TCanvas::Print>: png file plot_standard_version30_resolutions_et3_eta2.100.png has been created
+et5 eta2.1
+cellSize is 2.5
+versionNumber is 30
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=56.5307 FROM MINOS     STATUS=SUCCESSFUL     21 CALLS         269 TOTAL
+                     EDM=6.80423e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     5.43924e+01   2.21807e+00  -2.43316e-02   3.64650e-05
+   2  Mean         1.03669e+03   1.71785e+00   6.95407e-03   1.25336e-04
+   3  Sigma        5.17797e+01   1.28355e+00   1.28355e+00  -4.17938e-02
+checking ... number of ds of f is 42
+Info in <TCanvas::Print>: png file plot_standard_version30_resolutions_et5_eta2.100.png has been created
+et7 eta2.1
+cellSize is 2.5
+versionNumber is 30
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=33.6733 FROM MINOS     STATUS=SUCCESSFUL     51 CALLS         454 TOTAL
+                     EDM=3.53586e-11    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     4.76219e+01   1.92760e+00  -6.66280e-03  -1.48635e-06
+   2  Mean         1.45687e+03   2.18574e+00   4.17734e-04  -4.72510e-07
+   3  Sigma        6.55967e+01   1.69299e+00   1.69299e+00  -1.21645e-01
+checking ... number of ds of f is 42
+Info in <TCanvas::Print>: png file plot_standard_version30_resolutions_et7_eta2.100.png has been created
+et10 eta2.1
+cellSize is 2.5
+versionNumber is 30
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=42.818 FROM MINOS     STATUS=SUCCESSFUL     31 CALLS         312 TOTAL
+                     EDM=2.16837e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     4.67476e+01   1.90909e+00  -1.60010e-02   9.59748e-06
+   2  Mean         2.06941e+03   2.57692e+00   3.25409e-03   4.68256e-05
+   3  Sigma        7.60411e+01   1.98997e+00   1.98997e+00  -4.51184e-02
+checking ... number of ds of f is 41
+Info in <TCanvas::Print>: png file plot_standard_version30_resolutions_et10_eta2.100.png has been created
+et20 eta2.1
+cellSize is 2.5
+versionNumber is 30
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=30.535 FROM MINOS     STATUS=SUCCESSFUL     21 CALLS         248 TOTAL
+                     EDM=9.04946e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     5.54886e+01   2.23569e+00  -2.26274e-02   3.70764e-07
+   2  Mean         4.12583e+03   3.76349e+00  -1.20238e-03  -6.89490e-06
+   3  Sigma        1.13701e+02   2.82234e+00   2.82234e+00   4.41371e-02
+checking ... number of ds of f is 39
+Info in <TCanvas::Print>: png file plot_standard_version30_resolutions_et20_eta2.100.png has been created
+et30 eta2.1
+cellSize is 2.5
+versionNumber is 30
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=36.6132 FROM MINOS     STATUS=SUCCESSFUL     21 CALLS         203 TOTAL
+                     EDM=5.89946e-11    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     6.74335e+01   2.73205e+00  -2.71958e-02   1.77446e-04
+   2  Mean         6.18523e+03   4.84487e+00  -5.85911e-02  -8.02675e-05
+   3  Sigma        1.46758e+02   3.66255e+00   3.66255e+00   1.64771e-01
+checking ... number of ds of f is 34
+Info in <TCanvas::Print>: png file plot_standard_version30_resolutions_et30_eta2.100.png has been created
+et40 eta2.1
+cellSize is 2.5
+versionNumber is 30
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=29.3793 FROM MINOS     STATUS=SUCCESSFUL     21 CALLS         203 TOTAL
+                     EDM=1.65231e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     6.98394e+01   2.81095e+00  -2.93303e-02   7.40990e-05
+   2  Mean         8.23099e+03   5.27992e+00  -4.06119e-02  -5.22227e-05
+   3  Sigma        1.60192e+02   3.90894e+00   3.90894e+00   8.38957e-02
+checking ... number of ds of f is 34
+Info in <TCanvas::Print>: png file plot_standard_version30_resolutions_et40_eta2.100.png has been created
+et50 eta2.1
+cellSize is 2.5
+versionNumber is 30
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=32.6003 FROM MINOS     STATUS=SUCCESSFUL     21 CALLS         222 TOTAL
+                     EDM=2.62756e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     5.51712e+01   2.22852e+00  -2.36195e-02   4.22227e-05
+   2  Mean         1.02835e+04   6.03293e+00   2.45887e-02   3.99246e-05
+   3  Sigma        1.83828e+02   4.51181e+00   4.51181e+00  -6.03858e-02
+checking ... number of ds of f is 40
+Info in <TCanvas::Print>: png file plot_standard_version30_resolutions_et50_eta2.100.png has been created
+et60 eta2.1
+cellSize is 2.5
+versionNumber is 30
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=31.0333 FROM MINOS     STATUS=SUCCESSFUL     21 CALLS         215 TOTAL
+                     EDM=6.84157e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     6.66807e+01   2.71386e+00  -2.53710e-02   1.11952e-04
+   2  Mean         1.23461e+04   6.81927e+00   5.22295e-02   5.34266e-05
+   3  Sigma        2.08804e+02   5.28582e+00   5.28582e+00  -1.46393e-01
+checking ... number of ds of f is 39
+Info in <TCanvas::Print>: png file plot_standard_version30_resolutions_et60_eta2.100.png has been created
+et70 eta2.1
+cellSize is 2.5
+versionNumber is 30
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=35.2118 FROM MINOS     STATUS=SUCCESSFUL     21 CALLS         226 TOTAL
+                     EDM=1.79747e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     6.78229e+01   2.71558e+00  -3.05777e-02   1.15958e-05
+   2  Mean         1.43906e+04   7.55120e+00  -1.84328e-02  -1.88718e-05
+   3  Sigma        2.24382e+02   5.39812e+00   5.39812e+00   1.65135e-01
+checking ... number of ds of f is 34
+Info in <TCanvas::Print>: png file plot_standard_version30_resolutions_et70_eta2.100.png has been created
+et100 eta2.1
+cellSize is 2.5
+versionNumber is 30
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=27.7802 FROM MINOS     STATUS=SUCCESSFUL     21 CALLS         229 TOTAL
+                     EDM=3.25852e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     5.79467e+01   2.38746e+00  -1.80409e-02   2.98987e-04
+   2  Mean         2.05596e+04   9.30997e+00   9.77230e-02   5.44579e-05
+   3  Sigma        2.82746e+02   7.45633e+00   7.45633e+00  -1.22768e-01
+checking ... number of ds of f is 37
+Info in <TCanvas::Print>: png file plot_standard_version30_resolutions_et100_eta2.100.png has been created
+et125 eta2.1
+cellSize is 2.5
+versionNumber is 30
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=38.9508 FROM MINOS     STATUS=SUCCESSFUL     40 CALLS         241 TOTAL
+                     EDM=7.26261e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.15644e+02   4.93110e+00  -2.12668e-02   1.20243e-04
+   2  Mean         2.56349e+04   1.14071e+01  -2.28642e-02  -2.59663e-05
+   3  Sigma        3.29658e+02   9.30128e+00   9.30128e+00  -1.66124e-02
+checking ... number of ds of f is 24
+Info in <TCanvas::Print>: png file plot_standard_version30_resolutions_et125_eta2.100.png has been created
+et150 eta2.1
+cellSize is 2.5
+versionNumber is 30
+model is 2
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=44.7803 FROM MINOS     STATUS=SUCCESSFUL     21 CALLS         223 TOTAL
+                     EDM=2.13982e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     5.53706e+01   2.30018e+00  -2.24769e-02   1.04536e-04
+   2  Mean         3.07381e+04   1.32384e+01  -6.89141e-02  -3.36919e-05
+   3  Sigma        3.88986e+02   1.00250e+01   1.00250e+01   1.09267e-01
+checking ... number of ds of f is 44
+Info in <TCanvas::Print>: png file plot_standard_version30_resolutions_et150_eta2.100.png has been created
+
+****************************************
+Minimizer is Linear
+Chi2                      =      72.3635
+NDf                       =           11
+p0                        =       14.868   +/-   0.938852    
+p1                        =      49.5275   +/-   0.0101885   
+checking ... number of ds of f is 11
+Info in <TCanvas::Print>: pdf file plot_standard_version30_calibration_fit_eta2.100.pdf has been created
+ FCN=16.5698 FROM MINOS     STATUS=SUCCESSFUL     70 CALLS         250 TOTAL
+                     EDM=5.86456e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  stoch_term   2.32346e-01   2.77907e-03   1.47908e-06   7.32589e-03
+   2  const_term   8.14298e-03   3.59752e-04  -1.62771e-07   4.69882e-02
+   3  noise_term   3.07209e-10   1.73719e-01   1.73719e-01** at limit **
+checking ... number of ds of f is 10
+Info in <TCanvas::Print>: pdf file plot_standard_version30_resolutions_versus_energy_standalone_withnoise__eta2.100.pdf has been created
+
+ FCN=16.5698 FROM MINOS     STATUS=SUCCESSFUL     26 CALLS         128 TOTAL
+                     EDM=5.85782e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  stoch_term   2.32346e-01   2.77727e-03   3.83093e-05   4.08823e-03
+   2  const_term   8.14298e-03   3.59674e-04   3.59674e-04   1.75235e-02
+checking ... number of ds of f is 11
+Info in <TCanvas::Print>: pdf file plot_standard_version30_resolutions_versus_energy_standalone__eta2.100.pdf has been created
+

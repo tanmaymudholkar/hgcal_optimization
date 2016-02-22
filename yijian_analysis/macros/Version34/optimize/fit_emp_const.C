@@ -1,0 +1,225 @@
+#include<string>
+#include<iostream>
+#include<fstream>
+#include<sstream>
+#include<cmath>
+#include<stdlib.h>
+
+#include "TFile.h"
+#include "TTree.h"
+#include "TF1.h"
+#include "TH1F.h"
+#include "TH2F.h"
+#include "TCanvas.h"
+#include "TStyle.h"
+#include "TString.h"
+#include "TChain.h"
+#include "TSystem.h"
+#include "TGraphErrors.h"
+#include "TVector.h"
+#include "TRandom3.h"
+
+#include "/export/home/yijianz/research/HGCstandalone/userlib/include/HGCSSEvent.hh"
+#include "/export/home/yijianz/research/HGCstandalone/userlib/include/HGCSSInfo.hh"
+#include "/export/home/yijianz/research/HGCstandalone/userlib/include/HGCSSRecoHit.hh"
+#include "/export/home/yijianz/research/HGCstandalone/userlib/include/HGCSSSimHit.hh"
+#include "/export/home/yijianz/research/HGCstandalone/userlib/include/HGCSSSamplingSection.hh"
+#include "/export/home/yijianz/research/HGCstandalone/userlib/include/HGCSSGenParticle.hh"
+
+const int layers=24; //global variable
+const int drops=8;
+
+typedef struct fitformula{
+   double alpha;// energy loss propto coeff
+   double beta; // energy loss log coeff
+   double gamma; //particle production rate propto coeff
+   double c; //particle production high energy limit adding term
+   double chisq; //square deviation, Hamiltonian
+   double Elfit[layers+1-drops];
+   double Nlfit[layers+1-drops];
+}fitformula;
+
+void initialformula(double alpha, double beta, double gamma, double c, std::vector<double> El, std::vector<double> weights, fitformula &fit){
+   fit.alpha=alpha;
+   fit.beta=beta;
+   fit.gamma=gamma;
+   fit.c=c;
+   fit.Elfit[0]=El[0];
+   fit.Nlfit[0]=1;
+   for(unsigned ilayer=1; ilayer<=layers-drops; ilayer++){
+     fit.Nlfit[ilayer]=fit.Nlfit[ilayer-1]*(1+gamma*weights[ilayer-1]/sqrt(fit.Nlfit[ilayer-1]/fit.Elfit[ilayer-1])+c);
+     fit.Elfit[ilayer]=fit.Elfit[ilayer-1]-alpha*weights[ilayer-1]*fit.Nlfit[ilayer]*log(beta*fit.Elfit[ilayer-1]/fit.Nlfit[ilayer]);
+   }
+   fit.chisq=0;
+   for(unsigned ilayer=1; ilayer<=layers-drops; ilayer++)
+      fit.chisq+=(El[ilayer]-fit.Elfit[ilayer])*(El[ilayer]-fit.Elfit[ilayer]);
+}
+
+void fitsubstitute(fitformula &fit,fitformula newfit){
+   fit.alpha=newfit.alpha;
+   fit.beta=newfit.beta;
+   fit.gamma=newfit.gamma;
+   fit.c=newfit.c;
+   for(unsigned ilayer=1; ilayer<=layers-drops; ilayer++){
+      fit.Nlfit[ilayer]=newfit.Nlfit[ilayer];
+      fit.Elfit[ilayer]=newfit.Elfit[ilayer];
+   }
+   fit.chisq=newfit.chisq;
+}
+
+void updateformula(fitformula &fit,std::vector<double> El, std::vector<double> weights,double longarray[],int &longarrayentry,double &newchisq,double temperature){
+   double *randomarray=longarray+longarrayentry;
+   fitformula newfit;
+   newfit.alpha=fit.alpha*(0.9+0.2*randomarray[0]);
+   newfit.beta=fit.beta*(0.9+0.2*randomarray[1]);
+   newfit.gamma=fit.gamma*(0.9+0.2*randomarray[2]);
+   newfit.c=fit.c*(0.9+0.2*randomarray[3]);
+   longarrayentry+=4;
+   newfit.Elfit[0]=El[0];
+   newfit.Nlfit[0]=1;
+   for(unsigned ilayer=1; ilayer<=layers-drops; ilayer++){
+     newfit.Nlfit[ilayer]=newfit.Nlfit[ilayer-1]*(1+newfit.gamma*weights[ilayer-1]/sqrt(newfit.Nlfit[ilayer-1]/newfit.Elfit[ilayer-1])+newfit.c);
+     newfit.Elfit[ilayer]=newfit.Elfit[ilayer-1]-newfit.alpha*weights[ilayer-1]*newfit.Nlfit[ilayer]*log(newfit.beta*fit.Elfit[ilayer-1]/newfit.Nlfit[ilayer]);
+   }
+   newfit.chisq=0;
+   for(unsigned ilayer=1; ilayer<=layers-drops; ilayer++)
+      newfit.chisq+=(El[ilayer]-newfit.Elfit[ilayer])*(El[ilayer]-newfit.Elfit[ilayer]);
+   if(newfit.chisq<fit.chisq)
+      fitsubstitute(fit,newfit);
+   else
+      if(longarray[++longarrayentry]<exp((fit.chisq-newfit.chisq)/temperature))
+         fitsubstitute(fit,newfit);
+   newchisq=fit.chisq;
+}
+
+void readdata(std::vector<double> &layer_array,std::vector<double> &El,std::vector<double> &weights){ //read data
+
+    const int et_counter=6; //et=40
+    const int eta_counter=1; //eta=2.1
+    gSystem->Load("/export/home/tmudholk/research/HGCstandalone/userlib/lib/libPFCalEEuserlib.so");
+
+    ifstream f_layer_weights;
+    f_layer_weights.open("weights_v34.dat");
+    std::string line;
+    double weight;
+    if (f_layer_weights.is_open()) {
+    while (getline(f_layer_weights,line)) {
+      weight = std::atof(line.c_str());
+      weights.push_back(weight);
+      }
+    }
+
+  double et_values_array[] = {3,5,7,10,20,30,40,50,60,70,80,90,100,125,150,175,200};
+  double eta_values_array[] = {1.6,2.1,2.5};
+
+  std::vector<double> et_values(et_values_array,et_values_array+sizeof(et_values_array)/sizeof(double));
+  std::vector<double> eta_values(eta_values_array,eta_values_array+sizeof(eta_values_array)/sizeof(double));
+
+  TString HGcal_common_prefix = Form("/export/cmss2/tmudholk/HGCal/version34/HGcal__version34_model2_BOFF_");// Form: convert a string to Tstring
+  TString Digi_common_prefix = Form("/export/cmss2/tmudholk/HGCal/version34/Digi__version34_model2_BOFF_");
+  TString common_suffix = Form(".root");
+
+      TString eta_portion = Form("_eta%.3f",eta_values[eta_counter]);
+      Double_t energy_incoming_gev = et_values[et_counter]*cosh(eta_values[eta_counter]);
+      TString et_portion = Form("et%.0f",et_values[et_counter]);
+      std::cout << "et" << et_values[et_counter] << " eta" << eta_values[eta_counter] << std::endl;
+
+      TChain  *lSimTree = new TChain("HGCSSTree");
+      TChain  *lRecTree = new TChain("RecoTree");
+
+      lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
+      lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+common_suffix);
+ 
+      std::vector<HGCSSSamplingSection> * ssvec = 0;
+      std::vector<HGCSSSimHit> * simhitvec = 0;
+      std::vector<HGCSSRecoHit> * rechitvec = 0;
+
+      lSimTree->SetBranchAddress("HGCSSSamplingSectionVec",&ssvec);
+      lSimTree->SetBranchAddress("HGCSSSimHitVec",&simhitvec);
+      lRecTree->SetBranchAddress("HGCSSRecoHitVec",&rechitvec);
+
+      const unsigned nEvts = lSimTree->GetEntries();       
+      double totalE[layers]={0};
+
+      for (unsigned ievt(0); ievt<nEvts; ++ievt){//loop on entries
+
+	if (ievt%100==0) std::cout << " -- Processing event " << ievt << std::endl;
+	lSimTree->GetEntry(ievt);
+	lRecTree->GetEntry(ievt);  
+        const unsigned nEvts = lSimTree->GetEntries(); 
+	for (unsigned iH(0); iH<(*rechitvec).size(); ++iH){//loop over rechits
+	  const HGCSSRecoHit lHit = (*rechitvec)[iH];
+    
+	  // double posx = lHit.get_x();
+	  // double posy = lHit.get_y();
+	  //double posz = lHit.get_z();
+	  unsigned layer = lHit.layer();
+	  double energy = lHit.energy();
+	  //	  std::cout << "energy is " << energy << "   " << "layer is " << layer << std::endl;
+
+	  double weighted_energy = energy*weights[layer]/tanh(eta_values[eta_counter]);
+	  
+	    totalE[layer] += weighted_energy;
+        }//end for hits
+     }//end for evts
+     
+     for (unsigned ilayer(0); ilayer<layers; ilayer++) // average mips
+         totalE[ilayer]/=nEvts;
+     double avermip=0;
+     for (unsigned ilayer(0); ilayer<layers; ilayer++)
+         avermip+=totalE[ilayer];
+     double calibration_constant=energy_incoming_gev/avermip;
+     for (unsigned ilayer(0); ilayer<layers; ilayer++)
+         totalE[ilayer]*=calibration_constant;
+     double remainE=energy_incoming_gev;
+     El.push_back(remainE);
+     layer_array.push_back(0);
+     for(unsigned ilayer=0; ilayer<layers; ilayer++){
+        remainE-=totalE[ilayer];
+        layer_array.push_back(double(ilayer+1));
+        El.push_back(remainE);
+     }
+}//end for readdata 
+
+void fit_emp_const(){
+   std::vector<double> layer_array,El,weights;
+   readdata(layer_array,El,weights);
+   TVectorD Tlayer_array(layer_array.size(),&layer_array[0]);
+   TVectorD Tweights(weights.size(),&weights[0]);
+   fitformula fit;
+   initialformula(0.5E0,5,0.1,0.01,El,weights,fit);
+   const int updatetime=200000;
+   double chisqn;
+   double longarray[5*updatetime];
+   double Tmax=200;//max temperature
+   double Tvalue=Tmax;
+   double deltaT=Tmax/updatetime;
+   TRandom3 r;
+   r.Rndm();
+   r.RndmArray(5*updatetime,longarray);
+   int longarrayentry=0;
+   for(unsigned time=1;time<=updatetime;time++)
+     { 
+      updateformula(fit,El,weights,longarray,longarrayentry,chisqn,Tvalue);
+      if(time%20000==0) printf("time=%d,chisq=%4.1f\n",time,chisqn);
+      Tvalue-=deltaT;
+     }
+    TCanvas *myc=new TCanvas("myc","myc",1000,1000);;
+    myc->Divide(2,1);
+    TVectorD TNlfit(layers+1-drops,fit.Nlfit);
+    TVectorD TElfit(layers+1-drops,fit.Elfit);
+    TVectorD TEl(layers+1-drops,&El[0]);
+    TGraph *nlgraph=new TGraph(Tlayer_array,TNlfit);
+    TGraph *elgraph=new TGraph(Tlayer_array,TElfit);
+    TGraph *originel=new TGraph(Tlayer_array,TEl);
+    elgraph->SetTitle(Form("chisq=%4.1f,alpha=%.2g,beta=%.2g,gamma=%.3g,c=%4g",fit.chisq,fit.alpha,fit.beta,fit.gamma,fit.c));
+    myc->cd(1);
+    elgraph->Draw("AC*");
+    originel->SetLineColor(4);
+    originel->SetMarkerStyle(21);
+    originel->Draw("CP");
+    myc->cd(2);
+    nlgraph->SetTitle("Effective num of particles vs layer");
+    nlgraph->Draw("AC*");
+    myc->SaveAs("emp_fit:et40,eta2.1.pdf");
+}    

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+root -b -q "plotE_resolution_old.C++(34,\"\/export\/cmss2\/tmudholk\/HGCal\/version34\")"

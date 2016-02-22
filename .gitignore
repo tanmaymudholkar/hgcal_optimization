@@ -6,3 +6,6 @@ LSFJOB_*
 bin
 obj
 *.root
+*.pdf
+*.png
+plot_*

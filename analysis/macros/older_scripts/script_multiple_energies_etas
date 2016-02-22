@@ -1,0 +1,16 @@
+#!/bin/bash
+
+data_directory=/export/cmss2/paulini/CMS/HGCal/version30
+
+for Hfile in $data_directory/H*; do
+echo "filename is" $Hfile
+Dfile=$(echo $Hfile | sed "s|HGcal_version|Digi_version|")
+echo "dfilename is" $Dfile
+et=$(echo $Hfile | egrep -o "et([0-9]+)")
+eta=$(echo $Hfile | egrep -o "eta([1,2]\.[6,1,5])" | sed "s|\.|pt|")
+#echo "et is" $et
+#echo "eta is" $eta
+cat plotE_layeronly.C | sed "s|lSimTree->AddFile(.*)|lSimTree->AddFile(\"$Hfile\")|" | sed "s|lRecTree->AddFile(.*)|lRecTree->AddFile(\"$Dfile\")|" | sed "s|myc->SaveAs(.*)|myc->SaveAs(\"plot_$et$eta.png\")|" > tempplotE_layeronly.C
+mv tempplotE_layeronly.C plotE_layeronly.C
+root -q -b plotE_layeronly.C++ >> script_multiple_energies_etas_output
+done

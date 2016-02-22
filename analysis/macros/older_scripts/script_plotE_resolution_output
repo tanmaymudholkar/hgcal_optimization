@@ -1,0 +1,1086 @@
+  *******************************************
+  *                                         *
+  *        W E L C O M E  to  R O O T       *
+  *                                         *
+  *   Version   5.34/14  16 December 2013   *
+  *                                         *
+  *  You are welcome to visit our Web site  *
+  *          http://root.cern.ch            *
+  *                                         *
+  *******************************************
+
+ROOT 5.34/14 (heads/v5-34-00-patches@v5-34-13-131-gd110ad3, Jan 07 2014, 00:12:00 on linuxx8664gcc)
+
+CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
+Type ? for help. Commands must be C++ statements.
+Enclose multiple statements between { }.
+
+Processing plotE_resolution.C++(34,"vcnncal","\/export\/cmss2\/tmudholk\/HGCal\/vcnncal",0.5)...
+Info in <TUnixSystem::ACLiC>: creating shared library /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_C.so
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:11:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution.C:23,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh: In member function ‘void HGCSSSimHit::setLayer(const unsigned int&, const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘silayer’ shadows a member of 'this' [-Wshadow]
+   inline void setLayer(const unsigned & layer, const unsigned & silayer){
+                                                                         ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution.C:23:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::energy(const double&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:65:45: warning: declaration of ‘energy’ shadows a member of 'this' [-Wshadow]
+   inline void energy(const double & energy) {
+                                             ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::adcCounts(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:85:52: warning: declaration of ‘adcCounts’ shadows a member of 'this' [-Wshadow]
+   inline void adcCounts(const unsigned & adcCounts){
+                                                    ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::layer(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:93:44: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+   inline void layer(const unsigned & layer){
+                                            ^
+et3 eta2.1
+ -- Processing event 0
+Warning in <TStreamerInfo::BuildCheck>: 
+   The StreamerInfo of class HGCSSRecoHit read from file /export/cmss2/tmudholk/HGCal/vcnncal/Digi__version34_model2_BOFF_et3_eta2.100.root
+   has the same version (=1) as the active class but a different checksum.
+   You should update the version to ClassDef(HGCSSRecoHit,2).
+   Do not try to write objects with the current class definition,
+   the files will not be readable.
+
+Warning in <TStreamerInfo::CompareContent>: The following data member of
+the in-memory layout version 1 of class 'HGCSSRecoHit' is missing from 
+the on-file layout version 1:
+   double time_; //
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=25.9615 FROM MIGRAD    STATUS=CONVERGED      61 CALLS          62 TOTAL
+                     EDM=9.38127e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.01838e+02   4.01918e+00   8.27368e-03  -1.23041e-04
+   2  Mean         5.91109e+02   1.40827e+00   3.52199e-03  -9.61864e-05
+   3  Sigma        4.23727e+01   1.01805e+00   1.63136e-05  -4.58456e-02
+checking ... number of ds of f is 21
+Info in <TCanvas::Print>: png file plot_vcnncal_threshold_0.5_resolutions_et3_eta2.100.png has been created
+et7 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=20.8159 FROM MIGRAD    STATUS=CONVERGED      60 CALLS          61 TOTAL
+                     EDM=5.90389e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.04658e+02   4.20680e+00   7.62822e-03   2.09761e-05
+   2  Mean         1.36091e+03   2.08088e+00   4.68705e-03  -3.93622e-04
+   3  Sigma        6.35791e+01   1.58255e+00   1.46570e-05  -6.60410e-02
+checking ... number of ds of f is 21
+Info in <TCanvas::Print>: png file plot_vcnncal_threshold_0.5_resolutions_et7_eta2.100.png has been created
+et20 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=27.0919 FROM MIGRAD    STATUS=CONVERGED      60 CALLS          61 TOTAL
+                     EDM=4.53285e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.07363e+02   4.19109e+00   8.91309e-03   6.57857e-07
+   2  Mean         3.88065e+03   3.61928e+00   9.35463e-03  -1.74551e-05
+   3  Sigma        1.11320e+02   2.53588e+00   1.58068e-05  -8.89785e-03
+checking ... number of ds of f is 21
+Info in <TCanvas::Print>: png file plot_vcnncal_threshold_0.5_resolutions_et20_eta2.100.png has been created
+et35 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=34.6334 FROM MIGRAD    STATUS=CONVERGED      60 CALLS          61 TOTAL
+                     EDM=4.44749e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.08038e+02   4.31298e+00   1.01404e-02  -5.24302e-06
+   2  Mean         6.78273e+03   4.99768e+00   1.42434e-02  -1.33014e-05
+   3  Sigma        1.50920e+02   3.59461e+00   1.80037e-05  -1.21009e-01
+checking ... number of ds of f is 23
+Info in <TCanvas::Print>: png file plot_vcnncal_threshold_0.5_resolutions_et35_eta2.100.png has been created
+et50 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=10.9115 FROM MIGRAD    STATUS=CONVERGED      60 CALLS          61 TOTAL
+                     EDM=6.7431e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.38067e+02   5.54669e+00   7.40198e-03  -2.00892e-06
+   2  Mean         9.67678e+03   6.47726e+00   1.09149e-02   1.02986e-06
+   3  Sigma        2.01731e+02   5.03989e+00   1.10670e-05   3.39415e-03
+checking ... number of ds of f is 17
+Info in <TCanvas::Print>: png file plot_vcnncal_threshold_0.5_resolutions_et50_eta2.100.png has been created
+
+****************************************
+Minimizer is Linear
+Chi2                      =      3.65263
+NDf                       =            3
+p0                        =      9.93642   +/-   1.36538     
+p1                        =      46.6704   +/-   0.0247572   
+checking ... number of ds of f is 3
+Info in <TCanvas::Print>: pdf file plot_vcnncal_threshold_0.5_calibration_fit_eta2.100.pdf has been created
+ FCN=7.72162 FROM MIGRAD    STATUS=CONVERGED      36 CALLS          37 TOTAL
+                     EDM=4.99619e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  const_offset   3.55405e-03   7.36238e-04   4.41966e-07  -3.40223e-02
+   2  coeff_sqrt   2.34253e-01   6.85896e-03   4.11745e-06  -7.67116e-03
+checking ... number of ds of f is 3
+Info in <TCanvas::Print>: pdf file plot_vcnncal_resolutions_versus_energy_eta2.100.pdf has been created
+
+ FCN=4.75234 FROM MIGRAD    STATUS=CONVERGED     185 CALLS         186 TOTAL
+                     EDM=2.91965e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  const_offset_inside_sqrt   6.02353e-02   2.33314e-03   1.76013e-06  -7.81390e-03
+   2  coeff_1byE_inside_sqrt   1.13650e-04   2.24619e-05   1.69462e-08  -3.98238e+00
+checking ... number of ds of f is 3
+Info in <TCanvas::Print>: pdf file plot_standalone_vcnncal_resolutions_versus_energy_eta2.100.pdf has been created
+
+  *******************************************
+  *                                         *
+  *        W E L C O M E  to  R O O T       *
+  *                                         *
+  *   Version   5.34/14  16 December 2013   *
+  *                                         *
+  *  You are welcome to visit our Web site  *
+  *          http://root.cern.ch            *
+  *                                         *
+  *******************************************
+
+ROOT 5.34/14 (heads/v5-34-00-patches@v5-34-13-131-gd110ad3, Jan 07 2014, 00:12:00 on linuxx8664gcc)
+
+CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
+Type ? for help. Commands must be C++ statements.
+Enclose multiple statements between { }.
+
+Processing plotE_resolution.C++(34,"vfrac1","\/export\/cmss2\/tmudholk\/HGCal\/vfrac1",0.5)...
+Info in <TUnixSystem::ACLiC>: creating shared library /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_C.so
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:11:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution.C:23,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh: In member function ‘void HGCSSSimHit::setLayer(const unsigned int&, const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘silayer’ shadows a member of 'this' [-Wshadow]
+   inline void setLayer(const unsigned & layer, const unsigned & silayer){
+                                                                         ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution.C:23:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::energy(const double&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:65:45: warning: declaration of ‘energy’ shadows a member of 'this' [-Wshadow]
+   inline void energy(const double & energy) {
+                                             ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::adcCounts(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:85:52: warning: declaration of ‘adcCounts’ shadows a member of 'this' [-Wshadow]
+   inline void adcCounts(const unsigned & adcCounts){
+                                                    ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::layer(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:93:44: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+   inline void layer(const unsigned & layer){
+                                            ^
+et3 eta2.1
+ -- Processing event 0
+Warning in <TStreamerInfo::BuildCheck>: 
+   The StreamerInfo of class HGCSSRecoHit read from file /export/cmss2/tmudholk/HGCal/vfrac1/Digi__version34_model2_BOFF_et3_eta2.100.root
+   has the same version (=1) as the active class but a different checksum.
+   You should update the version to ClassDef(HGCSSRecoHit,2).
+   Do not try to write objects with the current class definition,
+   the files will not be readable.
+
+Warning in <TStreamerInfo::CompareContent>: The following data member of
+the in-memory layout version 1 of class 'HGCSSRecoHit' is missing from 
+the on-file layout version 1:
+   double time_; //
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=32.7825 FROM MIGRAD    STATUS=CONVERGED      69 CALLS          70 TOTAL
+                     EDM=1.44047e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.15132e+02   4.56362e+00   1.05176e-02   4.88366e-06
+   2  Mean         6.01492e+02   1.37109e+00   3.85663e-03  -7.72333e-05
+   3  Sigma        4.13027e+01   9.94290e-01   1.79242e-05  -1.34287e-02
+checking ... number of ds of f is 20
+Info in <TCanvas::Print>: png file plot_vfrac1_threshold_0.5_resolutions_et3_eta2.100.png has been created
+et7 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=14.6462 FROM MIGRAD    STATUS=CONVERGED      58 CALLS          59 TOTAL
+                     EDM=3.48319e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.07989e+02   4.30881e+00   6.64885e-03  -1.86132e-04
+   2  Mean         1.38978e+03   2.10622e+00   4.05381e-03  -2.61494e-05
+   3  Sigma        6.43557e+01   1.61262e+00   1.28383e-05  -1.21337e-01
+checking ... number of ds of f is 20
+Info in <TCanvas::Print>: png file plot_vfrac1_threshold_0.5_resolutions_et7_eta2.100.png has been created
+et20 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=28.9991 FROM MIGRAD    STATUS=CONVERGED      60 CALLS          61 TOTAL
+                     EDM=1.41659e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.03426e+02   4.25124e+00   8.87600e-03   1.91920e-05
+   2  Mean         3.96163e+03   3.67409e+00   9.71779e-03   1.29526e-05
+   3  Sigma        1.13002e+02   2.91472e+00   1.75287e-05  -1.23607e-02
+checking ... number of ds of f is 25
+Info in <TCanvas::Print>: png file plot_vfrac1_threshold_0.5_resolutions_et20_eta2.100.png has been created
+et35 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=9.74397 FROM MIGRAD    STATUS=CONVERGED      60 CALLS          61 TOTAL
+                     EDM=4.26989e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.38944e+02   5.54720e+00   7.07041e-03  -1.32431e-05
+   2  Mean         6.91190e+03   5.21994e+00   8.32559e-03   1.33521e-05
+   3  Sigma        1.62932e+02   3.96565e+00   1.01001e-05  -4.23273e-03
+checking ... number of ds of f is 19
+Info in <TCanvas::Print>: png file plot_vfrac1_threshold_0.5_resolutions_et35_eta2.100.png has been created
+et50 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=9.32156 FROM MIGRAD    STATUS=CONVERGED      60 CALLS          61 TOTAL
+                     EDM=1.1794e-06    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.83817e+02   7.24499e+00   9.17262e-03  -2.16076e-04
+   2  Mean         9.86903e+03   6.35308e+00   9.96986e-03  -1.22674e-04
+   3  Sigma        1.98897e+02   4.66987e+00   9.59344e-06  -7.09342e-02
+checking ... number of ds of f is 14
+Info in <TCanvas::Print>: png file plot_vfrac1_threshold_0.5_resolutions_et50_eta2.100.png has been created
+
+****************************************
+Minimizer is Linear
+Chi2                      =      3.91041
+NDf                       =            3
+p0                        =      9.86414   +/-   1.34269     
+p1                        =      47.5988   +/-   0.0248021   
+checking ... number of ds of f is 3
+Info in <TCanvas::Print>: pdf file plot_vfrac1_threshold_0.5_calibration_fit_eta2.100.pdf has been created
+ FCN=1.38285 FROM MIGRAD    STATUS=CONVERGED      36 CALLS          37 TOTAL
+                     EDM=3.59573e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  const_offset   4.55633e-03   7.09625e-04   2.33252e-07  -2.87419e-02
+   2  coeff_sqrt   2.24584e-01   6.63878e-03   2.18215e-06  -6.57549e-03
+checking ... number of ds of f is 3
+Info in <TCanvas::Print>: pdf file plot_vfrac1_resolutions_versus_energy_eta2.100.pdf has been created
+
+ FCN=1.13841 FROM MIGRAD    STATUS=CONVERGED     417 CALLS         418 TOTAL
+                     EDM=7.1506e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  const_offset_inside_sqrt   5.74598e-02   2.26504e-03   1.07925e-06  -2.47468e-01
+   2  coeff_1byE_inside_sqrt   1.37411e-04   2.16985e-05   1.03322e-08  -1.66758e+01
+checking ... number of ds of f is 3
+Info in <TCanvas::Print>: pdf file plot_standalone_vfrac1_resolutions_versus_energy_eta2.100.pdf has been created
+
+  *******************************************
+  *                                         *
+  *        W E L C O M E  to  R O O T       *
+  *                                         *
+  *   Version   5.34/14  16 December 2013   *
+  *                                         *
+  *  You are welcome to visit our Web site  *
+  *          http://root.cern.ch            *
+  *                                         *
+  *******************************************
+
+ROOT 5.34/14 (heads/v5-34-00-patches@v5-34-13-131-gd110ad3, Jan 07 2014, 00:12:00 on linuxx8664gcc)
+
+CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
+Type ? for help. Commands must be C++ statements.
+Enclose multiple statements between { }.
+
+Processing plotE_resolution.C++(40,"vfrac75","\/export\/cmss2\/tmudholk\/HGCal\/vfrac75",0.5)...
+Info in <TUnixSystem::ACLiC>: creating shared library /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_C.so
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:11:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution.C:23,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh: In member function ‘void HGCSSSimHit::setLayer(const unsigned int&, const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘silayer’ shadows a member of 'this' [-Wshadow]
+   inline void setLayer(const unsigned & layer, const unsigned & silayer){
+                                                                         ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution.C:23:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::energy(const double&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:65:45: warning: declaration of ‘energy’ shadows a member of 'this' [-Wshadow]
+   inline void energy(const double & energy) {
+                                             ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::adcCounts(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:85:52: warning: declaration of ‘adcCounts’ shadows a member of 'this' [-Wshadow]
+   inline void adcCounts(const unsigned & adcCounts){
+                                                    ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::layer(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:93:44: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+   inline void layer(const unsigned & layer){
+                                            ^
+et3 eta2.1
+ -- Processing event 0
+Warning in <TStreamerInfo::BuildCheck>: 
+   The StreamerInfo of class HGCSSRecoHit read from file /export/cmss2/tmudholk/HGCal/vfrac75/Digi__version40_model2_BOFF_et3_eta2.100.root
+   has the same version (=1) as the active class but a different checksum.
+   You should update the version to ClassDef(HGCSSRecoHit,2).
+   Do not try to write objects with the current class definition,
+   the files will not be readable.
+
+Warning in <TStreamerInfo::CompareContent>: The following data member of
+the in-memory layout version 1 of class 'HGCSSRecoHit' is missing from 
+the on-file layout version 1:
+   double time_; //
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=17.1097 FROM MIGRAD    STATUS=CONVERGED      64 CALLS          65 TOTAL
+                     EDM=2.43192e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.06375e+02   4.26503e+00   7.05084e-03   5.52115e-05
+   2  Mean         5.88673e+02   1.26531e+00   2.61693e-03  -1.73653e-04
+   3  Sigma        3.93151e+01   9.62047e-01   1.31408e-05  -5.90083e-02
+checking ... number of ds of f is 24
+Info in <TCanvas::Print>: png file plot_vfrac75_threshold_0.5_resolutions_et3_eta2.100.png has been created
+et7 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=15.3605 FROM MIGRAD    STATUS=CONVERGED      52 CALLS          53 TOTAL
+                     EDM=2.0702e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.02170e+02   4.07250e+00   6.43622e-03  -1.83336e-04
+   2  Mean         1.36037e+03   2.16558e+00   4.27343e-03  -1.00019e-05
+   3  Sigma        6.63184e+01   1.66474e+00   1.32675e-05  -8.20214e-02
+checking ... number of ds of f is 20
+Info in <TCanvas::Print>: png file plot_vfrac75_threshold_0.5_resolutions_et7_eta2.100.png has been created
+et20 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=18.2156 FROM MIGRAD    STATUS=CONVERGED      60 CALLS          61 TOTAL
+                     EDM=1.26093e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.04083e+02   4.33985e+00   7.11002e-03  -4.12008e-07
+   2  Mean         3.87808e+03   3.84797e+00   8.20369e-03   3.97700e-06
+   3  Sigma        1.18274e+02   3.27326e+00   1.48984e-05  -7.43583e-04
+checking ... number of ds of f is 22
+Info in <TCanvas::Print>: png file plot_vfrac75_threshold_0.5_resolutions_et20_eta2.100.png has been created
+et35 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=11.7462 FROM MIGRAD    STATUS=CONVERGED      58 CALLS          59 TOTAL
+                     EDM=9.29304e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.99195e+02   7.96612e+00   1.10733e-02  -1.57015e-05
+   2  Mean         6.76370e+03   4.98532e+00   8.67432e-03  -2.70407e-04
+   3  Sigma        1.54792e+02   3.79084e+00   1.07565e-05   2.87458e-03
+checking ... number of ds of f is 15
+Info in <TCanvas::Print>: png file plot_vfrac75_threshold_0.5_resolutions_et35_eta2.100.png has been created
+et50 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=23.3194 FROM MIGRAD    STATUS=CONVERGED      59 CALLS          60 TOTAL
+                     EDM=1.13727e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.38805e+02   5.59082e+00   1.07005e-02   8.06888e-06
+   2  Mean         9.66520e+03   6.19534e+00   1.49111e-02  -2.81243e-06
+   3  Sigma        1.92687e+02   4.74483e+00   1.56451e-05   6.61109e-03
+checking ... number of ds of f is 17
+Info in <TCanvas::Print>: png file plot_vfrac75_threshold_0.5_resolutions_et50_eta2.100.png has been created
+
+****************************************
+Minimizer is Linear
+Chi2                      =      3.79746
+NDf                       =            3
+p0                        =      9.38096   +/-   1.26862     
+p1                        =      46.5988   +/-   0.0240428   
+checking ... number of ds of f is 3
+Info in <TCanvas::Print>: pdf file plot_vfrac75_threshold_0.5_calibration_fit_eta2.100.pdf has been created
+ FCN=7.0983 FROM MIGRAD    STATUS=CONVERGED      36 CALLS          37 TOTAL
+                     EDM=4.72252e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  const_offset   4.18191e-03   7.18924e-04   4.44720e-07  -3.12997e-02
+   2  coeff_sqrt   2.29534e-01   6.72506e-03   4.16007e-06  -7.31646e-03
+checking ... number of ds of f is 3
+Info in <TCanvas::Print>: pdf file plot_vfrac75_resolutions_versus_energy_eta2.100.pdf has been created
+
+ FCN=10.671 FROM MIGRAD    STATUS=CONVERGED     271 CALLS         272 TOTAL
+                     EDM=7.4854e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  const_offset_inside_sqrt   5.96938e-02   2.35816e-03   2.63580e-06  -2.42042e-01
+   2  coeff_1byE_inside_sqrt   1.20806e-04   2.22749e-05   2.49347e-08  -1.61159e+01
+checking ... number of ds of f is 3
+Info in <TCanvas::Print>: pdf file plot_standalone_vfrac75_resolutions_versus_energy_eta2.100.pdf has been created
+
+  *******************************************
+  *                                         *
+  *        W E L C O M E  to  R O O T       *
+  *                                         *
+  *   Version   5.34/14  16 December 2013   *
+  *                                         *
+  *  You are welcome to visit our Web site  *
+  *          http://root.cern.ch            *
+  *                                         *
+  *******************************************
+
+ROOT 5.34/14 (heads/v5-34-00-patches@v5-34-13-131-gd110ad3, Jan 07 2014, 00:12:00 on linuxx8664gcc)
+
+CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
+Type ? for help. Commands must be C++ statements.
+Enclose multiple statements between { }.
+
+Processing plotE_resolution.C++(41,"vfrac50","\/export\/cmss2\/tmudholk\/HGCal\/vfrac50",0.5)...
+Info in <TUnixSystem::ACLiC>: creating shared library /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_C.so
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:11:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution.C:23,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh: In member function ‘void HGCSSSimHit::setLayer(const unsigned int&, const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘silayer’ shadows a member of 'this' [-Wshadow]
+   inline void setLayer(const unsigned & layer, const unsigned & silayer){
+                                                                         ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution.C:23:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::energy(const double&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:65:45: warning: declaration of ‘energy’ shadows a member of 'this' [-Wshadow]
+   inline void energy(const double & energy) {
+                                             ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::adcCounts(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:85:52: warning: declaration of ‘adcCounts’ shadows a member of 'this' [-Wshadow]
+   inline void adcCounts(const unsigned & adcCounts){
+                                                    ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::layer(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:93:44: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+   inline void layer(const unsigned & layer){
+                                            ^
+et3 eta2.1
+ -- Processing event 0
+Warning in <TStreamerInfo::BuildCheck>: 
+   The StreamerInfo of class HGCSSRecoHit read from file /export/cmss2/tmudholk/HGCal/vfrac50/Digi__version41_model2_BOFF_et3_eta2.100.root
+   has the same version (=1) as the active class but a different checksum.
+   You should update the version to ClassDef(HGCSSRecoHit,2).
+   Do not try to write objects with the current class definition,
+   the files will not be readable.
+
+Warning in <TStreamerInfo::CompareContent>: The following data member of
+the in-memory layout version 1 of class 'HGCSSRecoHit' is missing from 
+the on-file layout version 1:
+   double time_; //
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=27.4809 FROM MIGRAD    STATUS=CONVERGED      62 CALLS          63 TOTAL
+                     EDM=8.29731e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.08176e+02   4.59975e+00   9.04621e-03  -1.09104e-04
+   2  Mean         5.78062e+02   1.38489e+00   3.47526e-03  -9.24309e-04
+   3  Sigma        4.10417e+01   1.17016e+00   1.80038e-05   1.01220e-02
+checking ... number of ds of f is 22
+Info in <TCanvas::Print>: png file plot_vfrac50_threshold_0.5_resolutions_et3_eta2.100.png has been created
+et7 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=31.4424 FROM MIGRAD    STATUS=CONVERGED      59 CALLS          60 TOTAL
+                     EDM=1.37183e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.05967e+02   4.30846e+00   9.46984e-03  -2.55821e-06
+   2  Mean         1.33719e+03   2.05486e+00   5.60149e-03  -8.17862e-05
+   3  Sigma        6.23396e+01   1.56967e+00   1.76182e-05   5.12582e-03
+checking ... number of ds of f is 22
+Info in <TCanvas::Print>: png file plot_vfrac50_threshold_0.5_resolutions_et7_eta2.100.png has been created
+et20 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=20.252 FROM MIGRAD    STATUS=CONVERGED      60 CALLS          61 TOTAL
+                     EDM=1.5801e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.23938e+02   4.80766e+00   8.91785e-03   8.84583e-06
+   2  Mean         3.79126e+03   3.51958e+00   7.77147e-03  -4.69978e-05
+   3  Sigma        1.07430e+02   2.38631e+00   1.33204e-05  -6.60469e-02
+checking ... number of ds of f is 19
+Info in <TCanvas::Print>: png file plot_vfrac50_threshold_0.5_resolutions_et20_eta2.100.png has been created
+et35 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=24.6209 FROM MIGRAD    STATUS=CONVERGED      60 CALLS          61 TOTAL
+                     EDM=7.36334e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.15276e+02   4.67902e+00   9.12750e-03  -5.47353e-06
+   2  Mean         6.62417e+03   4.88978e+00   1.20764e-02   6.49498e-06
+   3  Sigma        1.51552e+02   3.82442e+00   1.61086e-05  -8.33482e-04
+checking ... number of ds of f is 20
+Info in <TCanvas::Print>: png file plot_vfrac50_threshold_0.5_resolutions_et35_eta2.100.png has been created
+et50 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=24.6316 FROM MIGRAD    STATUS=CONVERGED      67 CALLS          68 TOTAL
+                     EDM=1.91527e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.35564e+02   5.63670e+00   1.07362e-02  -3.03025e-06
+   2  Mean         9.46033e+03   6.06198e+00   1.49836e-02  -6.73376e-06
+   3  Sigma        1.89073e+02   5.01691e+00   1.60387e-05  -6.67510e-03
+checking ... number of ds of f is 22
+Info in <TCanvas::Print>: png file plot_vfrac50_threshold_0.5_resolutions_et50_eta2.100.png has been created
+
+****************************************
+Minimizer is Linear
+Chi2                      =      1.86601
+NDf                       =            3
+p0                        =      12.0974   +/-   1.3383      
+p1                        =      45.5958   +/-   0.0237506   
+checking ... number of ds of f is 3
+Info in <TCanvas::Print>: pdf file plot_vfrac50_threshold_0.5_calibration_fit_eta2.100.pdf has been created
+ FCN=2.23958 FROM MIGRAD    STATUS=CONVERGED      36 CALLS          37 TOTAL
+                     EDM=1.34877e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  const_offset   3.44964e-03   7.93941e-04   2.77461e-07  -1.78356e-02
+   2  coeff_sqrt   2.33005e-01   7.49580e-03   2.61958e-06  -3.79166e-03
+checking ... number of ds of f is 3
+Info in <TCanvas::Print>: pdf file plot_vfrac50_resolutions_versus_energy_eta2.100.pdf has been created
+
+ FCN=0.748008 FROM MIGRAD    STATUS=CONVERGED     464 CALLS         465 TOTAL
+                     EDM=1.25599e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  const_offset_inside_sqrt   5.98363e-02   2.50666e-03   1.00787e-06   1.39041e-03
+   2  coeff_1byE_inside_sqrt   1.06071e-04   2.37789e-05   9.56109e-09  -5.45575e-01
+checking ... number of ds of f is 3
+Info in <TCanvas::Print>: pdf file plot_standalone_vfrac50_resolutions_versus_energy_eta2.100.pdf has been created
+
+  *******************************************
+  *                                         *
+  *        W E L C O M E  to  R O O T       *
+  *                                         *
+  *   Version   5.34/14  16 December 2013   *
+  *                                         *
+  *  You are welcome to visit our Web site  *
+  *          http://root.cern.ch            *
+  *                                         *
+  *******************************************
+
+ROOT 5.34/14 (heads/v5-34-00-patches@v5-34-13-131-gd110ad3, Jan 07 2014, 00:12:00 on linuxx8664gcc)
+
+CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
+Type ? for help. Commands must be C++ statements.
+Enclose multiple statements between { }.
+
+Processing plotE_resolution.C++(42,"vfrac25","\/export\/cmss2\/tmudholk\/HGCal\/vfrac25",0.5)...
+Info in <TUnixSystem::ACLiC>: creating shared library /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_C.so
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:11:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution.C:23,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh: In member function ‘void HGCSSSimHit::setLayer(const unsigned int&, const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘silayer’ shadows a member of 'this' [-Wshadow]
+   inline void setLayer(const unsigned & layer, const unsigned & silayer){
+                                                                         ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution.C:23:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::energy(const double&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:65:45: warning: declaration of ‘energy’ shadows a member of 'this' [-Wshadow]
+   inline void energy(const double & energy) {
+                                             ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::adcCounts(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:85:52: warning: declaration of ‘adcCounts’ shadows a member of 'this' [-Wshadow]
+   inline void adcCounts(const unsigned & adcCounts){
+                                                    ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::layer(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:93:44: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+   inline void layer(const unsigned & layer){
+                                            ^
+et3 eta2.1
+ -- Processing event 0
+Warning in <TStreamerInfo::BuildCheck>: 
+   The StreamerInfo of class HGCSSRecoHit read from file /export/cmss2/tmudholk/HGCal/vfrac25/Digi__version42_model2_BOFF_et3_eta2.100.root
+   has the same version (=1) as the active class but a different checksum.
+   You should update the version to ClassDef(HGCSSRecoHit,2).
+   Do not try to write objects with the current class definition,
+   the files will not be readable.
+
+Warning in <TStreamerInfo::CompareContent>: The following data member of
+the in-memory layout version 1 of class 'HGCSSRecoHit' is missing from 
+the on-file layout version 1:
+   double time_; //
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=21.0008 FROM MIGRAD    STATUS=CONVERGED      62 CALLS          63 TOTAL
+                     EDM=7.01619e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.07010e+02   4.31059e+00   7.83283e-03  -6.57007e-05
+   2  Mean         5.68346e+02   1.30415e+00   2.91803e-03  -4.29199e-04
+   3  Sigma        3.96839e+01   9.80779e-01   1.43424e-05  -1.34727e-01
+checking ... number of ds of f is 23
+Info in <TCanvas::Print>: png file plot_vfrac25_threshold_0.5_resolutions_et3_eta2.100.png has been created
+et7 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=33.0664 FROM MIGRAD    STATUS=CONVERGED      60 CALLS          61 TOTAL
+                     EDM=1.6074e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.13079e+02   4.48324e+00   1.03686e-02   3.77199e-05
+   2  Mean         1.30930e+03   2.05372e+00   5.73025e-03   2.30851e-04
+   3  Sigma        6.23161e+01   1.45139e+00   1.72707e-05   3.93775e-02
+checking ... number of ds of f is 22
+Info in <TCanvas::Print>: png file plot_vfrac25_threshold_0.5_resolutions_et7_eta2.100.png has been created
+et20 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=23.9752 FROM MIGRAD    STATUS=CONVERGED      60 CALLS          61 TOTAL
+                     EDM=4.48295e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.18248e+02   4.56991e+00   9.24613e-03  -6.02327e-05
+   2  Mean         3.71408e+03   3.45753e+00   8.43816e-03   3.81337e-05
+   3  Sigma        1.07289e+02   2.34440e+00   1.43766e-05  -1.83963e-03
+checking ... number of ds of f is 22
+Info in <TCanvas::Print>: png file plot_vfrac25_threshold_0.5_resolutions_et20_eta2.100.png has been created
+et35 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=32.4989 FROM MIGRAD    STATUS=CONVERGED      60 CALLS          61 TOTAL
+                     EDM=6.50812e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.15144e+02   4.60701e+00   1.04729e-02   1.75618e-04
+   2  Mean         6.48908e+03   4.78629e+00   1.35244e-02  -6.52374e-05
+   3  Sigma        1.48191e+02   3.54698e+00   1.74722e-05   1.77007e-01
+checking ... number of ds of f is 24
+Info in <TCanvas::Print>: png file plot_vfrac25_threshold_0.5_resolutions_et35_eta2.100.png has been created
+et50 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=26.2497 FROM MIGRAD    STATUS=CONVERGED      60 CALLS          61 TOTAL
+                     EDM=1.07566e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.09826e+02   4.41282e+00   8.97510e-03   3.48886e-06
+   2  Mean         9.25400e+03   5.92082e+00   1.48833e-02   1.00078e-06
+   3  Sigma        1.80617e+02   4.44622e+00   1.62505e-05  -4.22861e-03
+checking ... number of ds of f is 21
+Info in <TCanvas::Print>: png file plot_vfrac25_threshold_0.5_resolutions_et50_eta2.100.png has been created
+
+****************************************
+Minimizer is Linear
+Chi2                      =      1.88575
+NDf                       =            3
+p0                        =      14.1389   +/-   1.27948     
+p1                        =      44.6177   +/-   0.0231033   
+checking ... number of ds of f is 3
+Info in <TCanvas::Print>: pdf file plot_vfrac25_threshold_0.5_calibration_fit_eta2.100.pdf has been created
+ FCN=0.434786 FROM MIGRAD    STATUS=CONVERGED      40 CALLS          41 TOTAL
+                     EDM=5.89296e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  const_offset   3.06694e-03   7.14691e-04   1.73863e-07  -3.74805e-02
+   2  coeff_sqrt   2.36994e-01   6.70012e-03   1.62994e-06  -8.48229e-03
+checking ... number of ds of f is 3
+Info in <TCanvas::Print>: pdf file plot_vfrac25_resolutions_versus_energy_eta2.100.pdf has been created
+
+ FCN=0.904338 FROM MIGRAD    STATUS=CONVERGED     470 CALLS         471 TOTAL
+                     EDM=1.29119e-13    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  const_offset_inside_sqrt   6.14232e-02   2.29541e-03   9.85371e-07  -4.59682e-05
+   2  coeff_1byE_inside_sqrt   9.05605e-05   2.16116e-05   9.27747e-09   1.95439e-02
+checking ... number of ds of f is 3
+Info in <TCanvas::Print>: pdf file plot_standalone_vfrac25_resolutions_versus_energy_eta2.100.pdf has been created
+
+  *******************************************
+  *                                         *
+  *        W E L C O M E  to  R O O T       *
+  *                                         *
+  *   Version   5.34/14  16 December 2013   *
+  *                                         *
+  *  You are welcome to visit our Web site  *
+  *          http://root.cern.ch            *
+  *                                         *
+  *******************************************
+
+ROOT 5.34/14 (heads/v5-34-00-patches@v5-34-13-131-gd110ad3, Jan 07 2014, 00:12:00 on linuxx8664gcc)
+
+CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
+Type ? for help. Commands must be C++ statements.
+Enclose multiple statements between { }.
+
+Processing plotE_resolution.C++(43,"vflat","\/export\/cmss2\/tmudholk\/HGCal\/vflat",0.5)...
+Info in <TUnixSystem::ACLiC>: creating shared library /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_C.so
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:11:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution.C:23,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh: In member function ‘void HGCSSSimHit::setLayer(const unsigned int&, const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘silayer’ shadows a member of 'this' [-Wshadow]
+   inline void setLayer(const unsigned & layer, const unsigned & silayer){
+                                                                         ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution.C:23:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::energy(const double&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:65:45: warning: declaration of ‘energy’ shadows a member of 'this' [-Wshadow]
+   inline void energy(const double & energy) {
+                                             ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::adcCounts(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:85:52: warning: declaration of ‘adcCounts’ shadows a member of 'this' [-Wshadow]
+   inline void adcCounts(const unsigned & adcCounts){
+                                                    ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::layer(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:93:44: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+   inline void layer(const unsigned & layer){
+                                            ^
+et3 eta2.1
+ -- Processing event 0
+Warning in <TStreamerInfo::BuildCheck>: 
+   The StreamerInfo of class HGCSSRecoHit read from file /export/cmss2/tmudholk/HGCal/vflat/Digi__version43_model2_BOFF_et3_eta2.100.root
+   has the same version (=1) as the active class but a different checksum.
+   You should update the version to ClassDef(HGCSSRecoHit,2).
+   Do not try to write objects with the current class definition,
+   the files will not be readable.
+
+Warning in <TStreamerInfo::CompareContent>: The following data member of
+the in-memory layout version 1 of class 'HGCSSRecoHit' is missing from 
+the on-file layout version 1:
+   double time_; //
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=55.9638 FROM MIGRAD    STATUS=CONVERGED      77 CALLS          78 TOTAL
+                     EDM=1.68817e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.11606e+02   4.46669e+00   1.33867e-02  -1.11679e-06
+   2  Mean         5.57672e+02   1.31749e+00   4.46251e-03  -2.62783e-05
+   3  Sigma        3.69824e+01   8.71327e-01   2.06514e-05  -5.16783e-03
+checking ... number of ds of f is 23
+Info in <TCanvas::Print>: png file plot_vflat_threshold_0.5_resolutions_et3_eta2.100.png has been created
+et7 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=23.127 FROM MIGRAD    STATUS=CONVERGED      62 CALLS          63 TOTAL
+                     EDM=1.76835e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.09823e+02   4.50662e+00   8.43621e-03  -1.71919e-06
+   2  Mean         1.28617e+03   1.95629e+00   4.64535e-03  -3.04296e-05
+   3  Sigma        5.97357e+01   1.57062e+00   1.61202e-05  -1.71702e-04
+checking ... number of ds of f is 21
+Info in <TCanvas::Print>: png file plot_vflat_threshold_0.5_resolutions_et7_eta2.100.png has been created
+et20 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=30.1632 FROM MIGRAD    STATUS=CONVERGED      60 CALLS          61 TOTAL
+                     EDM=2.45326e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.06162e+02   4.29453e+00   9.29317e-03   1.72313e-05
+   2  Mean         3.64138e+03   3.43730e+00   9.29994e-03   5.33455e-05
+   3  Sigma        1.06028e+02   2.61668e+00   1.71644e-05  -1.12654e-02
+checking ... number of ds of f is 24
+Info in <TCanvas::Print>: png file plot_vflat_threshold_0.5_resolutions_et20_eta2.100.png has been created
+et35 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=24.6352 FROM MIGRAD    STATUS=CONVERGED      60 CALLS          61 TOTAL
+                     EDM=8.84078e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.06857e+02   4.33064e+00   8.45887e-03   6.68897e-07
+   2  Mean         6.35970e+03   4.75407e+00   1.17533e-02   7.90438e-06
+   3  Sigma        1.47028e+02   3.72332e+00   1.60185e-05  -1.53007e-02
+checking ... number of ds of f is 23
+Info in <TCanvas::Print>: png file plot_vflat_threshold_0.5_resolutions_et35_eta2.100.png has been created
+et50 eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+ FCN=7.93873 FROM MIGRAD    STATUS=CONVERGED      59 CALLS          60 TOTAL
+                     EDM=2.47848e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     1.32861e+02   5.31792e+00   6.16121e-03   2.79024e-06
+   2  Mean         9.08795e+03   6.30268e+00   9.19668e-03   1.06243e-05
+   3  Sigma        1.94692e+02   4.92000e+00   9.71303e-06  -1.32480e-03
+checking ... number of ds of f is 18
+Info in <TCanvas::Print>: png file plot_vflat_threshold_0.5_resolutions_et50_eta2.100.png has been created
+
+****************************************
+Minimizer is Linear
+Chi2                      =      2.48383
+NDf                       =            3
+p0                        =      14.1791   +/-   1.28325     
+p1                        =      43.7719   +/-   0.0237182   
+checking ... number of ds of f is 3
+Info in <TCanvas::Print>: pdf file plot_vflat_threshold_0.5_calibration_fit_eta2.100.pdf has been created
+ FCN=2.93837 FROM MIGRAD    STATUS=CONVERGED      36 CALLS          37 TOTAL
+                     EDM=4.19197e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  const_offset   6.04435e-03   7.37571e-04   3.17257e-07  -3.24139e-02
+   2  coeff_sqrt   2.13101e-01   6.63053e-03   2.85204e-06  -7.29402e-03
+checking ... number of ds of f is 3
+Info in <TCanvas::Print>: pdf file plot_vflat_resolutions_versus_energy_eta2.100.pdf has been created
+
+ FCN=2.44868 FROM MIGRAD    STATUS=CONVERGED     212 CALLS         213 TOTAL
+                     EDM=1.56478e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  const_offset_inside_sqrt   5.40266e-02   2.21413e-03   1.38065e-06  -6.91698e-03
+   2  coeff_1byE_inside_sqrt   1.86775e-04   2.33225e-05   1.45450e-08  -8.04848e+00
+checking ... number of ds of f is 3
+Info in <TCanvas::Print>: pdf file plot_standalone_vflat_resolutions_versus_energy_eta2.100.pdf has been created
+

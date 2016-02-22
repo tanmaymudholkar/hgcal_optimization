@@ -1,0 +1,180 @@
+  *******************************************
+  *                                         *
+  *        W E L C O M E  to  R O O T       *
+  *                                         *
+  *   Version   5.34/14  16 December 2013   *
+  *                                         *
+  *  You are welcome to visit our Web site  *
+  *          http://root.cern.ch            *
+  *                                         *
+  *******************************************
+
+ROOT 5.34/14 (heads/v5-34-00-patches@v5-34-13-131-gd110ad3, Jan 07 2014, 00:12:00 on linuxx8664gcc)
+
+CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
+Type ? for help. Commands must be C++ statements.
+Enclose multiple statements between { }.
+
+Processing plotE_resolution_vlayer_nevts.C++(34,"\/export\/cmss2\/tmudholk\/HGCal\/version34",5)...
+Info in <TUnixSystem::ACLiC>: creating shared library /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_vlayer_nevts_C.so
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:11:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_vlayer_nevts.C:23,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_vlayer_nevts_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_vlayer_nevts_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh: In member function ‘void HGCSSSimHit::setLayer(const unsigned int&, const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘silayer’ shadows a member of 'this' [-Wshadow]
+   inline void setLayer(const unsigned & layer, const unsigned & silayer){
+                                                                         ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_vlayer_nevts.C:23:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_vlayer_nevts_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_vlayer_nevts_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::energy(const double&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:65:45: warning: declaration of ‘energy’ shadows a member of 'this' [-Wshadow]
+   inline void energy(const double & energy) {
+                                             ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::adcCounts(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:85:52: warning: declaration of ‘adcCounts’ shadows a member of 'this' [-Wshadow]
+   inline void adcCounts(const unsigned & adcCounts){
+                                                    ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::layer(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:93:44: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+   inline void layer(const unsigned & layer){
+                                            ^
+eta1.6
+ -- Processing event 0
+Warning in <TStreamerInfo::BuildCheck>: 
+   The StreamerInfo of class HGCSSRecoHit read from file /export/cmss2/tmudholk/HGCal/version34/Digi__version34_model2_BOFF_et5_eta1.600.root
+   has the same version (=1) as the active class but a different checksum.
+   You should update the version to ClassDef(HGCSSRecoHit,2).
+   Do not try to write objects with the current class definition,
+   the files will not be readable.
+
+Warning in <TStreamerInfo::CompareContent>: The following data member of
+the in-memory layout version 1 of class 'HGCSSRecoHit' is missing from 
+the on-file layout version 1:
+   double time_; //
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+Info in <TCanvas::Print>: png file plot_shower_profile_energy_distribution_2d_withdigi_v34et5_eta1.600.png has been created
+eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+Info in <TCanvas::Print>: png file plot_shower_profile_energy_distribution_2d_withdigi_v34et5_eta2.100.png has been created
+eta2.5
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+Info in <TCanvas::Print>: png file plot_shower_profile_energy_distribution_2d_withdigi_v34et5_eta2.500.png has been created
+  *******************************************
+  *                                         *
+  *        W E L C O M E  to  R O O T       *
+  *                                         *
+  *   Version   5.34/14  16 December 2013   *
+  *                                         *
+  *  You are welcome to visit our Web site  *
+  *          http://root.cern.ch            *
+  *                                         *
+  *******************************************
+
+ROOT 5.34/14 (heads/v5-34-00-patches@v5-34-13-131-gd110ad3, Jan 07 2014, 00:12:00 on linuxx8664gcc)
+
+CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
+Type ? for help. Commands must be C++ statements.
+Enclose multiple statements between { }.
+
+Processing plotE_resolution_vlayer_nevts.C++(34,"\/export\/cmss2\/tmudholk\/HGCal\/version34",175)...
+Info in <TUnixSystem::ACLiC>: creating shared library /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_vlayer_nevts_C.so
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:11:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_vlayer_nevts.C:23,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_vlayer_nevts_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_vlayer_nevts_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh: In member function ‘void HGCSSSimHit::setLayer(const unsigned int&, const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘silayer’ shadows a member of 'this' [-Wshadow]
+   inline void setLayer(const unsigned & layer, const unsigned & silayer){
+                                                                         ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSSimHit.hh:67:73: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+In file included from /home/tmudholk/research/HGCstandalone/analysis/macros/./plotE_resolution_vlayer_nevts.C:23:0,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_vlayer_nevts_C_ACLiC_dict.h:34,
+                 from /home/tmudholk/research/HGCstandalone/analysis/macros/plotE_resolution_vlayer_nevts_C_ACLiC_dict.cxx:17:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::energy(const double&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:65:45: warning: declaration of ‘energy’ shadows a member of 'this' [-Wshadow]
+   inline void energy(const double & energy) {
+                                             ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::adcCounts(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:85:52: warning: declaration of ‘adcCounts’ shadows a member of 'this' [-Wshadow]
+   inline void adcCounts(const unsigned & adcCounts){
+                                                    ^
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh: In member function ‘void HGCSSRecoHit::layer(const unsigned int&)’:
+/home/tmudholk/research/HGCstandalone/analysis/macros/./../../userlib/include/HGCSSRecoHit.hh:93:44: warning: declaration of ‘layer’ shadows a member of 'this' [-Wshadow]
+   inline void layer(const unsigned & layer){
+                                            ^
+eta1.6
+ -- Processing event 0
+Warning in <TStreamerInfo::BuildCheck>: 
+   The StreamerInfo of class HGCSSRecoHit read from file /export/cmss2/tmudholk/HGCal/version34/Digi__version34_model2_BOFF_et175_eta1.600.root
+   has the same version (=1) as the active class but a different checksum.
+   You should update the version to ClassDef(HGCSSRecoHit,2).
+   Do not try to write objects with the current class definition,
+   the files will not be readable.
+
+Warning in <TStreamerInfo::CompareContent>: The following data member of
+the in-memory layout version 1 of class 'HGCSSRecoHit' is missing from 
+the on-file layout version 1:
+   double time_; //
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+Info in <TCanvas::Print>: png file plot_shower_profile_energy_distribution_2d_withdigi_v34et175_eta1.600.png has been created
+eta2.1
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+Info in <TCanvas::Print>: png file plot_shower_profile_energy_distribution_2d_withdigi_v34et175_eta2.100.png has been created
+eta2.5
+ -- Processing event 0
+ -- Processing event 100
+ -- Processing event 200
+ -- Processing event 300
+ -- Processing event 400
+ -- Processing event 500
+ -- Processing event 600
+ -- Processing event 700
+ -- Processing event 800
+ -- Processing event 900
+Info in <TCanvas::Print>: png file plot_shower_profile_energy_distribution_2d_withdigi_v34et175_eta2.500.png has been created

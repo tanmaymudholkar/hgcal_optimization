@@ -1,0 +1,26 @@
+  for(eventnum=100;eventnum<=900;eventnum++){
+     layer_vs_energy_center_sig_event(eventnum,aver_x,aver_y,aver_z,rangemin,rangemax);
+
+     tt=new TGraph(28,layers,aver_x);
+     tt->Fit("pol1","NO","",rangemin,rangemax);
+     fit=tt->GetFunction("pol1");
+     evt[eventnum].init_x=fit->GetParameter(0);
+     evt[eventnum].x_vs_layer=fit->GetParameter(1);
+
+     tt=new TGraph(28,layers,aver_y);
+     tt->Fit("pol1","NO","",rangemin,rangemax);
+     fit=tt->GetFunction("pol1");
+     evt[eventnum].init_y=fit->GetParameter(0);
+     evt[eventnum].y_vs_layer=fit->GetParameter(1);
+
+     tt=new TGraph(28,layers,aver_z);
+     tt->Fit("pol1","NO","",rangemin,rangemax);
+     fit=tt->GetFunction("pol1");
+     evt[eventnum].init_z=fit->GetParameter(0);
+     evt[eventnum].z_vs_layer=fit->GetParameter(1);
+     
+     evt[eventnum].tan_phi=evt[eventnum].y_vs_layer/evt[eventnum].x_vs_layer;
+     evt[eventnum].tan_theta=(evt[eventnum].y_vs_layer*evt[eventnum].y_vs_layer+evt[eventnum].x_vs_layer*evt[eventnum].x_vs_layer)/(evt[eventnum].z_vs_layer*evt    [eventnum].z_vs_layer);
+     evt[eventnum].reco_eta=-log(tan(atan(evt[eventnum].tan_theta)/2));
+     //fprintf(fp2,"%d    %lf    %lf    %lf    %lf    %lf    %lf\n",eventnum,evt[eventnum].init_x,evt[eventnum].init_y,evt[eventnum].init_z,evt[eventnum].tan_phi,evt[eventnum].tan_theta,evt[eventnum].reco_eta);
+  } 

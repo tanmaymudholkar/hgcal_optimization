@@ -1,0 +1,94 @@
+#include<string>
+#include<iostream>
+#include<fstream>
+#include<sstream>
+#include<cmath>
+#include<stdlib.h>
+
+#include "TFile.h"
+#include "TTree.h"
+#include "TF1.h"
+#include "TH1F.h"
+#include "TH2F.h"
+#include "TCanvas.h"
+#include "TStyle.h"
+#include "TString.h"
+#include "TChain.h"
+#include "TSystem.h"
+#include "TGraph.h"
+#include "TVector.h"
+
+#include "../../../../userlib/include/HGCSSEvent.hh"
+#include "../../../../userlib/include/HGCSSInfo.hh"
+#include "../../../../userlib/include/HGCSSRecoHit.hh"
+#include "../../../../userlib/include/HGCSSSimHit.hh"
+#include "../../../../userlib/include/HGCSSSamplingSection.hh"
+
+void droplayer_resolution(){
+  const int layers=28;
+  const double b0=0.236;
+  const double a0=0.330;
+  std::vector<Double_t> layer_array;
+  for(unsigned ilayer=0; ilayer<layers; ilayer++)
+      //layer_array[ilayer]=(double)ilayer;
+      layer_array.push_back((double)ilayer);
+  gSystem->Load("/export/home/tmudholk/research/HGCstandalone/userlib/lib/libPFCalEEuserlib.so");
+
+  std::vector<double> resol_b,resol_a,resol5,resol30,resol100; // vector with double components
+  ifstream f_resol_b,f_resol_a; // input file stream
+  f_resol_b.open("resol_b_eta2pt1_droplayer.dat"); //fopen
+  f_resol_a.open("resol_a_eta2pt1_droplayer.dat");
+  std::string line; // a char string 
+  double sig_b,sig_a;
+  if (f_resol_b.is_open()) {
+    while (getline(f_resol_b,line)) { //=0 if the last line, line++
+      sig_b = std::atof(line.c_str()); // line.c_str(): a string read from the line, atof: convert string to float
+      resol_b.push_back(sig_b); // fill the last compoent of vector "weights", with double value "weight" and extend the array by one (like a stack)
+    }
+  }
+  if (f_resol_a.is_open()) {
+    while (getline(f_resol_a,line)) { //=0 if the last line, line++
+      sig_a = std::atof(line.c_str()); // line.c_str(): a string read from the line, atof: convert string to float
+      resol_a.push_back(sig_a/1000); // fill the last compoent of vector "weights", with double value "weight" and extend the array by one (like a stack)
+    }
+  }
+  TVectorD Tresol_a(resol_a.size(),&resol_a[0]);
+  TVectorD Tresol_b(resol_b.size(),&resol_b[0]);
+  TVectorD Tlayer_array(layer_array.size(),&layer_array[0]);
+  for(unsigned i=0;i<resol_a.size()&&i<resol_b.size();i++){
+     resol5.push_back(resol_a[i]+resol_b[i]/sqrt(5));
+     resol30.push_back(resol_a[i]+resol_b[i]/sqrt(30));
+     resol100.push_back(resol_a[i]+resol_b[i]/sqrt(100));
+  }
+  TVectorD Tresol5(resol5.size(),&resol5[0]);
+  TVectorD Tresol30(resol30.size(),&resol30[0]);
+  TVectorD Tresol100(resol100.size(),&resol100[0]);
+  for(unsigned i=0;i<resol_b.size();i++){
+     Tresol_b[i]/=b0;
+  }
+  for(unsigned i=0;i<resol_a.size();i++)
+     Tresol_a[i]/=a0;
+  TGraph *resol_b_layer=new TGraph(Tlayer_array,Tresol_b);
+  TGraph *resol_a_layer=new TGraph(Tlayer_array,Tresol_a);
+  resol_b_layer->SetTitle("b/b0_vs_droplayer");
+  resol_a_layer->SetTitle("a/a0_vs_droplayer");
+  TCanvas *myc=new TCanvas("droplayer_resol","droplayer_resol",800,600);
+  myc->Divide(2,1);
+  myc->cd(1);
+  resol_b_layer->Draw("AC*");
+  myc->cd(2);
+  resol_a_layer->Draw("AC*");
+  myc->SaveAs("ab_droplayer.png");
+  myc=new TCanvas("droplayer_resol_fixE","droplayer_resol",1800,600);
+  TGraph *resol_5_layer=new TGraph(Tlayer_array,Tresol5);
+  TGraph *resol_30_layer=new TGraph(Tlayer_array,Tresol30);
+  TGraph *resol_100_layer=new TGraph(Tlayer_array,Tresol100);
+  myc->Divide(3,1);
+  myc->cd(1);
+  resol_5_layer->Draw("AC*");
+  myc->cd(2);
+  resol_30_layer->Draw("AC*");
+  myc->cd(3);
+  resol_100_layer->Draw("AC*");
+  myc->SaveAs("resol_droplayer.png");
+}

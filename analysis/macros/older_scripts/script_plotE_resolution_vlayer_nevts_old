@@ -1,0 +1,4 @@
+#!/bin/bash
+
+root -b -q "plotE_resolution_vlayer_nevts.C++(34,\"\/export\/cmss2\/tmudholk\/HGCal\/version34\",5)"
+root -b -q "plotE_resolution_vlayer_nevts.C++(34,\"\/export\/cmss2\/tmudholk\/HGCal\/version34\",175)"

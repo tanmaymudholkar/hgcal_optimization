@@ -1,0 +1,8 @@
+#!/bin/bash
+
+root -b -q "plotE_resolution_vlayer.C++(40,\"\/export\/cmss2\/tmudholk\/HGCal\/opt_et_5\",5)"
+root -b -q "plotE_resolution_vlayer.C++(40,\"\/export\/cmss2\/tmudholk\/HGCal\/opt_et_5\",175)"
+root -b -q "plotE_resolution_vlayer.C++(41,\"\/export\/cmss2\/tmudholk\/HGCal\/optsq_et_5\",5)"
+root -b -q "plotE_resolution_vlayer.C++(41,\"\/export\/cmss2\/tmudholk\/HGCal\/optsq_et_5\",175)"
+root -b -q "plotE_resolution_vlayer.C++(42,\"\/export\/cmss2\/tmudholk\/HGCal\/optsq_et_175\",5)"
+root -b -q "plotE_resolution_vlayer.C++(42,\"\/export\/cmss2\/tmudholk\/HGCal\/optsq_et_175\",175)"
