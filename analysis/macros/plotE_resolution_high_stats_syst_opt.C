@@ -64,7 +64,7 @@ Double_t cellsizeat(Double_t x, Double_t y) {
 void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_name, TString datadir, Double_t et) { // main
   
   // load the shared library for HGCSS* classes:
-  gSystem->Load("/export/home/tmudholk/research/HGCstandalone/userlib/lib/libPFCalEEuserlib.so");
+  gSystem->Load("/afs/cern.ch/user/t/tmudholk/public/research/hgcal_analysis/hgcal_optimization/userlib/lib/libPFCalEEuserlib.so");
 
   // if(threshold<0.5) {
   //   std::cout << "Threshold provided less than minimum threshold analyzable from Digi file" << std::endl;
@@ -74,6 +74,7 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
   Double_t chisqr;
   Double_t ndfr;
   Double_t chisqdf;
+  TString et_portion = Form("et%.0f",et);
 
   // Double_t et_values_array[] = {5,50}; //For systematic optimization studies
   // Double_t et_values_array[] = {3,5,7,10,20,30,40,50,60,70,100,125,150}; //Intersection version 30 & 34
@@ -92,11 +93,7 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
   TString HGcal_common_prefix_firstpart = datadir + Form("/HGcal__version%i_model2_BOFF_",version_number);
   TString Digi_common_prefix_firstpart = datadir + Form("/Digi__version%i_model2_BOFF_",version_number);
   TString common_suffix = Form(".root");
-
-  ofstream outfile;
-  TString outfile_name_prefix = Form("data_et%.0f_",et);
-  outfile.open(outfile_name_prefix+version_name+Form("_resolutions"));
-
+  
   for (Double_t rwcuf = 0; rwcuf<=1.0; rwcuf += 0.1) {
     for (Double_t rwcum = 0; rwcum<=1.0; rwcum += 0.1) {
       if (rwcuf < 0.95 || rwcum < 0.95) {
@@ -125,6 +122,10 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
 	  }
 	}
 
+	ofstream outfile;
+	TString outfile_name_prefix = Form("data_resolution_et%.0f_rwcuf%.1f_rwcum%.1f",et,rwcuf,rwcum);
+	outfile.open(outfile_name_prefix+version_name+Form("_resolutions"));
+
 	TString HGcal_common_prefix = HGcal_common_prefix_firstpart + Form("rwcuf_%.1f_rwcum_%.1f_",rwcuf,rwcum);
 	TString Digi_common_prefix = Digi_common_prefix_firstpart + Form("rwcuf_%.1f_rwcum_%.1f_",rwcuf,rwcum);
 	
@@ -145,7 +146,6 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
 	  Double_t resolution_error;
 	  // for (unsigned int et_counter = 0; et_counter != et_values.size(); et_counter++) {
 	  // Double_t energy_incoming_gev = et*cosh(eta_values[eta_counter]);
-	  TString et_portion = Form("et%.0f",et);
 	  // Double_t energy_incoming_gev_error;
 	  Double_t mean_energy_wmips;
 	  Double_t mean_energy_wmips_error;
