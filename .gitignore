@@ -9,3 +9,6 @@ obj
 *.pdf
 *.png
 plot_*
+data_*
+plots/
+resolutions/
