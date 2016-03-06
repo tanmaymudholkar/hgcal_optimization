@@ -12,3 +12,4 @@ plot_*
 data_*
 plots/
 resolutions/
+*_out

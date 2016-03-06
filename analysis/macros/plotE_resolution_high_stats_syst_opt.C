@@ -18,12 +18,12 @@
 #include "TGraphErrors.h"
 #include "TVector.h"
 
-#include "/afs/cern.ch/user/t/tmudholk/public/research/hgcal_analysis/hgcal_optimization/userlib/include/HGCSSEvent.hh"
-#include "/afs/cern.ch/user/t/tmudholk/public/research/hgcal_analysis/hgcal_optimization/userlib/include/HGCSSInfo.hh"
-#include "/afs/cern.ch/user/t/tmudholk/public/research/hgcal_analysis/hgcal_optimization/userlib/include/HGCSSRecoHit.hh"
-#include "/afs/cern.ch/user/t/tmudholk/public/research/hgcal_analysis/hgcal_optimization/userlib/include/HGCSSSimHit.hh"
-#include "/afs/cern.ch/user/t/tmudholk/public/research/hgcal_analysis/hgcal_optimization/userlib/include/HGCSSSamplingSection.hh"
-#include "/afs/cern.ch/user/t/tmudholk/public/research/hgcal_analysis/hgcal_optimization/userlib/include/HGCSSGenParticle.hh"
+#include "/export/home/tmudholk/research/HGCstandalone/userlib/include/HGCSSEvent.hh"
+#include "/export/home/tmudholk/research/HGCstandalone/userlib/include/HGCSSInfo.hh"
+#include "/export/home/tmudholk/research/HGCstandalone/userlib/include/HGCSSRecoHit.hh"
+#include "/export/home/tmudholk/research/HGCstandalone/userlib/include/HGCSSSimHit.hh"
+#include "/export/home/tmudholk/research/HGCstandalone/userlib/include/HGCSSSamplingSection.hh"
+#include "/export/home/tmudholk/research/HGCstandalone/userlib/include/HGCSSGenParticle.hh"
 
 Double_t cellSize = 2.5;
 const Double_t radlim = 750;
@@ -75,7 +75,7 @@ bool testInputFile(TString inputPath, TFile* testFile)
 void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_name, TString datadir, TString outputdir, Double_t et, Double_t rwcuf, Double_t rwcum) { // main
   
   // load the shared library for HGCSS* classes:
-  gSystem->Load("/afs/cern.ch/user/t/tmudholk/public/research/hgcal_analysis/hgcal_optimization/userlib/lib/libPFCalEEuserlib.so");
+  gSystem->Load("/export/home/tmudholk/research/HGCstandalone/userlib/lib/libPFCalEEuserlib.so");
 
   if(threshold<0.5) {
     std::cout << "Threshold provided less than minimum threshold analyzable from Digi file" << std::endl;
@@ -167,6 +167,7 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
     Double_t sigma_wmips_error;
     std::vector<Double_t> total_energies;
     unsigned nEvts_to_count = 0;
+    Double_t fraction_of_statistics_available;
     Double_t meanE_statistical = 0;
     Double_t sigE_statistical = 0;
     std::cout << "et" << et << " eta" << eta_values[eta_counter] << std::endl;
@@ -174,7 +175,7 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
     TChain  *lSimTree = new TChain("HGCSSTree");
     TChain  *lRecTree = new TChain("RecoTree");
     
-    for (unsigned run_no = 1; run_no <= 31; run_no++) {
+    for (unsigned run_no = 1; run_no <= 10; run_no++) {
       std::cout << "___________________________________________________________________________" << std::endl;
       std::cout << "run number " << run_no << std::endl;
       std::cout << "___________________________________________________________________________" << std::endl;
@@ -290,6 +291,8 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
     delete lSimTree;
     delete lRecTree;
 
+    fraction_of_statistics_available=nEvts_to_count/10000.0;
+
     meanE_statistical = meanE_statistical/nEvts_to_count;
     sigE_statistical = sigE_statistical/nEvts_to_count;
       
@@ -332,7 +335,7 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
     resolution = sigma_wmips/mean_energy_wmips;
     resolution_error = resolution*sqrt(pow(sigma_wmips_error/sigma_wmips,2)+pow(mean_energy_wmips_error/mean_energy_wmips,2));
 
-    outfile << rwcuf << "    " << rwcum << "    " << resolution << "    " << resolution_error << std::endl;
+    outfile << rwcuf << "    " << rwcum << "    " << resolution << "    " << resolution_error << "    " << fraction_of_statistics_available << std::endl;
   } // ends loop over eta
 //   //     } // ends if condition taking care of the extreme corner
 //   //   } // ends loop over rwcum
