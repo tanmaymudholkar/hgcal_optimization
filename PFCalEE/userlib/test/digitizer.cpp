@@ -81,7 +81,7 @@ void processHist(const unsigned iL,
 		 std::vector<PseudoJet> & lParticles
 		 ){
 
-  bool doSaturation=true;
+  bool doSaturation=false;
 
   DetectorEnum adet = subdet.type;
   bool isScint = subdet.isScint;

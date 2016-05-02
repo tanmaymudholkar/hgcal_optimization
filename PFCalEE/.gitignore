@@ -1,8 +1,19 @@
 
 PLOTS/
 LSFJOB_*
+LSFJOBS/
 *.d
 *.so
 bin
 obj
 *.root
+*.pdf
+*.png
+plot_*
+data_*
+plots/
+*_out
+*_for_weight*
+geometry_of_detector
+*.log
+layer_weights*
