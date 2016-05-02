@@ -75,7 +75,7 @@ bool testInputFile(TString inputPath, TFile* testFile)
 void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_name, TString datadir, TString outputdir, Double_t rwcuf, Double_t rwcum) { // main
   
   // load the shared library for HGCSS* classes:
-  gSystem->Load("/home/tmudholk/research/hgcal_analysis/hgcal_optimization/userlib/lib/libPFCalEEuserlib.so");
+  gSystem->Load("../../userlib/lib/libPFCalEEuserlib.so");
 
   // if(threshold<0.5) {
   //   std::cout << "Threshold provided less than minimum threshold analyzable from Digi file" << std::endl;
@@ -86,7 +86,7 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
   Double_t ndfr;
   Double_t chisqdf;  
 
-  Double_t et_values_array[] = {5,50,100,150}; //For systematic optimization studies
+  Double_t et_values_array[] = {100,150}; //For systematic optimization studies
   // Double_t et_values_array[] = {3,5,7,10,20,30,40,50,60,70,100,125,150}; //Intersection version 30 & 34
   // Double_t et_values_array[] = {3,5,7,10,20};
   // Double_t et_values_array[] = {3,5,10,20,30,40,50,60,80,100,125,175};
@@ -137,7 +137,6 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
     std::vector<Double_t> sigmas_wmips_errors;
     std::vector<Double_t> resolutions;
     std::vector<Double_t> resolutions_errors;
-    std::vector<Int_t> events_measured;
     Double_t resolution;
     Double_t resolution_error;
     
@@ -252,132 +251,131 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
 	  // std::cout << "energy is " << energy << "   " << "layer is " << layer << std::endl;
 	  
 	  if(energy>threshold) {
-	    // std::cout << "layer number: " << layer << std::endl;
+	    std::cout << "layer number: " << layer << std::endl;
 	    // Double_t posx_gen = posx_gen_ini + (px_gen/pz_gen)*(posz - posz_gen_ini);
 	    //   Double_t posy_gen = posy_gen_ini + (py_gen/pz_gen)*(posz - posz_gen_ini);
 	    //   Double_t dx = posx - posx_gen;
 	    //   Double_t dy = posy - posy_gen;
 	    //   Double_t halfCell = 0.5*cellsizeat(posx,posy);
 	    //   if ((fabs(dx) <= signal_region*halfCell) && (fabs(dy) <= signal_region*halfCell)){
-	    Double_t weighted_energy = energy*weights[layer]/tanh(eta_values[eta_counter]);
-	    	// totalE_in_layer[layer] += weighted_energy;
-	    totalE += weighted_energy;
+	    // Double_t weighted_energy = energy*weights[layer]/tanh(eta_values[eta_counter]);
+	    // 	// totalE_in_layer[layer] += weighted_energy;
+	    // totalE += weighted_energy;
 	    //  }// end if condition for counting energies in a signal region
 	  }//end if condition for counting energies above a threshold
 	}// end loop over rechits
-	total_energies.push_back(totalE);
-	meanE_statistical += totalE;
-	sigE_statistical += totalE*totalE;
+	// total_energies.push_back(totalE);
+	// meanE_statistical += totalE;
+	// sigE_statistical += totalE*totalE;
 	// }// end else condition for counting only meaningful genvecs
       }// loop on events
       
       // delete lSimTree;
       delete lRecTree;
 
-      meanE_statistical = meanE_statistical/nEvts_to_count;
-      sigE_statistical = sigE_statistical/nEvts_to_count;
+      // meanE_statistical = meanE_statistical/nEvts_to_count;
+      // sigE_statistical = sigE_statistical/nEvts_to_count;
       
-      sigE_statistical = sigE_statistical - meanE_statistical*meanE_statistical;
-      sigE_statistical = sqrt(sigE_statistical);
+      // sigE_statistical = sigE_statistical - meanE_statistical*meanE_statistical;
+      // sigE_statistical = sqrt(sigE_statistical);
 
-      // std::cout << "mean_statistical is " << meanE_statistical << std::endl;
-      // std::cout << "sigma_statistical is " << sigE_statistical << std::endl;
+      // // std::cout << "mean_statistical is " << meanE_statistical << std::endl;
+      // // std::cout << "sigma_statistical is " << sigE_statistical << std::endl;
 
-      Double_t lower_bound_for_hist;
-      Double_t upper_bound_for_hist;
+      // Double_t lower_bound_for_hist;
+      // Double_t upper_bound_for_hist;
       
-      lower_bound_for_hist = meanE_statistical - sigmas_down*sigE_statistical;
-      upper_bound_for_hist = meanE_statistical + sigmas_up*sigE_statistical;
+      // lower_bound_for_hist = meanE_statistical - sigmas_down*sigE_statistical;
+      // upper_bound_for_hist = meanE_statistical + sigmas_up*sigE_statistical;
       
-      TCanvas *myc = new TCanvas("Energy Distribution","Energy",800,600);
-      myc->cd();
-      TH1F *p_l = new TH1F("Energy Distribution", "Energies", 50, lower_bound_for_hist,upper_bound_for_hist);
-      for(unsigned hist_filler_counter = 0; hist_filler_counter < total_energies.size(); hist_filler_counter++) {
-      	p_l->Fill(total_energies[hist_filler_counter]);
-      }
-      p_l->Fit("gaus","IME");
-      TF1 *gaussian_fit = p_l->GetFunction("gaus");
-      mean_energy_wmips = gaussian_fit->GetParameter(1);
-      mean_energy_wmips_error = gaussian_fit->GetParError(1);
-      sigma_wmips = gaussian_fit->GetParameter(2);
-      sigma_wmips_error = gaussian_fit->GetParError(2);
-      chisqr = gaussian_fit->GetChisquare();
-      ndfr = gaussian_fit->GetNDF();
-      std::cout << "checking ... number of ds of f is " << ndfr << std::endl;
-      chisqdf = chisqr/ndfr;
-      // resolution = stddev/mean_energy;
-      // resolution_error = resolution*((stddev_error/stddev) + (mean_energy_error/mean_energy));
-      // resolution_error = resolution*sqrt(pow(stddev_error/stddev,2) + pow(mean_energy_error/mean_energy,2));
-      // energy_incoming_gev_error = energy_incoming_gev*mean_energy_error/mean_energy;
-      energy_incoming_gev_error = 0;
-      energies_incoming_gev.push_back(energy_incoming_gev);
-      energies_incoming_gev_errors.push_back(energy_incoming_gev_error);
-      mean_energies_wmips.push_back(mean_energy_wmips);
-      mean_energies_wmips_errors.push_back(mean_energy_wmips_error);
-      sigmas_wmips.push_back(sigma_wmips);
-      sigmas_wmips_errors.push_back(sigma_wmips_error);
-      events_measured.push_back(nEvts_to_count);
-      // resolutions.push_back(resolution);
-      // resolutions_errors.push_back(resolution_error);
+      // TCanvas *myc = new TCanvas("Energy Distribution","Energy",800,600);
+      // myc->cd();
+      // TH1F *p_l = new TH1F("Energy Distribution", "Energies", 50, lower_bound_for_hist,upper_bound_for_hist);
+      // for(unsigned hist_filler_counter = 0; hist_filler_counter < total_energies.size(); hist_filler_counter++) {
+      // 	p_l->Fill(total_energies[hist_filler_counter]);
+      // }
+      // p_l->Fit("gaus","IME");
+      // TF1 *gaussian_fit = p_l->GetFunction("gaus");
+      // mean_energy_wmips = gaussian_fit->GetParameter(1);
+      // mean_energy_wmips_error = gaussian_fit->GetParError(1);
+      // sigma_wmips = gaussian_fit->GetParameter(2);
+      // sigma_wmips_error = gaussian_fit->GetParError(2);
+      // chisqr = gaussian_fit->GetChisquare();
+      // ndfr = gaussian_fit->GetNDF();
+      // std::cout << "checking ... number of ds of f is " << ndfr << std::endl;
+      // chisqdf = chisqr/ndfr;
+      // // resolution = stddev/mean_energy;
+      // // resolution_error = resolution*((stddev_error/stddev) + (mean_energy_error/mean_energy));
+      // // resolution_error = resolution*sqrt(pow(stddev_error/stddev,2) + pow(mean_energy_error/mean_energy,2));
+      // // energy_incoming_gev_error = energy_incoming_gev*mean_energy_error/mean_energy;
+      // energy_incoming_gev_error = 0;
+      // energies_incoming_gev.push_back(energy_incoming_gev);
+      // energies_incoming_gev_errors.push_back(energy_incoming_gev_error);
+      // mean_energies_wmips.push_back(mean_energy_wmips);
+      // mean_energies_wmips_errors.push_back(mean_energy_wmips_error);
+      // sigmas_wmips.push_back(sigma_wmips);
+      // sigmas_wmips_errors.push_back(sigma_wmips_error);
+      // // resolutions.push_back(resolution);
+      // // resolutions_errors.push_back(resolution_error);
       
-      p_l->SetTitle(version_name + Form("_rwcuf%.1f_rwcum%.1f . chisq/dof = %.2f",rwcuf,rwcum,chisqdf));
-      p_l->Draw();
-      // p_l_unweighted->Draw();
-      // p_E->Draw();
-      myc->Print(outputdir+Form("/plots/plot_rwcuf%.1f_rwcum%.1f_",rwcuf,rwcum)+version_name+Form("_distribution_")+et_portion+eta_portion+Form(".png"));
-      myc->Print(outputdir+Form("/plots/plot_rwcuf%.1f_rwcum%.1f_",rwcuf,rwcum)+version_name+Form("_distribution_")+et_portion+eta_portion+Form(".pdf"));
-      // cout << "min layer = " << min_layer << std::endl;
-      // cout << "max layer = " << max_layer << std::endl;
-      delete gaussian_fit;
-      delete p_l;
-      delete myc;
+      // p_l->SetTitle(version_name + Form("_rwcuf%.1f_rwcum%.1f . chisq/dof = %.2f",rwcuf,rwcum,chisqdf));
+      // p_l->Draw();
+      // // p_l_unweighted->Draw();
+      // // p_E->Draw();
+      // myc->Print(outputdir+Form("/plots/plot_rwcuf%.1f_rwcum%.1f_",rwcuf,rwcum)+version_name+Form("_distribution_")+et_portion+eta_portion+Form(".png"));
+      // myc->Print(outputdir+Form("/plots/plot_rwcuf%.1f_rwcum%.1f_",rwcuf,rwcum)+version_name+Form("_distribution_")+et_portion+eta_portion+Form(".pdf"));
+      // // cout << "min layer = " << min_layer << std::endl;
+      // // cout << "max layer = " << max_layer << std::endl;
+      // delete gaussian_fit;
+      // delete p_l;
+      // delete myc;
     } // ends loop over et
     
-    TVectorD Tmean_energies_wmips(mean_energies_wmips.size(),&mean_energies_wmips[0]);
-    TVectorD Tmean_energies_wmips_errors(mean_energies_wmips_errors.size(),&mean_energies_wmips_errors[0]);
-    // TVectorD Tsigmas_wmips(sigmas_wmips.size(),&sigmas_wmips[0]);
-    // TVectorD Tsigmas_wmips_errors(sigmas_wmips_errors.size(),&sigmas_wmips_errors[0]);
-    TVectorD Tenergies_incoming_gev(energies_incoming_gev.size(),&energies_incoming_gev[0]);
-    TVectorD Tenergies_incoming_gev_errors(energies_incoming_gev_errors.size(),&energies_incoming_gev_errors[0]);
+    // TVectorD Tmean_energies_wmips(mean_energies_wmips.size(),&mean_energies_wmips[0]);
+    // TVectorD Tmean_energies_wmips_errors(mean_energies_wmips_errors.size(),&mean_energies_wmips_errors[0]);
+    // // TVectorD Tsigmas_wmips(sigmas_wmips.size(),&sigmas_wmips[0]);
+    // // TVectorD Tsigmas_wmips_errors(sigmas_wmips_errors.size(),&sigmas_wmips_errors[0]);
+    // TVectorD Tenergies_incoming_gev(energies_incoming_gev.size(),&energies_incoming_gev[0]);
+    // TVectorD Tenergies_incoming_gev_errors(energies_incoming_gev_errors.size(),&energies_incoming_gev_errors[0]);
         
-    TCanvas *myc = new TCanvas("Energy mips calibration", "mips versus gev",800,600);
-    myc->cd();
-    TGraphErrors *energy_mips_calibration = new TGraphErrors(Tenergies_incoming_gev,Tmean_energies_wmips,Tenergies_incoming_gev_errors,Tmean_energies_wmips_errors);
-    energy_mips_calibration->Fit("pol1");
-    TF1 *calibration_fit = energy_mips_calibration->GetFunction("pol1");
-    chisqr = calibration_fit->GetChisquare();
-    ndfr = calibration_fit->GetNDF();
-    std::cout << "checking ... number of ds of f is " << ndfr << std::endl;
-    chisqdf = chisqr/ndfr;
-    Double_t offset = calibration_fit->GetParameter(0);
-    Double_t offset_error = calibration_fit->GetParError(0);
-    Double_t conversion_factor = calibration_fit->GetParameter(1);
-    Double_t conversion_factor_error = calibration_fit->GetParError(1);
-    TString start_title_conversion_factor = Form("E_mips = (");
-    energy_mips_calibration->SetTitle(start_title_conversion_factor + Form("%5.3f +/- %5.3f) * E_GeV + (%.1f +/- %.1f). chisq/dof = %.2f",conversion_factor,conversion_factor_error,offset,offset_error,chisqdf));
-    energy_mips_calibration->Draw("AP");
-    myc->Update();
-    // myc->Print((Form("plot_thr_")+str_threshold+Form("_v")+(Form("%i",version_number)+(Form("_calibration_fit") + eta_portion))) + Form(".pdf"));
-    myc->Print(outputdir+Form("/plots/plot_")+version_name+Form("_rwcuf%.1f_rwcum%.1f_calibration_fit",rwcuf,rwcum)+ eta_portion + Form(".pdf"));
-    delete calibration_fit;
-    delete energy_mips_calibration;
-    delete myc;
+    // TCanvas *myc = new TCanvas("Energy mips calibration", "mips versus gev",800,600);
+    // myc->cd();
+    // TGraphErrors *energy_mips_calibration = new TGraphErrors(Tenergies_incoming_gev,Tmean_energies_wmips,Tenergies_incoming_gev_errors,Tmean_energies_wmips_errors);
+    // energy_mips_calibration->Fit("pol1");
+    // TF1 *calibration_fit = energy_mips_calibration->GetFunction("pol1");
+    // chisqr = calibration_fit->GetChisquare();
+    // ndfr = calibration_fit->GetNDF();
+    // std::cout << "checking ... number of ds of f is " << ndfr << std::endl;
+    // chisqdf = chisqr/ndfr;
+    // Double_t offset = calibration_fit->GetParameter(0);
+    // Double_t offset_error = calibration_fit->GetParError(0);
+    // Double_t conversion_factor = calibration_fit->GetParameter(1);
+    // Double_t conversion_factor_error = calibration_fit->GetParError(1);
+    // TString start_title_conversion_factor = Form("E_mips = (");
+    // energy_mips_calibration->SetTitle(start_title_conversion_factor + Form("%5.3f +/- %5.3f) * E_GeV + (%.1f +/- %.1f). chisq/dof = %.2f",conversion_factor,conversion_factor_error,offset,offset_error,chisqdf));
+    // energy_mips_calibration->Draw("AP");
+    // myc->Update();
+    // // myc->Print((Form("plot_thr_")+str_threshold+Form("_v")+(Form("%i",version_number)+(Form("_calibration_fit") + eta_portion))) + Form(".pdf"));
+    // myc->Print(outputdir+Form("/plots/plot_")+version_name+Form("_rwcuf%.1f_rwcum%.1f_calibration_fit",rwcuf,rwcum)+ eta_portion + Form(".pdf"));
+    // delete calibration_fit;
+    // delete energy_mips_calibration;
+    // delete myc;
     
-    for (unsigned int sigmas_wmips_counter = 0; sigmas_wmips_counter != sigmas_wmips.size(); sigmas_wmips_counter++) {
-      resolution = sigmas_wmips[sigmas_wmips_counter]/(mean_energies_wmips[sigmas_wmips_counter]-offset);
-      resolution_error = resolution*sqrt(pow(sigmas_wmips_errors[sigmas_wmips_counter]/sigmas_wmips[sigmas_wmips_counter],2)+(pow(mean_energies_wmips_errors[sigmas_wmips_counter],2)+pow(offset_error,2))/pow(mean_energies_wmips[sigmas_wmips_counter]-offset,2));
-      resolutions.push_back(resolution);
-      resolutions_errors.push_back(resolution_error);
-    }
-    TVectorD Tresolutions(resolutions.size(),&resolutions[0]);
-    TVectorD Tresolutions_errors(resolutions_errors.size(),&resolutions_errors[0]);
-    ofstream outfile;
-    TString outfile_name = outputdir+Form("/resolutions/data_resolutions_")+version_name+eta_portion+Form("_rwcuf%.1f_rwcum%.1f",rwcuf,rwcum);
-    outfile.open(outfile_name);
-    for(unsigned int et_counter = 0; et_counter != et_values.size(); et_counter++) {
-      outfile << et_values[et_counter] << "   " << resolutions[et_counter] << "   " << resolutions_errors[et_counter] << "    " << events_measured[et_counter] << std::endl;
-    }
-    outfile.close();
+    // for (unsigned int sigmas_wmips_counter = 0; sigmas_wmips_counter != sigmas_wmips.size(); sigmas_wmips_counter++) {
+    //   resolution = sigmas_wmips[sigmas_wmips_counter]/(mean_energies_wmips[sigmas_wmips_counter]-offset);
+    //   resolution_error = resolution*sqrt(pow(sigmas_wmips_errors[sigmas_wmips_counter]/sigmas_wmips[sigmas_wmips_counter],2)+(pow(mean_energies_wmips_errors[sigmas_wmips_counter],2)+pow(offset_error,2))/pow(mean_energies_wmips[sigmas_wmips_counter]-offset,2));
+    //   resolutions.push_back(resolution);
+    //   resolutions_errors.push_back(resolution_error);
+    // }
+    // TVectorD Tresolutions(resolutions.size(),&resolutions[0]);
+    // TVectorD Tresolutions_errors(resolutions_errors.size(),&resolutions_errors[0]);
+    // ofstream outfile;
+    // TString outfile_name = outputdir+Form("/resolutions/data_resolution_")+version_name+eta_portion+Form("_rwcuf%.1f_rwcum%.1f",rwcuf,rwcum);
+    // outfile.open(outfile_name);
+    // for(unsigned int et_counter = 0; et_counter != et_values.size(); et_counter++) {
+    //   outfile << energies_incoming_gev[et_counter] << "   " << energies_incoming_gev_errors[et_counter] << "   " << resolutions[et_counter] << "   " << resolutions_errors[et_counter] << std::endl;
+    // }
+    // outfile.close();
     
     // myc = new TCanvas("Resolutions versus Energy_standalone_withnoise","Resolution versus Energy",800,600);
     // myc->cd();

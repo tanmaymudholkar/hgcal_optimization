@@ -36,15 +36,15 @@ const Double_t sigmas_up = 3.0;
 //   return (par[1] + par[0]/sqrt(x[0]));
 // }
 
-// Double_t resolutions_fit_standalone_withnoise(Double_t *x,Double_t *par) {
-//   return sqrt(pow(par[1],2) + pow(par[0],2)/x[0] + pow(par[2]/x[0],2));
-//   // return sqrt(pow(par[1],2) + pow(par[0],2)/x[0]);
-// }
+Double_t resolutions_fit_standalone_withnoise(Double_t *x,Double_t *par) {
+  return sqrt(pow(par[1],2) + pow(par[0],2)/x[0] + pow(par[2]/x[0],2));
+  // return sqrt(pow(par[1],2) + pow(par[0],2)/x[0]);
+}
 
-// Double_t resolutions_fit_standalone(Double_t *x,Double_t *par) {
-//   // return sqrt(pow(par[1],2) + pow(par[0],2)/x[0] + pow(par[2]/x[0],2));
-//   return sqrt(pow(par[1],2) + pow(par[0],2)/x[0]);
-// }
+Double_t resolutions_fit_standalone(Double_t *x,Double_t *par) {
+  // return sqrt(pow(par[1],2) + pow(par[0],2)/x[0] + pow(par[2]/x[0],2));
+  return sqrt(pow(par[1],2) + pow(par[0],2)/x[0]);
+}
 
 // Double_t resolutions_fit_standalone_const(Double_t *x,Double_t *par) {
 //   return sqrt(pow(0.009,2) + pow(par[0],2)/x[0] + pow(par[1]/x[0],2));
@@ -61,18 +61,17 @@ const Double_t sigmas_up = 3.0;
 //   }
 // }
 
-bool testInputFile(TString inputPath, TFile* testFile)
-{
+bool testInputFile(TString inputPath, TFile* testFile) {
   testFile = TFile::Open(inputPath);
   if ( !testFile ) {
     // std::cout << " -- Error, input file " << inputPath << " cannot be opened. Skipping..." << std::endl;
     return false;
   } // else std::cout << " -- input file " << testFile->GetName() << " successfully opened." << std::endl;
-
+  delete testFile;
   return true;
 }
 
-void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_name, TString datadir, TString outputdir, Double_t rwcuf, Double_t rwcum) { // main
+void plotE_resolution_high_stats_modified_weights(Int_t version_number, TString version_name, TString datadir, TString outputdir) { // main
   
   // load the shared library for HGCSS* classes:
   gSystem->Load("/home/tmudholk/research/hgcal_analysis/hgcal_optimization/userlib/lib/libPFCalEEuserlib.so");
@@ -86,7 +85,7 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
   Double_t ndfr;
   Double_t chisqdf;  
 
-  Double_t et_values_array[] = {5,50,100,150}; //For systematic optimization studies
+  // Double_t et_values_array[] = {5,50,100,150}; //For systematic optimization studies
   // Double_t et_values_array[] = {3,5,7,10,20,30,40,50,60,70,100,125,150}; //Intersection version 30 & 34
   // Double_t et_values_array[] = {3,5,7,10,20};
   // Double_t et_values_array[] = {3,5,10,20,30,40,50,60,80,100,125,175};
@@ -94,6 +93,8 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
   // Double_t et_values_array[] = {3,7,20,35,50,70,100,125};
   // Double_t et_values_array[] = {100,125,150,175,200};
   // Double_t et_values_array[] = {3};
+  Double_t et_values_array[] = {3,5,20,50,100,150}; // high stats vflat and version 34 intersection
+  // Double_t et_values_array[] = {3,5,20,50,100}; // high stats version 34 only
   Double_t eta_values_array[] = {2.1};
   
   std::vector<Double_t> et_values(et_values_array,et_values_array+sizeof(et_values_array)/sizeof(Double_t));
@@ -102,30 +103,45 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
   // TString str_threshold = Form(".6f",threshold);
   // TString HGcal_common_prefix_firstpart = datadir + Form("/HGcal__version%i_model2_BOFF_",version_number);
 
-  std::cout << "___________________________________________________________________________" << std::endl;
-  std::cout << "___________________________________________________________________________" << std::endl;
-  std::cout << "___________________________________________________________________________" << std::endl;
-  std::cout << "___________________________________________________________________________" << std::endl;
-  std::cout << "___________________________________________________________________________" << std::endl;
-  std::cout << "rwcuf =  " << rwcuf << "; rwcum = " << rwcum << std::endl;
-  std::cout << "___________________________________________________________________________" << std::endl;
-  std::cout << "___________________________________________________________________________" << std::endl;
-  std::cout << "___________________________________________________________________________" << std::endl;
-  std::cout << "___________________________________________________________________________" << std::endl;
-  std::cout << "___________________________________________________________________________" << std::endl;
-
-  std::vector<Double_t> weights;
-  ifstream f_layer_weights;
-  f_layer_weights.open(datadir+Form("/layer_weights_rwcuf%.1f_rwcum%.1f.dat",rwcuf,rwcum));
+  std::vector<Double_t> weights_raw;
+  ifstream f_layer_weights_raw;
+  f_layer_weights_raw.open(datadir+Form("/layer_weights_version%i.dat",version_number));
   std::string line;
   Double_t weight;
-  if (f_layer_weights.is_open()) {
-    while (getline(f_layer_weights,line)) {
+  if (f_layer_weights_raw.is_open()) {
+    while (getline(f_layer_weights_raw,line)) {
       weight = std::atof(line.c_str());
-      weights.push_back(weight);
+      weights_raw.push_back(weight);
     }
   }
-  f_layer_weights.close();
+  f_layer_weights_raw.close();
+
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << "Old weights:" << std::endl;
+
+  for (unsigned layer_counter = 0; layer_counter != weights_raw.size(); layer_counter++) {
+    std::cout << "layer " << layer_counter << ": " << weights_raw[layer_counter] << std::endl;
+  }
+
+  std::vector<Double_t> weights;
+  weights.push_back(weights_raw[0]+0.5*weights_raw[1]);
+  for (unsigned layer_counter = 1; layer_counter != (weights_raw.size()-1); layer_counter++) {
+    weights.push_back(0.5*(weights_raw[layer_counter]+weights_raw[layer_counter+1]));
+  }
+  weights.push_back(0.5*weights_raw[(weights_raw.size()-1)]);
+
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << "New weights:" << std::endl;
+
+  for (unsigned layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
+    std::cout << "layer " << layer_counter << ": " << weights[layer_counter] << std::endl;
+  }
 
   for (unsigned int eta_counter = 0; eta_counter != eta_values.size(); eta_counter++) {
     TString eta_portion = Form("_eta%.3f",eta_values[eta_counter]);
@@ -145,9 +161,9 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
 
       TString et_portion = Form("et%.0f",et_values[et_counter]);
       
-      TString Digi_common_prefix_firstpart = datadir + Form("/") + et_portion + Form("/Digi__version%i_model2_BOFF_",version_number);
+      TString Digi_common_prefix = datadir + Form("/") + et_portion + Form("/Digi__version%i_model2_BOFF_",version_number);
       TString common_suffix = Form(".root");
-      TString Digi_common_prefix = Digi_common_prefix_firstpart + Form("rwcuf_%.1f_rwcum_%.1f_",rwcuf,rwcum);
+      //TString Digi_common_prefix = Digi_common_prefix_firstpart + Form("rwcuf_%.1f_rwcum_%.1f_",rwcuf,rwcum);
 
       Double_t energy_incoming_gev = et_values[et_counter]*cosh(eta_values[eta_counter]);
       
@@ -178,6 +194,7 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
 	bool digi_data_exists=testInputFile(Digi_common_prefix+Form("runno_%i_",run_no)+et_portion+eta_portion+common_suffix, testFile_digi);
 
 	if (digi_data_exists) {
+	  consecutive_nonexistent_files = 0;
 	  // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
 	  // lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+common_suffix);
 	  lRecTree->AddFile(Digi_common_prefix+Form("runno_%i_",run_no)+et_portion+eta_portion+common_suffix);
@@ -193,7 +210,7 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
 	  consecutive_nonexistent_files++;
 	  std::cout << "Digi data does not exist for run no " << run_no << std::endl; 
 	}
-	delete testFile_digi;
+	// delete testFile_digi;
 	run_no++;
       }// ends loop over runs  
 
@@ -320,12 +337,12 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
       // resolutions.push_back(resolution);
       // resolutions_errors.push_back(resolution_error);
       
-      p_l->SetTitle(version_name + Form("_rwcuf%.1f_rwcum%.1f . chisq/dof = %.2f",rwcuf,rwcum,chisqdf));
+      p_l->SetTitle(version_name + Form(" . chisq/dof = %.2f",chisqdf));
       p_l->Draw();
       // p_l_unweighted->Draw();
       // p_E->Draw();
-      myc->Print(outputdir+Form("/plots/plot_rwcuf%.1f_rwcum%.1f_",rwcuf,rwcum)+version_name+Form("_distribution_")+et_portion+eta_portion+Form(".png"));
-      myc->Print(outputdir+Form("/plots/plot_rwcuf%.1f_rwcum%.1f_",rwcuf,rwcum)+version_name+Form("_distribution_")+et_portion+eta_portion+Form(".pdf"));
+      myc->Print(outputdir+Form("/plots/plot_")+version_name+Form("_distribution_")+et_portion+eta_portion+Form(".png"));
+      myc->Print(outputdir+Form("/plots/plot_")+version_name+Form("_distribution_")+et_portion+eta_portion+Form(".pdf"));
       // cout << "min layer = " << min_layer << std::endl;
       // cout << "max layer = " << max_layer << std::endl;
       delete gaussian_fit;
@@ -358,7 +375,7 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
     energy_mips_calibration->Draw("AP");
     myc->Update();
     // myc->Print((Form("plot_thr_")+str_threshold+Form("_v")+(Form("%i",version_number)+(Form("_calibration_fit") + eta_portion))) + Form(".pdf"));
-    myc->Print(outputdir+Form("/plots/plot_")+version_name+Form("_rwcuf%.1f_rwcum%.1f_calibration_fit",rwcuf,rwcum)+ eta_portion + Form(".pdf"));
+    myc->Print(outputdir+Form("/plots/plot_")+version_name+Form("_calibration_fit")+ eta_portion + Form(".pdf"));
     delete calibration_fit;
     delete energy_mips_calibration;
     delete myc;
@@ -372,78 +389,88 @@ void plotE_resolution_high_stats_syst_opt(Int_t version_number, TString version_
     TVectorD Tresolutions(resolutions.size(),&resolutions[0]);
     TVectorD Tresolutions_errors(resolutions_errors.size(),&resolutions_errors[0]);
     ofstream outfile;
-    TString outfile_name = outputdir+Form("/resolutions/data_resolutions_")+version_name+eta_portion+Form("_rwcuf%.1f_rwcum%.1f",rwcuf,rwcum);
+    TString outfile_name = outputdir+Form("/resolutions/data_resolutions_")+version_name+eta_portion;
     outfile.open(outfile_name);
     for(unsigned int et_counter = 0; et_counter != et_values.size(); et_counter++) {
       outfile << et_values[et_counter] << "   " << resolutions[et_counter] << "   " << resolutions_errors[et_counter] << "    " << events_measured[et_counter] << std::endl;
     }
     outfile.close();
     
-    // myc = new TCanvas("Resolutions versus Energy_standalone_withnoise","Resolution versus Energy",800,600);
-    // myc->cd();
-    // TGraphErrors *resolutions_versus_energy_standalone_withnoise = new TGraphErrors(Tenergies_incoming_gev,Tresolutions,Tenergies_incoming_gev_errors,Tresolutions_errors);
-    // TF1 *function_to_fit_standalone_withnoise = new TF1("f_to_fit_standalone_withnoise",resolutions_fit_standalone_withnoise,0.0001,1300,3);
-    // function_to_fit_standalone_withnoise->SetParameters(0.25,0.01,0.00);
-    // function_to_fit_standalone_withnoise->SetParLimits(2,0.0,0.2);
-    // function_to_fit_standalone_withnoise->SetParNames("stoch_term","const_term","noise_term");
-    // resolutions_versus_energy_standalone_withnoise->Fit(function_to_fit_standalone_withnoise,"IME");
-    // chisqr = function_to_fit_standalone_withnoise->GetChisquare();
-    // ndfr = function_to_fit_standalone_withnoise->GetNDF();
-    // std::cout << "checking ... number of ds of f is " << ndfr << std::endl;
-    // chisqdf = chisqr/ndfr;
-    // Double_t fit_stoch_withnoise = function_to_fit_standalone_withnoise->GetParameter(0);
-    // Double_t fit_stoch_error_withnoise = function_to_fit_standalone_withnoise->GetParError(0);
-    // Double_t fit_const_withnoise = function_to_fit_standalone_withnoise->GetParameter(1);
-    // Double_t fit_const_error_withnoise = function_to_fit_standalone_withnoise->GetParError(1);
-    // Double_t fit_noise_withnoise = function_to_fit_standalone_withnoise->GetParameter(2);
-    // Double_t fit_noise_error_withnoise = function_to_fit_standalone_withnoise->GetParError(2);
-    // // fit_stoch = function_to_fit_standalone->GetParameter(0);
-    // // fit_stoch_error = function_to_fit_standalone->GetParError(0);
-    // // fit_const = function_to_fit_standalone->GetParameter(1);
-    // // fit_const_error = function_to_fit_standalone->GetParError(1);
-    // TString start_title_resolutions_withnoise = version_name + eta_portion + Form(": res = (");
-    // // start_title_resolutions = version_name + eta_portion + Form(": res = (");
-    // resolutions_versus_energy_standalone_withnoise->SetTitle(start_title_resolutions_withnoise + Form("%6.5f +/- %6.5f) + (%4.3f +/- %4.3f)/sqrt(E/GeV) + (%4.3f +/- %4.3f)/(E/GeV). chisq/dof = %.1f",fit_const_withnoise,fit_const_error_withnoise,fit_stoch_withnoise,fit_stoch_error_withnoise,fit_noise_withnoise,fit_noise_error_withnoise,chisqdf));
-    // resolutions_versus_energy_standalone_withnoise->Draw("AP");
-    // myc->Update();
-    // myc->Print((Form("plot_high_stats_")+(version_name+(Form("_resolutions_versus_energy_standalone_withnoise_") + eta_portion))) + Form(".pdf"));
-    // delete resolutions_versus_energy_standalone_withnoise;
-    // delete function_to_fit_standalone_withnoise;
-    // delete myc;
-    // std::cout << std::endl;
+    myc = new TCanvas("Resolutions versus Energy_standalone_withnoise","Resolution versus Energy",800,600);
+    myc->cd();
+    TGraphErrors *resolutions_versus_energy_standalone_withnoise = new TGraphErrors(Tenergies_incoming_gev,Tresolutions,Tenergies_incoming_gev_errors,Tresolutions_errors);
+    TF1 *function_to_fit_standalone_withnoise = new TF1("f_to_fit_standalone_withnoise",resolutions_fit_standalone_withnoise,0.0001,1300,3);
+    function_to_fit_standalone_withnoise->SetParameters(0.25,0.01,0.00);
+    function_to_fit_standalone_withnoise->SetParLimits(2,0.0,0.2);
+    function_to_fit_standalone_withnoise->SetParNames("stoch_term","const_term","noise_term");
+    resolutions_versus_energy_standalone_withnoise->Fit(function_to_fit_standalone_withnoise,"IME");
+    chisqr = function_to_fit_standalone_withnoise->GetChisquare();
+    ndfr = function_to_fit_standalone_withnoise->GetNDF();
+    std::cout << "checking ... number of ds of f is " << ndfr << std::endl;
+    chisqdf = chisqr/ndfr;
+    Double_t fit_stoch_withnoise = function_to_fit_standalone_withnoise->GetParameter(0);
+    Double_t fit_stoch_error_withnoise = function_to_fit_standalone_withnoise->GetParError(0);
+    Double_t fit_const_withnoise = function_to_fit_standalone_withnoise->GetParameter(1);
+    Double_t fit_const_error_withnoise = function_to_fit_standalone_withnoise->GetParError(1);
+    Double_t fit_noise_withnoise = function_to_fit_standalone_withnoise->GetParameter(2);
+    Double_t fit_noise_error_withnoise = function_to_fit_standalone_withnoise->GetParError(2);
+    // fit_stoch = function_to_fit_standalone->GetParameter(0);
+    // fit_stoch_error = function_to_fit_standalone->GetParError(0);
+    // fit_const = function_to_fit_standalone->GetParameter(1);
+    // fit_const_error = function_to_fit_standalone->GetParError(1);
+    TString start_title_resolutions_withnoise = version_name + eta_portion + Form(": res = (");
+    // start_title_resolutions = version_name + eta_portion + Form(": res = (");
+    resolutions_versus_energy_standalone_withnoise->SetTitle(start_title_resolutions_withnoise + Form("%6.5f +/- %6.5f) + (%4.3f +/- %4.3f)/sqrt(E/GeV) + (%4.3f +/- %4.3f)/(E/GeV). chisq/dof = %.1f",fit_const_withnoise,fit_const_error_withnoise,fit_stoch_withnoise,fit_stoch_error_withnoise,fit_noise_withnoise,fit_noise_error_withnoise,chisqdf));
+    resolutions_versus_energy_standalone_withnoise->Draw("AP");
+    myc->Update();
+    myc->Print(outputdir+(Form("/plots/plot_")+(version_name+(Form("_resolutions_versus_energy_standalone_withnoise_") + eta_portion))) + Form(".pdf"));
+    ofstream fit_withnoise;
+    outfile_name = outputdir+Form("/fits/data_fits_withnoise_")+version_name+eta_portion;
+    fit_withnoise.open(outfile_name);
+    fit_withnoise << fit_const_withnoise << "    " << fit_const_error_withnoise << "    " << fit_stoch_withnoise << "    " << fit_stoch_error_withnoise << "    " << fit_noise_withnoise << "    " << fit_noise_error_withnoise << "    " << chisqdf << std::endl;
+    fit_withnoise.close();
+    delete resolutions_versus_energy_standalone_withnoise;
+    delete function_to_fit_standalone_withnoise;
+    delete myc;
+    std::cout << std::endl;
 
-    // myc = new TCanvas("Resolutions versus Energy_standalone","Resolution versus Energy",800,600);
-    // myc->cd();
-    // TGraphErrors *resolutions_versus_energy_standalone = new TGraphErrors(Tenergies_incoming_gev,Tresolutions,Tenergies_incoming_gev_errors,Tresolutions_errors);
-    // TF1 *function_to_fit_standalone = new TF1("f_to_fit_standalone",resolutions_fit_standalone,0.0001,1300,2);
-    // function_to_fit_standalone->SetParameters(0.25,0.01);
-    // // function_to_fit_standalone->SetParLimits(2,0.0,0.2);
-    // function_to_fit_standalone->SetParNames("stoch_term","const_term");
-    // resolutions_versus_energy_standalone->Fit(function_to_fit_standalone,"IME");
-    // chisqr = function_to_fit_standalone->GetChisquare();
-    // ndfr = function_to_fit_standalone->GetNDF();
-    // std::cout << "checking ... number of ds of f is " << ndfr << std::endl;
-    // chisqdf = chisqr/ndfr;
-    // Double_t fit_stoch = function_to_fit_standalone->GetParameter(0);
-    // Double_t fit_stoch_error = function_to_fit_standalone->GetParError(0);
-    // Double_t fit_const = function_to_fit_standalone->GetParameter(1);
-    // Double_t fit_const_error = function_to_fit_standalone->GetParError(1);
-    // // Double_t fit_noise = function_to_fit_standalone->GetParameter(2);
-    // // Double_t fit_noise_error = function_to_fit_standalone->GetParError(2);
-    // // fit_stoch = function_to_fit_standalone->GetParameter(0);
-    // // fit_stoch_error = function_to_fit_standalone->GetParError(0);
-    // // fit_const = function_to_fit_standalone->GetParameter(1);
-    // // fit_const_error = function_to_fit_standalone->GetParError(1);
-    // TString start_title_resolutions = version_name + eta_portion + Form(": res = (");
-    // // start_title_resolutions = version_name + eta_portion + Form(": res = (");
-    // resolutions_versus_energy_standalone->SetTitle(start_title_resolutions + Form("%6.5f +/- %6.5f) + (%4.3f +/- %4.3f)/sqrt(E/GeV). chisq/dof = %.1f",fit_const,fit_const_error,fit_stoch,fit_stoch_error,chisqdf));
-    // resolutions_versus_energy_standalone->Draw("AP");
-    // myc->Update();
-    // myc->Print((Form("plot_high_stats_")+(version_name+(Form("_resolutions_versus_energy_standalone_") + eta_portion))) + Form(".pdf"));
-    // delete resolutions_versus_energy_standalone;
-    // delete function_to_fit_standalone;
-    // delete myc;
-    // std::cout << std::endl;
+    myc = new TCanvas("Resolutions versus Energy_standalone","Resolution versus Energy",800,600);
+    myc->cd();
+    TGraphErrors *resolutions_versus_energy_standalone = new TGraphErrors(Tenergies_incoming_gev,Tresolutions,Tenergies_incoming_gev_errors,Tresolutions_errors);
+    TF1 *function_to_fit_standalone = new TF1("f_to_fit_standalone",resolutions_fit_standalone,0.0001,1300,2);
+    function_to_fit_standalone->SetParameters(0.25,0.01);
+    // function_to_fit_standalone->SetParLimits(2,0.0,0.2);
+    function_to_fit_standalone->SetParNames("stoch_term","const_term");
+    resolutions_versus_energy_standalone->Fit(function_to_fit_standalone,"IME");
+    chisqr = function_to_fit_standalone->GetChisquare();
+    ndfr = function_to_fit_standalone->GetNDF();
+    std::cout << "checking ... number of ds of f is " << ndfr << std::endl;
+    chisqdf = chisqr/ndfr;
+    Double_t fit_stoch = function_to_fit_standalone->GetParameter(0);
+    Double_t fit_stoch_error = function_to_fit_standalone->GetParError(0);
+    Double_t fit_const = function_to_fit_standalone->GetParameter(1);
+    Double_t fit_const_error = function_to_fit_standalone->GetParError(1);
+    // Double_t fit_noise = function_to_fit_standalone->GetParameter(2);
+    // Double_t fit_noise_error = function_to_fit_standalone->GetParError(2);
+    // fit_stoch = function_to_fit_standalone->GetParameter(0);
+    // fit_stoch_error = function_to_fit_standalone->GetParError(0);
+    // fit_const = function_to_fit_standalone->GetParameter(1);
+    // fit_const_error = function_to_fit_standalone->GetParError(1);
+    TString start_title_resolutions = version_name + eta_portion + Form(": res = (");
+    // start_title_resolutions = version_name + eta_portion + Form(": res = (");
+    resolutions_versus_energy_standalone->SetTitle(start_title_resolutions + Form("%6.5f +/- %6.5f) + (%4.3f +/- %4.3f)/sqrt(E/GeV). chisq/dof = %.1f",fit_const,fit_const_error,fit_stoch,fit_stoch_error,chisqdf));
+    resolutions_versus_energy_standalone->Draw("AP");
+    myc->Update();
+    myc->Print(outputdir+(Form("/plots/plot_")+(version_name+(Form("_resolutions_versus_energy_standalone_") + eta_portion))) + Form(".pdf"));
+    ofstream fit_withoutnoise;
+    outfile_name = outputdir+Form("/fits/data_fits_")+version_name+eta_portion;
+    fit_withoutnoise.open(outfile_name);
+    fit_withoutnoise << fit_const << "    " << fit_const_error << "    " << fit_stoch << "    " << fit_stoch_error << "    " << chisqdf << std::endl;
+    fit_withoutnoise.close();
+    delete resolutions_versus_energy_standalone;
+    delete function_to_fit_standalone;
+    delete myc;
+    std::cout << std::endl;
 
     // myc = new TCanvas("Resolutions versus Energy_standalone_const","Resolution versus Energy",800,600);
     // myc->cd();

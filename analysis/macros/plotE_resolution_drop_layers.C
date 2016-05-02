@@ -77,7 +77,7 @@ bool isin(Int_t int_to_check, std::vector<Int_t> vector_of_ints) {
 void plotE_resolution_drop_layers(Int_t version_number, TString version_name, TString datadir) { // main
   
   // load the shared library for HGCSS* classes:
-  gSystem->Load("/export/home/tmudholk/research/HGCstandalone/userlib/lib/libPFCalEEuserlib.so");
+  gSystem->Load("/home/tmudholk/research/hgcal_analysis/hgcal_optimization/userlib/lib/libPFCalEEuserlib.so");
 
   // if(threshold<0.5) {
   //   std::cout << "Threshold provided less than minimum threshold analyzable from Digi file" << std::endl;
