@@ -35,7 +35,7 @@ nSiLayers=2
 enlist=[0]
 #if opt.dogun : enlist=[3,5,7,10,20,30,40,50,60,70,80,90,100,125,150,175,200]
 if opt.dogun : 
-    enlist=[30]
+    enlist=[3,5,10,30,50,70,100,150]
     #enlist=[3,5,10,30,50,70,100,200]
 
 #if opt.dogun : enlist=[2,5,10,20,40,60,80,100,150,200]#,300,400,500]
@@ -96,7 +96,8 @@ elif (opt.version==30 or opt.version==100 or opt.version==110):
     threshold='0-27:5'
 elif (opt.version==33):
     granularity='0-27:4,28-39:4,40-51:8'
-    noise='0-39:0.14,40-51:0.2'
+    # noise='0-39:0.14,40-51:0.2'
+    noise='0-30:0.14,31-51:0'
     threshold='0-51:5'
 elif (opt.version==27 or opt.version==31):
     granularity='0-11:4,12-23:8'
@@ -205,7 +206,7 @@ for nPuVtx in nPuVtxlist:
                 scriptFile.write('fi\n')
                 scriptFile.write('fi\n')
             else:
-                scriptFile.write('mv DigiPFcal.root Digi%s_%s.root\n'%(suffix,outTag))
+                scriptFile.write('mv DigiPFcal.root Digi%s_%s_reducedNoise.root\n'%(suffix,outTag))
 
             scriptFile.write('echo "--deleting core files: too heavy!!"\n')
             scriptFile.write('rm core.*\n')

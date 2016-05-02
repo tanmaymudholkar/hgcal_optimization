@@ -109,6 +109,9 @@ bool ShowerProfile::buildShowerProfile(Float_t eElec, TString version, TNtuple *
 	  if(hitEn>1.0) totNmipHits++;
 	  double posx = lHit.get_x();
 	  double posy = lHit.get_y();
+          // std::pair<double,double> xy = aSimHit.get_xy(isScintillator,aGeom);
+          // double posx = lHit.get_xy().first;
+          // double posy = lHit.get_xy().second;
 
 	  //save in deposits in the transverse plane with fixed cell size
 	  if( edeps_xy.find( volNb ) == edeps_xy.end() )
