@@ -12,8 +12,10 @@ obj
 plot_*
 data_*
 plots/
+root_histograms/
 *_out
 *_for_weight*
 geometry_of_detector
 *.log
 layer_weights*
+output*

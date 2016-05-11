@@ -31,6 +31,8 @@
 // const Double_t threshold = 0.5;
 const Double_t sigmas_down = 3.0;
 const Double_t sigmas_up = 3.0;
+const Double_t abovecut = 21000;
+const Double_t belowcut = 20500;
 // const Int_t signal_region = 1000;
 
 // Double_t resolutions_fit(Double_t *x,Double_t *par) {
@@ -72,7 +74,7 @@ bool testInputFile(TString inputPath, TFile* testFile) {
   return true;
 }
 
-void plotE_resolution_high_stats(Int_t version_number, TString version_name, TString datadir, TString outputdir, Double_t threshold_adc, Int_t digi_or_raw_switch) { // main
+void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TString version_name, TString datadir, TString outputdir, Double_t threshold_adc, Int_t digi_or_raw_switch) { // main
   
   // load the shared library for HGCSS* classes:
   gSystem->Load("/afs/cern.ch/user/t/tmudholk/public/research/hgcal_optimization_latest/PFCal/PFCalEE/userlib/lib/libPFCalEEuserlib.so");
@@ -98,10 +100,10 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
   // Double_t et_values_array[] = {3};
   // Double_t et_values_array[] = {3,5,20,50,100,150}; // high stats vflat and version 34 intersection
   // Double_t et_values_array[] = {3,5,20,50,100}; // high stats version 34 only
-  Double_t et_values_array[] = {3,5,10,30,50,70,100,150}; // version 33 and 30, hexagonal geometry
+  // Double_t et_values_array[] = {3,5,10,30,50,70,100,150}; // version 33 and 30, hexagonal geometry
   // Double_t et_values_array[] = {3,5,7,10,20,30,40,50,60,70,100,125,150}; // old version 30
   // Double_t et_values_array[] = {3,7,10,40,100}; // old version 30 reduced
-  // Double_t et_values_array[] = {3,5,10,100}; // version 33 and 30, hexagonal geometry, reduced
+  Double_t et_values_array[] = {3,5,10,100}; // version 33 and 30, hexagonal geometry, reduced
   Double_t eta_values_array[] = {2.1};
   
   std::vector<Double_t> et_values(et_values_array,et_values_array+sizeof(et_values_array)/sizeof(Double_t));
@@ -188,6 +190,12 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
       Double_t sigma_wmips_error;
       std::vector<Double_t> total_energies;
       std::vector<Double_t> energy_distribution;
+      // std::vector<Double_t> total_energies_by_layer_belowcut[weights.size()];
+      // std::vector<Double_t> total_energies_by_layer_abovecut[weights.size()];
+      Double_t total_energies_by_layer_belowcut[weights.size()];
+      Double_t total_energies_by_layer_abovecut[weights.size()];
+      std::vector<std::pair<Double_t, Double_t>> xy_positions_by_layer_abovecut[weights.size()];
+      std::vector<std::pair<Double_t, Double_t>> xy_positions_by_layer_belowcut[weights.size()];
       Double_t meanE_statistical = 0;
       Double_t sigE_statistical = 0;
       std::cout << "et" << et_values[et_counter] << " eta" << eta_values[eta_counter] << std::endl;
@@ -326,16 +334,23 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
       
       unsigned nEvts_to_count = 0;
       Double_t totalE(0);
-
+      Double_t totalE_by_layer[weights.size()];
+      
       std::cout << "no of events = " << nEvts << std::endl;
 
       TCanvas *myc = new TCanvas(Form("individual_hits_energy_distribution_")+et_portion,"Energy",800,600);
       myc->cd();
       TH1F *p_l_temp = new TH1F("Hits Energy Distribution", "Energies", 200, 0, 30);
-            
+      
       for (unsigned ievt(0); ievt<nEvts; ++ievt){// loop on events
       // for (unsigned ievt(0); ievt<1000; ++ievt){// loop on events
       	totalE = 0;
+        std::vector<std::pair<Double_t, Double_t>> xy_positions_by_layer[weights.size()];
+        std::vector<std::pair<Double_t, Double_t>> xy_positions_by_layer[weights.size()];
+
+        for (unsigned int layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
+          totalE_by_layer[layer_counter] = 0;
+        }
 	
 	if (ievt%100==0) std::cout << " -- Processing event " << ievt << std::endl;
 	
@@ -391,6 +406,7 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
               Double_t weighted_energy = energy*weights[layer]/tanh(eta_values[eta_counter]);
               // totalE_in_layer[layer] += weighted_energy;
               totalE += weighted_energy;
+              totalE_by_layer[layer] += weighted_energy;
               //  }// end if condition for counting energies in a signal region
             }//end if condition for counting energies above a threshold
           }// end loop over rechits
@@ -425,12 +441,23 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
             Double_t weighted_energy = energy*weights[layer]/tanh(eta_values[eta_counter]);
             // totalE_in_layer[layer] += weighted_energy;
             totalE += weighted_energy;
+            totalE_by_layer[layer] += weighted_energy;
             //  }// end if condition for counting energies in a signal region
             // }//end if condition for counting energies above a threshold
           }// end loop over simhits
         }
 	
 	total_energies.push_back(totalE);
+        if (totalE > abovecut) {
+          for (unsigned int layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
+            total_energies_by_layer_abovecut[layer_counter] += totalE_by_layer[layer_counter];
+          }
+        }
+        else if (totalE < belowcut) {
+          for (unsigned int layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
+            total_energies_by_layer_belowcut[layer_counter] += totalE_by_layer[layer_counter];
+          }
+        }
 	meanE_statistical += totalE;
 	sigE_statistical += totalE*totalE;
 	// }// end else condition for counting only meaningful genvecs
@@ -524,6 +551,27 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
       delete gaussian_fit;
       delete p_l;
       delete myc;
+
+      myc = new TCanvas(Form("shower_profile_abovecut")+et_portion,"Energy",800,600);
+      TH1F *h_shower_profile_abovecut = new TH1F("Shower Profile abovecut", "layer", weights.size(), -0.5, weights.size() - 0.5);
+      for (unsigned int layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
+        h_shower_profile_abovecut->Fill(layer_counter, total_energies_by_layer_abovecut[layer_counter]);
+      }
+      h_shower_profile_abovecut->Draw();
+      histograms_output_file->WriteTObject(myc);
+      delete h_shower_profile_abovecut;
+      delete myc;
+
+      myc = new TCanvas(Form("shower_profile_belowcut")+et_portion,"Energy",800,600);
+      TH1F *h_shower_profile_belowcut = new TH1F("Shower Profile belowcut", "layer", weights.size(), -0.5, weights.size() - 0.5);
+      for (unsigned int layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
+        h_shower_profile_belowcut->Fill(layer_counter, total_energies_by_layer_belowcut[layer_counter]);
+      }
+      h_shower_profile_belowcut->Draw();
+      histograms_output_file->WriteTObject(myc);
+      delete h_shower_profile_belowcut;
+      delete myc;
+      
     } // ends loop over et
     
     TVectorD Tmean_energies_wmips(mean_energies_wmips.size(),&mean_energies_wmips[0]);

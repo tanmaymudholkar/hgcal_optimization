@@ -10,8 +10,8 @@ random.seed()
 
 usage = 'usage: %prog [options]'
 parser = optparse.OptionParser(usage)
-parser.add_option('-s', '--short-queue',    dest='squeue'             , help='short batch queue'            , default='1nd')
-parser.add_option('-q', '--long-queue' ,    dest='lqueue'             , help='long batch queue'             , default='2nw')
+parser.add_option('-s', '--short-queue' ,    dest='squeue'             , help='short batch queue'            , default='1nd')
+parser.add_option('-q', '--long-queue'  ,    dest='lqueue'             , help='long batch queue'             , default='2nw')
 parser.add_option('-t', '--git-tag'     ,    dest='gittag'             , help='git tag version'              , default='V00-00-00')
 parser.add_option('-r', '--run'         ,    dest='run'                , help='stat run'                     , default=-1,      type=int)
 parser.add_option('-v', '--version'     ,    dest='version'            , help='detector version'             , default=3,      type=int)
@@ -22,6 +22,7 @@ parser.add_option('-b', '--Bfield'      ,    dest='Bfield'             , help='B
 parser.add_option('-d', '--datatype'    ,    dest='datatype'           , help='data type or particle to shoot', default='e-')
 parser.add_option('-f', '--datafile'    ,    dest='datafile'           , help='full path to HepMC input file', default='data/example_MyPythia.dat')
 parser.add_option('-n', '--nevts'       ,    dest='nevts'              , help='number of events to generate' , default=1000,    type=int)
+parser.add_option('-T', '--threshold-adc',   dest='threshold_adc'      , help='digi energy threshold in ADC' , default=5,       type=float)
 parser.add_option('-o', '--out'         ,    dest='out'                , help='output directory'             , default=os.getcwd() )
 parser.add_option('-e', '--eos'         ,    dest='eos'                , help='eos path to save root file to EOS',         default='')
 parser.add_option('-E', '--eosin'       ,    dest='eosin'              , help='eos path to read input root file from EOS',  default='')
@@ -93,12 +94,11 @@ elif (opt.version==25 or opt.version==26):
 elif (opt.version==30 or opt.version==100 or opt.version==110):
     granularity='0-27:4'
     noise='0-27:0.14'
-    threshold='0-27:5'
+    threshold="0-27:%.1f"%(opt.threshold_adc)
 elif (opt.version==33):
     granularity='0-27:4,28-39:4,40-51:8'
-    # noise='0-39:0.14,40-51:0.2'
-    noise='0-30:0.14,31-51:0'
-    threshold='0-51:5'
+    noise='0-39:0.14,40-51:0.2'
+    threshold="0-51:5"%(opt.threshold_adc)
 elif (opt.version==27 or opt.version==31):
     granularity='0-11:4,12-23:8'
     noise='0-11:0.14,12-23:0.2'
@@ -134,7 +134,7 @@ elif (opt.version==39):
 else:
     granularity='0-51:4'
     noise='0-51:0.15'
-    threshold='0-51:5'
+    threshold="0-51:%.1f"%(opt.threshold_adc)
 
 for nPuVtx in nPuVtxlist:
 
@@ -147,6 +147,8 @@ for nPuVtx in nPuVtxlist:
             myqueue=opt.squeue
 
         if opt.model!=2 : suffix='%s_Si%d'%(suffix,nSiLayers)
+
+        suffix='%s_thr%.1f'%(suffix,opt.threshold_adc)
             
         for en in enlist :
             
@@ -206,7 +208,7 @@ for nPuVtx in nPuVtxlist:
                 scriptFile.write('fi\n')
                 scriptFile.write('fi\n')
             else:
-                scriptFile.write('mv DigiPFcal.root Digi%s_%s_reducedNoise.root\n'%(suffix,outTag))
+                scriptFile.write('mv DigiPFcal.root Digi%s_%s.root\n'%(suffix,outTag))
 
             scriptFile.write('echo "--deleting core files: too heavy!!"\n')
             scriptFile.write('rm core.*\n')
@@ -218,6 +220,3 @@ for nPuVtx in nPuVtxlist:
             os.system('chmod u+rwx %s/runDigiJob%s.sh'%(outDir,suffix))
             if opt.nosubmit : os.system('echo bsub -q %s %s/runDigiJob%s.sh'%(myqueue,outDir,suffix)) 
             else: os.system("bsub -q %s \'%s/runDigiJob%s.sh\'"%(myqueue,outDir,suffix))
-
-
-
