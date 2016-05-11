@@ -72,7 +72,7 @@ bool testInputFile(TString inputPath, TFile* testFile) {
   return true;
 }
 
-void plotE_resolution_high_stats(Int_t version_number, TString version_name, TString datadir, TString outputdir, Double_t threshold_adc, Int_t digi_or_raw_switch) { // main
+void plotE_resolution(Int_t version_number, TString version_name, TString datadir, TString outputdir, Double_t threshold_adc, Int_t digi_or_raw_switch) { // main
   
   // load the shared library for HGCSS* classes:
   gSystem->Load("/afs/cern.ch/user/t/tmudholk/public/research/hgcal_optimization_latest/PFCal/PFCalEE/userlib/lib/libPFCalEEuserlib.so");
@@ -98,9 +98,9 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
   // Double_t et_values_array[] = {3};
   // Double_t et_values_array[] = {3,5,20,50,100,150}; // high stats vflat and version 34 intersection
   // Double_t et_values_array[] = {3,5,20,50,100}; // high stats version 34 only
-  Double_t et_values_array[] = {3,5,10,30,50,70,100,150}; // version 33 and 30, hexagonal geometry
-  // Double_t et_values_array[] = {3,5,7,10,20,30,40,50,60,70,100,125,150}; // old version 30
-  // Double_t et_values_array[] = {3,7,10,40,100}; // old version 30 reduced
+  // Double_t et_values_array[] = {3,5,10,30,50,70,100,150}; // version 33 and 30, hexagonal geometry
+  Double_t et_values_array[] = {3,5,7,10,20,30,40,50,60,70,100,125,150}; // old version 30
+  // Double_t et_values_array[] = {3,5,7,100}; // old version 30 reduced
   // Double_t et_values_array[] = {3,5,10,100}; // version 33 and 30, hexagonal geometry, reduced
   Double_t eta_values_array[] = {2.1};
   
@@ -163,7 +163,7 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
       
       if (digi_or_raw_switch == 1) {
         // WHEN YOU CHANGE THIS REMEMBER ALSO TO CHANGE CONDITION REGARDING THRESHOLD IN TOTAL ENERGY CALCULATION
-        Digi_common_prefix = datadir + Form("/DigiIC3_thr5.0__version%i_model2_BOFF_",version_number);
+        Digi_common_prefix = datadir + Form("/Digi__version%i_model2_BOFF_",threshold_adc,version_number);
       }
       else if (digi_or_raw_switch == 2) {
         HGcal_common_prefix = datadir + Form("/HGcal__version%i_model2_BOFF_",version_number);
@@ -202,91 +202,93 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
       //   TChain  *lRecTree = new TChain("RecoTree");
       // }
 
-      unsigned run_no = 1;
-      Int_t consecutive_nonexistent_files = 0;
+      // unsigned run_no = 1;
+      // Int_t consecutive_nonexistent_files = 0;
 
-      while (consecutive_nonexistent_files < 4) {
-        std::cout << "___________________________________________________________________________" << std::endl;
-        std::cout << "run number " << run_no << std::endl;
-        std::cout << "___________________________________________________________________________" << std::endl;
+      // while (consecutive_nonexistent_files < 4) {
+      // std::cout << "___________________________________________________________________________" << std::endl;
+      // std::cout << "run number " << run_no << std::endl;
+      // std::cout << "___________________________________________________________________________" << std::endl;
 
-        TFile *testFile_hgcal(0);
-        TFile *testFile_digi(0);
+      // TFile *testFile_hgcal(0);
+      // TFile *testFile_digi(0);
 
-        // if (digi_or_raw_switch == 2) {
-        //   TFile *testFile_hgcal(0);
+      // if (digi_or_raw_switch == 2) {
+      //   TFile *testFile_hgcal(0);
+      // }
+      // else if (digi_or_raw_switch == 1) {
+      //   TFile *testFile_digi(0);
+      // }
+
+      // bool hgcal_data_exists, digi_data_exists;
+      // if (digi_or_raw_switch == 2) {
+      //   hgcal_data_exists=testInputFile(HGcal_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix, testFile_hgcal);
+      // }
+      // else if(digi_or_raw_switch == 1) {
+      //   digi_data_exists=testInputFile(Digi_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix, testFile_digi);
+      // }
+
+      // if (digi_or_raw_switch == 1) {
+      //   if (digi_data_exists) {
+      // if (hgcal_data_exists) {
+      // consecutive_nonexistent_files = 0;
+      // std::cout << "Exists!" << std::endl;
+      // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
+      // lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+common_suffix);
+      if (digi_or_raw_switch == 1) {
+        lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+common_suffix);
+      }
+      // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix);
+      // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
+
+      // TFile *inputFile = TFile::Open(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
+      // HGCSSInfo * info=(HGCSSInfo*)inputFile->Get("Info");
+      // cellSize = info->cellSize();
+      // const unsigned versionNumber = info->version();
+      // const unsigned model = info->model();
+      // delete inputFile;
+      // }
+      // else {
+      //         consecutive_nonexistent_files++;
+      //         std::cout << "Digi data does not exist for run no " << run_no << std::endl;
+      //         //     // std::cout << "HGcal data does not exist" << std::endl; 
+      //       }
+      // }
+
+      else if (digi_or_raw_switch == 2) {
+        // if (hgcal_data_exists) {
+        //   consecutive_nonexistent_files = 0;
+        // std::cout << "Exists!" << std::endl;
+        // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
+        // lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+common_suffix);
+        // lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix);
+        lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
+        // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
+
+        // TFile *inputFile = TFile::Open(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
+        // HGCSSInfo * info=(HGCSSInfo*)inputFile->Get("Info");
+        // cellSize = info->cellSize();
+        // const unsigned versionNumber = info->version();
+        // const unsigned model = info->model();
+        // delete inputFile;
         // }
-        // else if (digi_or_raw_switch == 1) {
-        //   TFile *testFile_digi(0);
+        // else {
+        //   consecutive_nonexistent_files++;
+        //   std::cout << "HGcal data does not exist for run no " << run_no << std::endl;
+        //   //     // std::cout << "HGcal data does not exist" << std::endl; 
         // }
+      }
 
-        bool hgcal_data_exists, digi_data_exists;
-        if (digi_or_raw_switch == 2) {
-          hgcal_data_exists=testInputFile(HGcal_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix, testFile_hgcal);
-        }
-        else if(digi_or_raw_switch == 1) {
-          digi_data_exists=testInputFile(Digi_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix, testFile_digi);
-        }
-
-        if (digi_or_raw_switch == 1) {
-          if (digi_data_exists) {
-            // if (hgcal_data_exists) {
-            consecutive_nonexistent_files = 0;
-            // std::cout << "Exists!" << std::endl;
-            // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
-            // lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+common_suffix);
-            lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix);
-            // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix);
-            // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
-
-            // TFile *inputFile = TFile::Open(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
-            // HGCSSInfo * info=(HGCSSInfo*)inputFile->Get("Info");
-            // cellSize = info->cellSize();
-            // const unsigned versionNumber = info->version();
-            // const unsigned model = info->model();
-            // delete inputFile;
-          }
-          else {
-            consecutive_nonexistent_files++;
-            std::cout << "Digi data does not exist for run no " << run_no << std::endl;
-            //     // std::cout << "HGcal data does not exist" << std::endl; 
-          }
-        }
-
-        else if (digi_or_raw_switch == 2) {
-          if (hgcal_data_exists) {
-            consecutive_nonexistent_files = 0;
-            // std::cout << "Exists!" << std::endl;
-            // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
-            // lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+common_suffix);
-            // lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix);
-            lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix);
-            // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
-
-            // TFile *inputFile = TFile::Open(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
-            // HGCSSInfo * info=(HGCSSInfo*)inputFile->Get("Info");
-            // cellSize = info->cellSize();
-            // const unsigned versionNumber = info->version();
-            // const unsigned model = info->model();
-            // delete inputFile;
-          }
-          else {
-            consecutive_nonexistent_files++;
-            std::cout << "HGcal data does not exist for run no " << run_no << std::endl;
-            //     // std::cout << "HGcal data does not exist" << std::endl; 
-          }
-        }
-
-        // if (digi_or_raw_switch == 1) {
-        //   delete testFile_digi;
-        // }
-        // else if (digi_or_raw_switch == 2) {
-        //   delete testFile_hgcal;
-        // }
-        delete testFile_digi;
-        delete testFile_hgcal;
-        run_no++;
-      }// ends loop over runs
+      // if (digi_or_raw_switch == 1) {
+      //   delete testFile_digi;
+      // }
+      // else if (digi_or_raw_switch == 2) {
+      //   delete testFile_hgcal;
+      // }
+      // delete testFile_digi;
+      // delete testFile_hgcal;
+      // run_no++;
+      // }// ends loop over runs
 
       // std::exit(EXIT_SUCCESS);
 
@@ -334,7 +336,6 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
       TH1F *p_l_temp = new TH1F("Hits Energy Distribution", "Energies", 200, 0, 30);
             
       for (unsigned ievt(0); ievt<nEvts; ++ievt){// loop on events
-      // for (unsigned ievt(0); ievt<1000; ++ievt){// loop on events
       	totalE = 0;
 	
 	if (ievt%100==0) std::cout << " -- Processing event " << ievt << std::endl;
@@ -457,8 +458,8 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
       lthr20->Draw();
       TLine *lthr50 = new TLine(5,1,5,100000);
       lthr50->Draw();
-      // myc_temp->Print(outputdir+Form("/plots/plot_")+version_name+Form("_energy_distribution_")+et_portion+eta_portion+Form("_thr%.1f",threshold_mips)+Form(".png"));
-      // myc_temp->Print(outputdir+Form("/plots/plot_")+version_name+Form("_energy_distribution_")+et_portion+eta_portion+Form("_thr%.1f",threshold_mips)+Form(".pdf"));
+      // myc->Print(outputdir+Form("/plots/plot_")+version_name+Form("_energy_distribution_")+et_portion+eta_portion+Form("_thr%.1f",threshold_mips)+Form(".png"));
+      // myc->Print(outputdir+Form("/plots/plot_")+version_name+Form("_energy_distribution_")+et_portion+eta_portion+Form("_thr%.1f",threshold_mips)+Form(".pdf"));
       histograms_output_file->WriteTObject(myc);
       delete lthr50;
       delete lthr20;

@@ -17,7 +17,6 @@
 #include "TSystem.h"
 #include "TGraphErrors.h"
 #include "TVector.h"
-#include "TLine.h"
 
 #include "../../../userlib/include/HGCSSEvent.hh"
 #include "../../../userlib/include/HGCSSInfo.hh"
@@ -72,7 +71,7 @@ bool testInputFile(TString inputPath, TFile* testFile) {
   return true;
 }
 
-void plotE_resolution_high_stats(Int_t version_number, TString version_name, TString datadir, TString outputdir, Double_t threshold_adc, Int_t digi_or_raw_switch) { // main
+void plotE_resolution_high_stats_alt(Int_t version_number, TString version_name, TString datadir, TString outputdir, Double_t threshold_adc) { // main
   
   // load the shared library for HGCSS* classes:
   gSystem->Load("/afs/cern.ch/user/t/tmudholk/public/research/hgcal_optimization_latest/PFCal/PFCalEE/userlib/lib/libPFCalEEuserlib.so");
@@ -152,30 +151,14 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
     std::vector<Int_t> events_measured;
     Double_t resolution;
     Double_t resolution_error;
-
-    TFile *histograms_output_file = new TFile(outputdir+Form("/root_histograms/histograms_threshold_%.1f_",threshold_mips)+version_name+eta_portion+Form("_results.root"),"RECREATE");
     
     for (unsigned int et_counter = 0; et_counter != et_values.size(); et_counter++) {
 
       TString et_portion = Form("et%.0f",et_values[et_counter]);
-
-      TString Digi_common_prefix, HGcal_common_prefix;
       
-      if (digi_or_raw_switch == 1) {
-        // WHEN YOU CHANGE THIS REMEMBER ALSO TO CHANGE CONDITION REGARDING THRESHOLD IN TOTAL ENERGY CALCULATION
-        Digi_common_prefix = datadir + Form("/DigiIC3_thr5.0__version%i_model2_BOFF_",version_number);
-      }
-      else if (digi_or_raw_switch == 2) {
-        HGcal_common_prefix = datadir + Form("/HGcal__version%i_model2_BOFF_",version_number);
-      }
-
-      // std::cout << "HGcal_common_prefix = " << HGcal_common_prefix << std::endl;
-      // std::cout << "Digi_common_prefix = " << Digi_common_prefix << std::endl;
-      // std::exit(EXIT_SUCCESS);
-      // TString Digi_common_prefix = datadir + Form("/DigiIC3_thr%.1f__version%i_model2_BOFF_",threshold_adc,version_number);
+      TString Digi_common_prefix = datadir + Form("/DigiIC3_thr5.0__version%i_model2_BOFF_",version_number);
       // TString HGcal_common_prefix = datadir + Form("/") + et_portion + Form("/HGcal__version%i_model2_BOFF_",version_number);
       // TString HGcal_common_prefix = datadir + Form("/") + Form("/HGcal__version%i_model2_BOFF_",version_number);
-      // TString common_prefix = datadir + Form("/DigiIC3_thr0.5__version%i_model2_BOFF_",version_number);
       TString common_suffix = Form(".root");
       //TString Digi_common_prefix = Digi_common_prefix_firstpart + Form("rwcuf_%.1f_rwcum_%.1f_",rwcuf,rwcum);
 
@@ -187,20 +170,12 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
       Double_t sigma_wmips;
       Double_t sigma_wmips_error;
       std::vector<Double_t> total_energies;
-      std::vector<Double_t> energy_distribution;
       Double_t meanE_statistical = 0;
       Double_t sigE_statistical = 0;
       std::cout << "et" << et_values[et_counter] << " eta" << eta_values[eta_counter] << std::endl;
-
-      TChain  *lSimTree = new TChain("HGCSSTree");
-      TChain  *lRecTree = new TChain("RecoTree");
       
-      // if (digi_or_raw_switch == 2) {
-      //   TChain  *lSimTree = new TChain("HGCSSTree");
-      // }
-      // else if (digi_or_raw_switch == 1) {
-      //   TChain  *lRecTree = new TChain("RecoTree");
-      // }
+      // TChain  *lSimTree = new TChain("HGCSSTree");
+      TChain  *lRecTree = new TChain("RecoTree");
 
       unsigned run_no = 1;
       Int_t consecutive_nonexistent_files = 0;
@@ -210,81 +185,35 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
         std::cout << "run number " << run_no << std::endl;
         std::cout << "___________________________________________________________________________" << std::endl;
 
-        TFile *testFile_hgcal(0);
+        // TFile *testFile_hgcal(0);
         TFile *testFile_digi(0);
+        // bool hgcal_data_exists=testInputFile(HGcal_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix, testFile_hgcal);
+        bool digi_data_exists=testInputFile(Digi_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix, testFile_digi);
 
-        // if (digi_or_raw_switch == 2) {
-        //   TFile *testFile_hgcal(0);
-        // }
-        // else if (digi_or_raw_switch == 1) {
-        //   TFile *testFile_digi(0);
-        // }
+        if (digi_data_exists) {
+          // if (hgcal_data_exists) {
+          consecutive_nonexistent_files = 0;
+          // std::cout << "Exists!" << std::endl;
+          // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
+          // lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+common_suffix);
+          lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix);
+          // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix);
+          // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
 
-        bool hgcal_data_exists, digi_data_exists;
-        if (digi_or_raw_switch == 2) {
-          hgcal_data_exists=testInputFile(HGcal_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix, testFile_hgcal);
+          // TFile *inputFile = TFile::Open(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
+          // HGCSSInfo * info=(HGCSSInfo*)inputFile->Get("Info");
+          // cellSize = info->cellSize();
+          // const unsigned versionNumber = info->version();
+          // const unsigned model = info->model();
+          // delete inputFile;
         }
-        else if(digi_or_raw_switch == 1) {
-          digi_data_exists=testInputFile(Digi_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix, testFile_digi);
+        else {
+          consecutive_nonexistent_files++;
+          std::cout << "HGcal data does not exist for run no " << run_no << std::endl;
+      //     // std::cout << "HGcal data does not exist" << std::endl; 
         }
-
-        if (digi_or_raw_switch == 1) {
-          if (digi_data_exists) {
-            // if (hgcal_data_exists) {
-            consecutive_nonexistent_files = 0;
-            // std::cout << "Exists!" << std::endl;
-            // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
-            // lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+common_suffix);
-            lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix);
-            // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix);
-            // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
-
-            // TFile *inputFile = TFile::Open(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
-            // HGCSSInfo * info=(HGCSSInfo*)inputFile->Get("Info");
-            // cellSize = info->cellSize();
-            // const unsigned versionNumber = info->version();
-            // const unsigned model = info->model();
-            // delete inputFile;
-          }
-          else {
-            consecutive_nonexistent_files++;
-            std::cout << "Digi data does not exist for run no " << run_no << std::endl;
-            //     // std::cout << "HGcal data does not exist" << std::endl; 
-          }
-        }
-
-        else if (digi_or_raw_switch == 2) {
-          if (hgcal_data_exists) {
-            consecutive_nonexistent_files = 0;
-            // std::cout << "Exists!" << std::endl;
-            // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
-            // lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+common_suffix);
-            // lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix);
-            lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix);
-            // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
-
-            // TFile *inputFile = TFile::Open(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
-            // HGCSSInfo * info=(HGCSSInfo*)inputFile->Get("Info");
-            // cellSize = info->cellSize();
-            // const unsigned versionNumber = info->version();
-            // const unsigned model = info->model();
-            // delete inputFile;
-          }
-          else {
-            consecutive_nonexistent_files++;
-            std::cout << "HGcal data does not exist for run no " << run_no << std::endl;
-            //     // std::cout << "HGcal data does not exist" << std::endl; 
-          }
-        }
-
-        // if (digi_or_raw_switch == 1) {
-        //   delete testFile_digi;
-        // }
-        // else if (digi_or_raw_switch == 2) {
-        //   delete testFile_hgcal;
-        // }
         delete testFile_digi;
-        delete testFile_hgcal;
+      //   delete testFile_hgcal;
         run_no++;
       }// ends loop over runs
 
@@ -293,58 +222,35 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
       // std::cout << "cellSize is " << cellSize << std::endl;
       // std::cout << "versionNumber is " << versionNumber << std::endl;
       // std::cout << "model is " << model << std::endl;
-
-      std::vector<HGCSSRecoHit> * rechitvec = 0;
-      std::vector<HGCSSSimHit> * simhitvec = 0;
       
       // std::vector<HGCSSSamplingSection> * ssvec = 0;
       // std::vector<HGCSSSimHit> * simhitvec = 0;
-      // if (digi_or_raw_switch == 1) {
-      //   std::vector<HGCSSRecoHit> * rechitvec = 0;
-      // }
-      // else if (digi_or_raw_switch == 2) {
-      //   std::vector<HGCSSSimHit> * simhitvec = 0;
-      // }
+      std::vector<HGCSSRecoHit> * rechitvec = 0;
       // std::vector<HGCSSGenParticle> * genvec = 0; // get the generated particle vector
       
       // lSimTree->SetBranchAddress("HGCSSSamplingSectionVec",&ssvec);
+      // lSimTree->SetBranchAddress("HGCSSSimHitVec",&simhitvec);
       // lSimTree->SetBranchAddress("HGCSSGenParticleVec",&genvec);
-      if (digi_or_raw_switch == 1) {
-        lRecTree->SetBranchAddress("HGCSSRecoHitVec",&rechitvec);
-      }
-      else if (digi_or_raw_switch == 2) {
-        lSimTree->SetBranchAddress("HGCSSSimHitVec",&simhitvec);
-      }
+      lRecTree->SetBranchAddress("HGCSSRecoHitVec",&rechitvec);
       
-      unsigned nEvts;
-      if (digi_or_raw_switch == 1) {
-        nEvts = lRecTree->GetEntries();
-      }
-      else if (digi_or_raw_switch == 2) {
-        nEvts = lSimTree->GetEntries();
-      }
-      
+      const unsigned nEvts = lRecTree->GetEntries();
+      // const unsigned nEvts = lSimTree->GetEntries();
       unsigned nEvts_to_count = 0;
       Double_t totalE(0);
 
       std::cout << "no of events = " << nEvts << std::endl;
 
-      TCanvas *myc = new TCanvas(Form("individual_hits_energy_distribution_")+et_portion,"Energy",800,600);
-      myc->cd();
-      TH1F *p_l_temp = new TH1F("Hits Energy Distribution", "Energies", 200, 0, 30);
-            
+      // TCanvas *myc_temp = new TCanvas("Simhits Energy Distribution","Energy",800,600);
+      // myc_temp->cd();
+      // TH1F *p_l_temp = new TH1F("Simhits Energy Distribution", "Energies", 600, 0, 30);
+      
       for (unsigned ievt(0); ievt<nEvts; ++ievt){// loop on events
       // for (unsigned ievt(0); ievt<1000; ++ievt){// loop on events
-      	totalE = 0;
+	totalE = 0;
 	
 	if (ievt%100==0) std::cout << " -- Processing event " << ievt << std::endl;
-	
-	if (digi_or_raw_switch == 1) {
-          lRecTree->GetEntry(ievt);
-        }
-        else if (digi_or_raw_switch == 2) {
-          lSimTree->GetEntry(ievt);
-        }
+	// lSimTree->GetEntry(ievt);
+	lRecTree->GetEntry(ievt);
 
 	//std::cout << "track id " << (*genvec)[0].trackID() << "  genvec size " << (*genvec).size() << std::endl;
 
@@ -360,111 +266,54 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
 	// Double_t px_gen = gHit.px();
 	// Double_t py_gen = gHit.py();
 	// Double_t pz_gen = gHit.pz();
-
-        if (digi_or_raw_switch == 1) {
-          for (unsigned iH(0); iH<(*rechitvec).size(); ++iH){ // loop over rechits
-            // const HGCSSSimHit lHit = (*simhitvec)[iH];
-            // const HGCSSRecoHit lHit = (*rechitvec)[iH];
+	
+	// for (unsigned iH(0); iH<(*simhitvec).size(); ++iH){// loop over simhits
+	for (unsigned iH(0); iH<(*rechitvec).size(); ++iH){ // loop over rechits
+	  // const HGCSSSimHit lHit = (*simhitvec)[iH];
+	  // const HGCSSRecoHit lHit = (*rechitvec)[iH];
 	  
-            // Double_t posx = ((*rechitvec)[iH]).get_x();
-            // Double_t posy = ((*rechitvec)[iH]).get_y();
-            // Double_t posz = ((*rechitvec)[iH]).get_z();
-            unsigned layer = ((*rechitvec)[iH]).layer();
-            Double_t energy = ((*rechitvec)[iH]).energy();
-            // unsigned layer = ((*simhitvec)[iH]).layer();
-            // Double_t energy = ((*simhitvec)[iH]).energy();
-            // std::cout << "energy is " << energy << "   " << "layer is " << layer << std::endl;
+	  // Double_t posx = ((*rechitvec)[iH]).get_x();
+	  // Double_t posy = ((*rechitvec)[iH]).get_y();
+	  // Double_t posz = ((*rechitvec)[iH]).get_z();
+	  unsigned layer = ((*rechitvec)[iH]).layer();
+	  Double_t energy = ((*rechitvec)[iH]).energy();
+          // unsigned layer = ((*simhitvec)[iH]).layer();
+	  // Double_t energy = ((*simhitvec)[iH]).energy();
+	  // std::cout << "energy is " << energy << "   " << "layer is " << layer << std::endl;
 
-            // if(energy>0.5) p_l_temp->Fill(energy);
-            // if(energy>0.001) p_l_temp->Fill(energy);
-            if (ievt<=1000 && energy>0) {
-              p_l_temp->Fill(energy);
-            }
-            if(energy>threshold_mips) {
-              // std::cout << "layer number: " << layer << std::endl;
-              // Double_t posx_gen = posx_gen_ini + (px_gen/pz_gen)*(posz - posz_gen_ini);
-              //   Double_t posy_gen = posy_gen_ini + (py_gen/pz_gen)*(posz - posz_gen_ini);
-              //   Double_t dx = posx - posx_gen;
-              //   Double_t dy = posy - posy_gen;
-              //   Double_t halfCell = 0.5*cellsizeat(posx,posy);
-              //   if ((fabs(dx) <= signal_region*halfCell) && (fabs(dy) <= signal_region*halfCell)){
-              Double_t weighted_energy = energy*weights[layer]/tanh(eta_values[eta_counter]);
-              // totalE_in_layer[layer] += weighted_energy;
-              totalE += weighted_energy;
-              //  }// end if condition for counting energies in a signal region
-            }//end if condition for counting energies above a threshold
-          }// end loop over rechits
-        }
-        else if (digi_or_raw_switch == 2) {
-          for (unsigned iH(0); iH<(*simhitvec).size(); ++iH){// loop over simhits
-            // const HGCSSSimHit lHit = (*simhitvec)[iH];
-            // const HGCSSRecoHit lHit = (*rechitvec)[iH];
-	  
-            // Double_t posx = ((*rechitvec)[iH]).get_x();
-            // Double_t posy = ((*rechitvec)[iH]).get_y();
-            // Double_t posz = ((*rechitvec)[iH]).get_z();
-            unsigned layer = ((*simhitvec)[iH]).layer();
-            Double_t energy = ((*simhitvec)[iH]).energy();
-            // unsigned layer = ((*simhitvec)[iH]).layer();
-            // Double_t energy = ((*simhitvec)[iH]).energy();
-            // std::cout << "energy is " << energy << "   " << "layer is " << layer << std::endl;
-
-            // if(energy>0.5) p_l_temp->Fill(energy);
-            // if(energy>0.001) p_l_temp->Fill(energy);
-            if (ievt<=1000 && energy>0) {
-              p_l_temp->Fill(energy);
-            }
-            // if(energy>threshold_mips) {
-            // std::cout << "layer number: " << layer << std::endl;
-            // Double_t posx_gen = posx_gen_ini + (px_gen/pz_gen)*(posz - posz_gen_ini);
-            //   Double_t posy_gen = posy_gen_ini + (py_gen/pz_gen)*(posz - posz_gen_ini);
-            //   Double_t dx = posx - posx_gen;
-            //   Double_t dy = posy - posy_gen;
-            //   Double_t halfCell = 0.5*cellsizeat(posx,posy);
-            //   if ((fabs(dx) <= signal_region*halfCell) && (fabs(dy) <= signal_region*halfCell)){
+          // if(energy>0.5) p_l_temp->Fill(energy);
+          // if(energy>0.001) p_l_temp->Fill(energy);
+          
+	  if(energy>threshold_mips) {
+	    // std::cout << "layer number: " << layer << std::endl;
+	    // Double_t posx_gen = posx_gen_ini + (px_gen/pz_gen)*(posz - posz_gen_ini);
+	    //   Double_t posy_gen = posy_gen_ini + (py_gen/pz_gen)*(posz - posz_gen_ini);
+	    //   Double_t dx = posx - posx_gen;
+	    //   Double_t dy = posy - posy_gen;
+	    //   Double_t halfCell = 0.5*cellsizeat(posx,posy);
+	    //   if ((fabs(dx) <= signal_region*halfCell) && (fabs(dy) <= signal_region*halfCell)){
             Double_t weighted_energy = energy*weights[layer]/tanh(eta_values[eta_counter]);
             // totalE_in_layer[layer] += weighted_energy;
             totalE += weighted_energy;
-            //  }// end if condition for counting energies in a signal region
-            // }//end if condition for counting energies above a threshold
-          }// end loop over simhits
-        }
-	
+	    //  }// end if condition for counting energies in a signal region
+          }//end if condition for counting energies above a threshold
+	}// end loop over rechits
 	total_energies.push_back(totalE);
 	meanE_statistical += totalE;
 	sigE_statistical += totalE*totalE;
 	// }// end else condition for counting only meaningful genvecs
       }// loop on events
       
-      // if (digi_or_raw_switch == 2) {
-      //   delete lSimTree;
-      // }
-      // else if (digi_or_raw_switch == 1) {
-      //   delete lRecTree;
-      // }
-
-      delete lSimTree;
+      // delete lSimTree;
       delete lRecTree;
 
-      // TVectorD Tenergy_distribution(energy_distribution.size(),&energy_distribution[0]);
-
-      gPad->SetLogy();
-      p_l_temp->SetTitle(version_name);
-      p_l_temp->Draw();
-      TLine *lthr5 = new TLine(0.5,1,0.5,100000);
-      lthr5->Draw();
-      TLine *lthr20 = new TLine(2,1,2,100000);
-      lthr20->Draw();
-      TLine *lthr50 = new TLine(5,1,5,100000);
-      lthr50->Draw();
-      // myc_temp->Print(outputdir+Form("/plots/plot_")+version_name+Form("_energy_distribution_")+et_portion+eta_portion+Form("_thr%.1f",threshold_mips)+Form(".png"));
-      // myc_temp->Print(outputdir+Form("/plots/plot_")+version_name+Form("_energy_distribution_")+et_portion+eta_portion+Form("_thr%.1f",threshold_mips)+Form(".pdf"));
-      histograms_output_file->WriteTObject(myc);
-      delete lthr50;
-      delete lthr20;
-      delete lthr5;
-      delete p_l_temp;
-      delete myc;
+      // gPad->SetLogy();
+      // p_l_temp->SetTitle(version_name + Form(" . chisq/dof = %.2f",chisqdf));
+      // p_l_temp->Draw();
+      // myc_temp->Print(outputdir+Form("/plots/plot_")+version_name+Form("energy_distribution_")+et_portion+eta_portion+Form("_thr%.1f",threshold)+Form(".png"));
+      // myc_temp->Print(outputdir+Form("/plots/plot_")+version_name+Form("energy_distribution_")+et_portion+eta_portion+Form("_thr%.1f",threshold)+Form(".pdf"));
+      // delete p_l_temp;
+      // delete myc_temp;
 
       meanE_statistical = meanE_statistical/nEvts_to_count;
       sigE_statistical = sigE_statistical/nEvts_to_count;
@@ -480,8 +329,8 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
       
       lower_bound_for_hist = meanE_statistical - sigmas_down*sigE_statistical;
       upper_bound_for_hist = meanE_statistical + sigmas_up*sigE_statistical;
-
-      myc = new TCanvas(Form("total_energy_distribution")+et_portion,"Energy",800,600);
+      
+      TCanvas *myc = new TCanvas("Energy Distribution","Energy",800,600);
       myc->cd();
       TH1F *p_l = new TH1F("Energy Distribution", "Energies", 50, lower_bound_for_hist,upper_bound_for_hist);
       for(unsigned hist_filler_counter = 0; hist_filler_counter < total_energies.size(); hist_filler_counter++) {
@@ -516,9 +365,8 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
       p_l->Draw();
       // p_l_unweighted->Draw();
       // p_E->Draw();
-      // myc->Print(outputdir+Form("/plots/plot_")+version_name+Form("_distribution_")+et_portion+eta_portion+Form("_thr%.1f",threshold_mips)+Form(".png"));
-      // myc->Print(outputdir+Form("/plots/plot_")+version_name+Form("_distribution_")+et_portion+eta_portion+Form("_thr%.1f",threshold_mips)+Form(".pdf"));
-      histograms_output_file->WriteTObject(myc);
+      myc->Print(outputdir+Form("/plots/plot_")+version_name+Form("_distribution_")+et_portion+eta_portion+Form("_thr%.1f",threshold_mips)+Form(".png"));
+      myc->Print(outputdir+Form("/plots/plot_")+version_name+Form("_distribution_")+et_portion+eta_portion+Form("_thr%.1f",threshold_mips)+Form(".pdf"));
       // cout << "min layer = " << min_layer << std::endl;
       // cout << "max layer = " << max_layer << std::endl;
       delete gaussian_fit;
@@ -533,7 +381,7 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
     TVectorD Tenergies_incoming_gev(energies_incoming_gev.size(),&energies_incoming_gev[0]);
     TVectorD Tenergies_incoming_gev_errors(energies_incoming_gev_errors.size(),&energies_incoming_gev_errors[0]);
         
-    TCanvas *myc = new TCanvas(Form("mips_calibration"), "mips versus gev",800,600);
+    TCanvas *myc = new TCanvas("Energy mips calibration", "mips versus gev",800,600);
     myc->cd();
     TGraphErrors *energy_mips_calibration = new TGraphErrors(Tenergies_incoming_gev,Tmean_energies_wmips,Tenergies_incoming_gev_errors,Tmean_energies_wmips_errors);
     energy_mips_calibration->Fit("pol1");
@@ -551,8 +399,7 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
     energy_mips_calibration->Draw("AP");
     myc->Update();
     // myc->Print((Form("plot_thr_")+str_threshold+Form("_v")+(Form("%i",version_number)+(Form("_calibration_fit") + eta_portion))) + Form(".pdf"));
-    // myc->Print(outputdir+Form("/plots/plot_")+version_name+Form("_calibration_fit")+ eta_portion + Form("_thr%.1f",threshold_mips) + Form(".pdf"));
-    histograms_output_file->WriteTObject(myc);
+    myc->Print(outputdir+Form("/plots/plot_")+version_name+Form("_calibration_fit")+ eta_portion + Form("_thr%.1f",threshold_mips) + Form(".pdf"));
     delete calibration_fit;
     delete energy_mips_calibration;
     delete myc;
@@ -573,7 +420,7 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
     }
     outfile.close();
     
-    myc = new TCanvas(Form("resolution_versus_energy_standalone_withnoise"),"Resolution versus Energy",800,600);
+    myc = new TCanvas("Resolutions versus Energy_standalone_withnoise","Resolution versus Energy",800,600);
     myc->cd();
     TGraphErrors *resolutions_versus_energy_standalone_withnoise = new TGraphErrors(Tenergies_incoming_gev,Tresolutions,Tenergies_incoming_gev_errors,Tresolutions_errors);
     TF1 *function_to_fit_standalone_withnoise = new TF1("f_to_fit_standalone_withnoise",resolutions_fit_standalone_withnoise,0.0001,1300,3);
@@ -600,8 +447,7 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
     resolutions_versus_energy_standalone_withnoise->SetTitle(start_title_resolutions_withnoise + Form("%6.5f +/- %6.5f) + (%4.3f +/- %4.3f)/sqrt(E/GeV) + (%4.3f +/- %4.3f)/(E/GeV). chisq/dof = %.1f",fit_const_withnoise,fit_const_error_withnoise,fit_stoch_withnoise,fit_stoch_error_withnoise,fit_noise_withnoise,fit_noise_error_withnoise,chisqdf));
     resolutions_versus_energy_standalone_withnoise->Draw("AP");
     myc->Update();
-    // myc->Print(outputdir+(Form("/plots/plot_")+(version_name+(Form("_resolutions_versus_energy_standalone_withnoise_") + eta_portion))) + Form("_thr%.1f",threshold_mips) + Form(".pdf"));
-    histograms_output_file->WriteTObject(myc);
+    myc->Print(outputdir+(Form("/plots/plot_")+(version_name+(Form("_resolutions_versus_energy_standalone_withnoise_") + eta_portion))) + Form("_thr%.1f",threshold_mips) + Form(".pdf"));
     ofstream fit_withnoise;
     outfile_name = outputdir+Form("/fits/data_fits_withnoise_")+version_name+eta_portion+Form("_thr%.1f",threshold_mips);
     fit_withnoise.open(outfile_name);
@@ -612,7 +458,7 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
     delete myc;
     std::cout << std::endl;
 
-    myc = new TCanvas(Form("resolution_versus_energy_standalone"),"Resolution versus Energy",800,600);
+    myc = new TCanvas("Resolutions versus Energy_standalone","Resolution versus Energy",800,600);
     myc->cd();
     TGraphErrors *resolutions_versus_energy_standalone = new TGraphErrors(Tenergies_incoming_gev,Tresolutions,Tenergies_incoming_gev_errors,Tresolutions_errors);
     TF1 *function_to_fit_standalone = new TF1("f_to_fit_standalone",resolutions_fit_standalone,0.0001,1300,2);
@@ -639,8 +485,7 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
     resolutions_versus_energy_standalone->SetTitle(start_title_resolutions + Form("%6.5f +/- %6.5f) + (%4.3f +/- %4.3f)/sqrt(E/GeV). chisq/dof = %.1f",fit_const,fit_const_error,fit_stoch,fit_stoch_error,chisqdf));
     resolutions_versus_energy_standalone->Draw("AP");
     myc->Update();
-    // myc->Print(outputdir+(Form("/plots/plot_")+(version_name+(Form("_resolutions_versus_energy_standalone_") + eta_portion))) + Form("_thr%.1f",threshold_mips) + Form(".pdf"));
-    histograms_output_file->WriteTObject(myc);
+    myc->Print(outputdir+(Form("/plots/plot_")+(version_name+(Form("_resolutions_versus_energy_standalone_") + eta_portion))) + Form("_thr%.1f",threshold_mips) + Form(".pdf"));
     ofstream fit_withoutnoise;
     outfile_name = outputdir+Form("/fits/data_fits_")+version_name+eta_portion+Form("_thr%.1f",threshold_mips);
     fit_withoutnoise.open(outfile_name);
@@ -685,8 +530,7 @@ void plotE_resolution_high_stats(Int_t version_number, TString version_name, TSt
     // delete function_to_fit_standalone_const;
     // delete myc;
     // std::cout << std::endl;
-
-    delete histograms_output_file;
+  
   } // ends loop over eta
   // return 0;
 }
