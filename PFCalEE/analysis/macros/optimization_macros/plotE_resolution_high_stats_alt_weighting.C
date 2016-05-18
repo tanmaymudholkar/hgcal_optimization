@@ -31,8 +31,6 @@
 // const Double_t threshold = 0.5;
 const Double_t sigmas_down = 3.0;
 const Double_t sigmas_up = 3.0;
-const Double_t abovecut = 21000;
-const Double_t belowcut = 20500;
 // const Int_t signal_region = 1000;
 
 // Double_t resolutions_fit(Double_t *x,Double_t *par) {
@@ -74,7 +72,7 @@ bool testInputFile(TString inputPath, TFile* testFile) {
   return true;
 }
 
-void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TString version_name, TString datadir, TString outputdir, Double_t threshold_adc, Int_t digi_or_raw_switch) { // main
+void plotE_resolution_high_stats_alt_weighting(Int_t version_number, TString version_name, TString datadir, TString outputdir, Double_t threshold_adc, Int_t digi_or_raw_switch) { // main
   
   // load the shared library for HGCSS* classes:
   gSystem->Load("/afs/cern.ch/user/t/tmudholk/public/research/hgcal_optimization_latest/PFCal/PFCalEE/userlib/lib/libPFCalEEuserlib.so");
@@ -83,11 +81,6 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
   //   std::cout << "Threshold provided less than minimum threshold analyzable from Digi file" << std::endl;
   //   std::exit(EXIT_FAILURE);
   // }
-
-  if (digi_or_raw_switch != 1 && digi_or_raw_switch != 2 && digi_or_raw_switch != 3) {
-    std::cout << "Digi hits or raw hits?" << std::endl;
-    std::exit(EXIT_FAILURE);
-  }
 
   Double_t threshold_mips = threshold_adc/10.0;
   
@@ -117,22 +110,49 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
   // TString str_threshold = Form("%.2f",threshold);
   // TString HGcal_common_prefix_firstpart = datadir + Form("/HGcal__version%i_model2_BOFF_",version_number);
 
-  std::vector<Double_t> weights;
-  ifstream f_layer_weights;
-  f_layer_weights.open(datadir+Form("/layer_weights_version%i.dat",version_number));
+  std::vector<Double_t> weights_raw;
+  ifstream f_layer_weights_raw;
+  f_layer_weights_raw.open(datadir+Form("/layer_weights_version%i.dat",version_number));
   std::string line;
   Double_t weight;
-  if (f_layer_weights.is_open()) {
-    while (getline(f_layer_weights,line)) {
+  if (f_layer_weights_raw.is_open()) {
+    while (getline(f_layer_weights_raw,line)) {
       weight = std::atof(line.c_str());
-      weights.push_back(weight);
+      weights_raw.push_back(weight);
     }
   }
-  f_layer_weights.close();
+  f_layer_weights_raw.close();
+
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << "Old weights:" << std::endl;
+
+  for (unsigned layer_counter = 0; layer_counter != weights_raw.size(); layer_counter++) {
+    std::cout << "layer " << layer_counter << ": " << weights_raw[layer_counter] << std::endl;
+  }
+
+  std::vector<Double_t> weights;
+  weights.push_back(weights_raw[0]+0.5*weights_raw[1]);
+  for (unsigned layer_counter = 1; layer_counter != (weights_raw.size()-1); layer_counter++) {
+    weights.push_back(0.5*(weights_raw[layer_counter]+weights_raw[layer_counter+1]));
+  }
+  weights.push_back(0.5*weights_raw[(weights_raw.size()-1)]);
+
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << "New weights:" << std::endl;
 
   for (unsigned layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
     std::cout << "layer " << layer_counter << ": " << weights[layer_counter] << std::endl;
   }
+
+  // for (unsigned layer_counter = 0; layer_counter != weights_raw.size(); layer_counter++) {
+  //   std::cout << "layer " << layer_counter << ": " << weights_raw[layer_counter] << std::endl;
+  // }
 
   // for (unsigned layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
   //   if (layer_counter >= 28) weights[layer_counter] = 0;
@@ -168,11 +188,11 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
 
       TString Digi_common_prefix, HGcal_common_prefix;
       
-      if (digi_or_raw_switch == 1 || digi_or_raw_switch == 3) {
+      if (digi_or_raw_switch == 1) {
         // WHEN YOU CHANGE THIS REMEMBER ALSO TO CHANGE CONDITION REGARDING THRESHOLD IN TOTAL ENERGY CALCULATION
         Digi_common_prefix = datadir + Form("/DigiIC3_thr5.0__version%i_model2_BOFF_",version_number);
       }
-      if (digi_or_raw_switch == 2 || digi_or_raw_switch == 3) {
+      else if (digi_or_raw_switch == 2) {
         HGcal_common_prefix = datadir + Form("/HGcal__version%i_model2_BOFF_",version_number);
       }
 
@@ -195,15 +215,6 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
       Double_t sigma_wmips_error;
       std::vector<Double_t> total_energies;
       std::vector<Double_t> energy_distribution;
-      // std::vector<Double_t> total_energies_by_layer_belowcut[weights.size()];
-      // std::vector<Double_t> total_energies_by_layer_abovecut[weights.size()];
-      Double_t total_energies_by_layer_belowcut[weights.size()];
-      Double_t total_energies_by_layer_abovecut[weights.size()];
-      Double_t total_energies_by_layer_all[weights.size()];
-      std::vector<std::pair<Double_t, Double_t>> xy_positions_by_layer_abovecut[weights.size()];
-      std::vector<std::pair<Double_t, Double_t>> xy_positions_by_layer_belowcut[weights.size()];
-      std::vector<std::pair<Double_t, Double_t>> xy_positions_by_layer_all[weights.size()];
-      std::vector<std::pair<Double_t, Double_t>> xy_positions_gen_particle;
       Double_t meanE_statistical = 0;
       Double_t sigE_statistical = 0;
       std::cout << "et" << et_values[et_counter] << " eta" << eta_values[eta_counter] << std::endl;
@@ -214,7 +225,7 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
       // if (digi_or_raw_switch == 2) {
       //   TChain  *lSimTree = new TChain("HGCSSTree");
       // }
-      // if (digi_or_raw_switch == 1) {
+      // else if (digi_or_raw_switch == 1) {
       //   TChain  *lRecTree = new TChain("RecoTree");
       // }
 
@@ -232,15 +243,15 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
         // if (digi_or_raw_switch == 2) {
         //   TFile *testFile_hgcal(0);
         // }
-        // if (digi_or_raw_switch == 1) {
+        // else if (digi_or_raw_switch == 1) {
         //   TFile *testFile_digi(0);
         // }
 
         bool hgcal_data_exists, digi_data_exists;
-        if (digi_or_raw_switch == 2 || digi_or_raw_switch == 3) {
+        if (digi_or_raw_switch == 2) {
           hgcal_data_exists=testInputFile(HGcal_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix, testFile_hgcal);
         }
-        if (digi_or_raw_switch == 1 || digi_or_raw_switch == 3) {
+        else if(digi_or_raw_switch == 1) {
           digi_data_exists=testInputFile(Digi_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix, testFile_digi);
         }
 
@@ -269,7 +280,7 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
           }
         }
 
-        if (digi_or_raw_switch == 2) {
+        else if (digi_or_raw_switch == 2) {
           if (hgcal_data_exists) {
             consecutive_nonexistent_files = 0;
             // std::cout << "Exists!" << std::endl;
@@ -293,39 +304,10 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
           }
         }
 
-        if (digi_or_raw_switch == 3) {
-          if (digi_data_exists && hgcal_data_exists) {
-            consecutive_nonexistent_files = 0;
-            // std::cout << "Exists!" << std::endl;
-            // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
-            // lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+common_suffix);
-            // lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix);
-            lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix);
-            lRecTree->AddFile(Digi_common_prefix+et_portion+eta_portion+Form("_run%i",run_no)+common_suffix);
-            // lSimTree->AddFile(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
-
-            // TFile *inputFile = TFile::Open(HGcal_common_prefix+et_portion+eta_portion+common_suffix);
-            // HGCSSInfo * info=(HGCSSInfo*)inputFile->Get("Info");
-            // cellSize = info->cellSize();
-            // const unsigned versionNumber = info->version();
-            // const unsigned model = info->model();
-            // delete inputFile;
-          }
-          else {
-            consecutive_nonexistent_files++;
-            if (!(hgcal_data_exists)) {
-              std::cout << "HGcal data does not exist for run no " << run_no << std::endl;
-            }
-            if (!(digi_data_exists)) {
-              std::cout << "Digi data does not exist for run no " << run_no << std::endl;
-            }
-          }
-        }
-
         // if (digi_or_raw_switch == 1) {
         //   delete testFile_digi;
         // }
-        // if (digi_or_raw_switch == 2) {
+        // else if (digi_or_raw_switch == 2) {
         //   delete testFile_hgcal;
         // }
         delete testFile_digi;
@@ -347,57 +329,47 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
       // if (digi_or_raw_switch == 1) {
       //   std::vector<HGCSSRecoHit> * rechitvec = 0;
       // }
-      // if (digi_or_raw_switch == 2) {
+      // else if (digi_or_raw_switch == 2) {
       //   std::vector<HGCSSSimHit> * simhitvec = 0;
       // }
-      std::vector<HGCSSGenParticle> * genvec = 0; // get the generated particle vector
+      // std::vector<HGCSSGenParticle> * genvec = 0; // get the generated particle vector
       
       // lSimTree->SetBranchAddress("HGCSSSamplingSectionVec",&ssvec);
-      if (digi_or_raw_switch == 1 || digi_or_raw_switch == 3) {
+      // lSimTree->SetBranchAddress("HGCSSGenParticleVec",&genvec);
+      if (digi_or_raw_switch == 1) {
         lRecTree->SetBranchAddress("HGCSSRecoHitVec",&rechitvec);
       }
-      if (digi_or_raw_switch == 2 || digi_or_raw_switch == 3) {
+      else if (digi_or_raw_switch == 2) {
         lSimTree->SetBranchAddress("HGCSSSimHitVec",&simhitvec);
-        lSimTree->SetBranchAddress("HGCSSGenParticleVec",&genvec);
       }
       
       unsigned nEvts;
-      if (digi_or_raw_switch == 1 || digi_or_raw_switch == 3) {
+      if (digi_or_raw_switch == 1) {
         nEvts = lRecTree->GetEntries();
       }
-      if (digi_or_raw_switch == 2) {
+      else if (digi_or_raw_switch == 2) {
         nEvts = lSimTree->GetEntries();
       }
       
       unsigned nEvts_to_count = 0;
       Double_t totalE(0);
-      Double_t totalE_by_layer[weights.size()];
-      
+
       std::cout << "no of events = " << nEvts << std::endl;
 
       TCanvas *myc = new TCanvas(Form("individual_hits_energy_distribution_")+et_portion,"Energy",800,600);
       myc->cd();
-      TH1F *p_l_temp;
-      if (digi_or_raw_switch == 1 || digi_or_raw_switch == 3) p_l_temp = new TH1F("Hits Energy Distribution", "Energies", 200, 0, 30);
-      if (digi_or_raw_switch == 2) p_l_temp = new TH1F("Hits Energy Distribution", "Energies", 200, 0, 5);
-      
+      TH1F *p_l_temp = new TH1F("Hits Energy Distribution", "Energies", 200, 0, 30);
+            
       for (unsigned ievt(0); ievt<nEvts; ++ievt){// loop on events
       // for (unsigned ievt(0); ievt<1000; ++ievt){// loop on events
       	totalE = 0;
-        Double_t totalE_with_5_mips_threshold = 0;
-        std::vector<std::pair<Double_t, Double_t>> xy_positions_by_layer[weights.size()];
-        // std::vector<std::pair<Double_t, Double_t>> xy_positions_by_layer[weights.size()];
-
-        for (unsigned int layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
-          totalE_by_layer[layer_counter] = 0;
-        }
 	
 	if (ievt%100==0) std::cout << " -- Processing event " << ievt << std::endl;
 	
-	if (digi_or_raw_switch == 1 || digi_or_raw_switch == 3) {
+	if (digi_or_raw_switch == 1) {
           lRecTree->GetEntry(ievt);
         }
-        if (digi_or_raw_switch == 2 || digi_or_raw_switch == 3) {
+        else if (digi_or_raw_switch == 2) {
           lSimTree->GetEntry(ievt);
         }
 
@@ -406,35 +378,36 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
 	// if((*genvec).size() > 1) continue;  // Delete events which has converted photons.
 	// if((*genvec)[0].trackID() >= 2) continue;
 	// else{
-	// nEvts_to_count += 1;
+	nEvts_to_count += 1;
 	// const HGCSSGenParticle gHit = (*genvec)[0];
 	// std::cout << "ACCEPTED: " << "track id " << (*genvec)[0].trackID() << "  genvec size " << (*genvec).size() << std::endl;
-	// Double_t posx_gen_ini = ((*genvec)[0]).x();
-	// Double_t posy_gen_ini = ((*genvec)[0]).y();
-	// Double_t posz_gen_ini = ((*genvec)[0]).z();
-	// Double_t px_gen = ((*genvec)[0]).px();
-	// Double_t py_gen = ((*genvec)[0]).py();
-	// Double_t pz_gen = ((*genvec)[0]).pz();
+	// Double_t posx_gen_ini = gHit.x();
+	// Double_t posy_gen_ini = gHit.y();
+	// Double_t posz_gen_ini = gHit.z();
+	// Double_t px_gen = gHit.px();
+	// Double_t py_gen = gHit.py();
+	// Double_t pz_gen = gHit.pz();
 
         if (digi_or_raw_switch == 1) {
-          nEvts_to_count += 1;
           for (unsigned iH(0); iH<(*rechitvec).size(); ++iH){ // loop over rechits
-            Double_t posx = ((*rechitvec)[iH]).get_x();
-            Double_t posy = ((*rechitvec)[iH]).get_y();
+            // const HGCSSSimHit lHit = (*simhitvec)[iH];
+            // const HGCSSRecoHit lHit = (*rechitvec)[iH];
+	  
+            // Double_t posx = ((*rechitvec)[iH]).get_x();
+            // Double_t posy = ((*rechitvec)[iH]).get_y();
             // Double_t posz = ((*rechitvec)[iH]).get_z();
             unsigned layer = ((*rechitvec)[iH]).layer();
             Double_t energy = ((*rechitvec)[iH]).energy();
-            
+            // unsigned layer = ((*simhitvec)[iH]).layer();
+            // Double_t energy = ((*simhitvec)[iH]).energy();
+            // std::cout << "energy is " << energy << "   " << "layer is " << layer << std::endl;
+
+            // if(energy>0.5) p_l_temp->Fill(energy);
+            // if(energy>0.001) p_l_temp->Fill(energy);
             if (ievt<=1000 && energy>0) {
               p_l_temp->Fill(energy);
             }
-            if(energy>5.0) {
-              Double_t weighted_energy = energy*weights[layer]/tanh(eta_values[eta_counter]);
-              totalE_with_5_mips_threshold += weighted_energy;
-            }
             if(energy>threshold_mips) {
-              std::pair<Double_t, Double_t> xypair (posx, posy);
-              xy_positions_by_layer[layer].push_back(xypair);
               // std::cout << "layer number: " << layer << std::endl;
               // Double_t posx_gen = posx_gen_ini + (px_gen/pz_gen)*(posz - posz_gen_ini);
               //   Double_t posy_gen = posy_gen_ini + (py_gen/pz_gen)*(posz - posz_gen_ini);
@@ -445,60 +418,15 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
               Double_t weighted_energy = energy*weights[layer]/tanh(eta_values[eta_counter]);
               // totalE_in_layer[layer] += weighted_energy;
               totalE += weighted_energy;
-              totalE_by_layer[layer] += weighted_energy;
               //  }// end if condition for counting energies in a signal region
             }//end if condition for counting energies above a threshold
           }// end loop over rechits
         }
-        if (digi_or_raw_switch == 3) {
-          if((*genvec)[0].trackID() >= 2) continue;
-          Double_t posx_gen_ini = ((*genvec)[0]).x();
-          Double_t posy_gen_ini = ((*genvec)[0]).y();
-          if (posx_gen_ini > 200) continue;
-          std::pair<Double_t, Double_t> xy_gen_pair (posx_gen_ini, posy_gen_ini);
-          xy_positions_gen_particle.push_back(xy_gen_pair);
-          nEvts_to_count += 1;
-          for (unsigned iH(0); iH<(*rechitvec).size(); ++iH){ // loop over rechits
-            Double_t posx = ((*rechitvec)[iH]).get_x();
-            Double_t posy = ((*rechitvec)[iH]).get_y();
-            // Double_t posz = ((*rechitvec)[iH]).get_z();
-            unsigned layer = ((*rechitvec)[iH]).layer();
-            Double_t energy = ((*rechitvec)[iH]).energy();
-            
-            if (ievt<=1000 && energy>0) {
-              p_l_temp->Fill(energy);
-            }
-            if(energy>5.0) {
-              Double_t weighted_energy = energy*weights[layer]/tanh(eta_values[eta_counter]);
-              totalE_with_5_mips_threshold += weighted_energy;
-            }
-            if(energy>threshold_mips) {
-              std::pair<Double_t, Double_t> xypair (posx, posy);
-              xy_positions_by_layer[layer].push_back(xypair);
-              // std::cout << "layer number: " << layer << std::endl;
-              // Double_t posx_gen = posx_gen_ini + (px_gen/pz_gen)*(posz - posz_gen_ini);
-              //   Double_t posy_gen = posy_gen_ini + (py_gen/pz_gen)*(posz - posz_gen_ini);
-              //   Double_t dx = posx - posx_gen;
-              //   Double_t dy = posy - posy_gen;
-              //   Double_t halfCell = 0.5*cellsizeat(posx,posy);
-              //   if ((fabs(dx) <= signal_region*halfCell) && (fabs(dy) <= signal_region*halfCell)){
-              Double_t weighted_energy = energy*weights[layer]/tanh(eta_values[eta_counter]);
-              // totalE_in_layer[layer] += weighted_energy;
-              totalE += weighted_energy;
-              totalE_by_layer[layer] += weighted_energy;
-              //  }// end if condition for counting energies in a signal region
-            }//end if condition for counting energies above a threshold
-          }// end loop over rechits
-        }
-        if (digi_or_raw_switch == 2) {
-          // if((*genvec).size() > 1) continue;  // Delete events which has converted photons.
-	  if((*genvec)[0].trackID() >= 2) continue;
-          nEvts_to_count += 1;
-          Double_t posx_gen_ini = ((*genvec)[0]).x();
-          Double_t posy_gen_ini = ((*genvec)[0]).y();
-          std::pair<Double_t, Double_t> xy_gen_pair (posx_gen_ini, posy_gen_ini);
-          xy_positions_gen_particle.push_back(xy_gen_pair);
+        else if (digi_or_raw_switch == 2) {
           for (unsigned iH(0); iH<(*simhitvec).size(); ++iH){// loop over simhits
+            // const HGCSSSimHit lHit = (*simhitvec)[iH];
+            // const HGCSSRecoHit lHit = (*rechitvec)[iH];
+	  
             // Double_t posx = ((*rechitvec)[iH]).get_x();
             // Double_t posy = ((*rechitvec)[iH]).get_y();
             // Double_t posz = ((*rechitvec)[iH]).get_z();
@@ -506,59 +434,30 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
             Double_t energy = ((*simhitvec)[iH]).energy();
             // unsigned layer = ((*simhitvec)[iH]).layer();
             // Double_t energy = ((*simhitvec)[iH]).energy();
+            // std::cout << "energy is " << energy << "   " << "layer is " << layer << std::endl;
 
+            // if(energy>0.5) p_l_temp->Fill(energy);
+            // if(energy>0.001) p_l_temp->Fill(energy);
             if (ievt<=1000 && energy>0) {
               p_l_temp->Fill(energy);
             }
-            
-            if(energy>threshold_mips) {
-              // std::pair<Double_t, Double_t> xypair (posx, posy);
-              // xy_positions_by_layer[layer].push_back(xypair);
-              // std::cout << "layer number: " << layer << std::endl;
-              // Double_t posx_gen = posx_gen_ini + (px_gen/pz_gen)*(posz - posz_gen_ini);
-              //   Double_t posy_gen = posy_gen_ini + (py_gen/pz_gen)*(posz - posz_gen_ini);
-              //   Double_t dx = posx - posx_gen;
-              //   Double_t dy = posy - posy_gen;
-              //   Double_t halfCell = 0.5*cellsizeat(posx,posy);
-              //   if ((fabs(dx) <= signal_region*halfCell) && (fabs(dy) <= signal_region*halfCell)){
-              Double_t weighted_energy = energy*weights[layer]/tanh(eta_values[eta_counter]);
-              // totalE_in_layer[layer] += weighted_energy;
-              totalE += weighted_energy;
-              totalE_by_layer[layer] += weighted_energy;
-              //  }// end if condition for counting energies in a signal region
-            }//end if condition for counting energies above a threshold
+            // if(energy>threshold_mips) {
+            // std::cout << "layer number: " << layer << std::endl;
+            // Double_t posx_gen = posx_gen_ini + (px_gen/pz_gen)*(posz - posz_gen_ini);
+            //   Double_t posy_gen = posy_gen_ini + (py_gen/pz_gen)*(posz - posz_gen_ini);
+            //   Double_t dx = posx - posx_gen;
+            //   Double_t dy = posy - posy_gen;
+            //   Double_t halfCell = 0.5*cellsizeat(posx,posy);
+            //   if ((fabs(dx) <= signal_region*halfCell) && (fabs(dy) <= signal_region*halfCell)){
+            Double_t weighted_energy = energy*weights[layer]/tanh(eta_values[eta_counter]);
+            // totalE_in_layer[layer] += weighted_energy;
+            totalE += weighted_energy;
+            //  }// end if condition for counting energies in a signal region
+            // }//end if condition for counting energies above a threshold
           }// end loop over simhits
         }
 	
 	total_energies.push_back(totalE);
-        for (unsigned int layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
-          total_energies_by_layer_all[layer_counter] += totalE_by_layer[layer_counter];
-          if (digi_or_raw_switch == 1 || digi_or_raw_switch == 3) {
-            for (std::vector<std::pair<Double_t, Double_t>>::iterator pair_iterator = xy_positions_by_layer[layer_counter].begin(); pair_iterator != xy_positions_by_layer[layer_counter].end(); ++pair_iterator) {
-              xy_positions_by_layer_all[layer_counter].push_back(*pair_iterator);
-            }
-          }
-        }
-        if (totalE_with_5_mips_threshold > abovecut) {
-          for (unsigned int layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
-            total_energies_by_layer_abovecut[layer_counter] += totalE_by_layer[layer_counter];
-            if (digi_or_raw_switch == 1 || digi_or_raw_switch == 3) {
-              for (std::vector<std::pair<Double_t, Double_t>>::iterator pair_iterator = xy_positions_by_layer[layer_counter].begin(); pair_iterator != xy_positions_by_layer[layer_counter].end(); ++pair_iterator) {
-                xy_positions_by_layer_abovecut[layer_counter].push_back(*pair_iterator);
-              }
-            }
-          }
-        }
-        else if (totalE_with_5_mips_threshold < belowcut) {
-          for (unsigned int layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
-            total_energies_by_layer_belowcut[layer_counter] += totalE_by_layer[layer_counter];
-            if (digi_or_raw_switch == 1 || digi_or_raw_switch == 3) {
-              for (std::vector<std::pair<Double_t, Double_t>>::iterator pair_iterator = xy_positions_by_layer[layer_counter].begin(); pair_iterator != xy_positions_by_layer[layer_counter].end(); ++pair_iterator) {
-                xy_positions_by_layer_belowcut[layer_counter].push_back(*pair_iterator);
-              }
-            }
-          }
-        }
 	meanE_statistical += totalE;
 	sigE_statistical += totalE*totalE;
 	// }// end else condition for counting only meaningful genvecs
@@ -567,7 +466,7 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
       // if (digi_or_raw_switch == 2) {
       //   delete lSimTree;
       // }
-      // if (digi_or_raw_switch == 1) {
+      // else if (digi_or_raw_switch == 1) {
       //   delete lRecTree;
       // }
 
@@ -579,21 +478,18 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
       gPad->SetLogy();
       p_l_temp->SetTitle(version_name);
       p_l_temp->Draw();
-      
       TLine *lthr5 = new TLine(0.5,1,0.5,100000);
-      if (digi_or_raw_switch == 1 || digi_or_raw_switch == 3) lthr5->Draw();
+      lthr5->Draw();
       TLine *lthr20 = new TLine(2,1,2,100000);
-      if (digi_or_raw_switch == 1 || digi_or_raw_switch == 3) lthr20->Draw();
+      lthr20->Draw();
       TLine *lthr50 = new TLine(5,1,5,100000);
-      if (digi_or_raw_switch == 1 || digi_or_raw_switch == 3) lthr50->Draw();
+      lthr50->Draw();
       // myc_temp->Print(outputdir+Form("/plots/plot_")+version_name+Form("_energy_distribution_")+et_portion+eta_portion+Form("_thr%.1f",threshold_mips)+Form(".png"));
       // myc_temp->Print(outputdir+Form("/plots/plot_")+version_name+Form("_energy_distribution_")+et_portion+eta_portion+Form("_thr%.1f",threshold_mips)+Form(".pdf"));
       histograms_output_file->WriteTObject(myc);
-      
       delete lthr50;
       delete lthr20;
       delete lthr5;
-      
       delete p_l_temp;
       delete myc;
 
@@ -606,20 +502,19 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
       // std::cout << "mean_statistical is " << meanE_statistical << std::endl;
       // std::cout << "sigma_statistical is " << sigE_statistical << std::endl;
 
-      Double_t lower_bound_for_fit;
-      Double_t upper_bound_for_fit;
+      Double_t lower_bound_for_hist;
+      Double_t upper_bound_for_hist;
       
-      lower_bound_for_fit = meanE_statistical - sigmas_down*sigE_statistical;
-      upper_bound_for_fit = meanE_statistical + sigmas_up*sigE_statistical;
+      lower_bound_for_hist = meanE_statistical - sigmas_down*sigE_statistical;
+      upper_bound_for_hist = meanE_statistical + sigmas_up*sigE_statistical;
 
       myc = new TCanvas(Form("total_energy_distribution")+et_portion,"Energy",800,600);
       myc->cd();
-      // TH1F *p_l = new TH1F("Energy Distribution", "Energies", 50, lower_bound_for_fit,upper_bound_for_fit);
-      TH1F *p_l = new TH1F("Energy Distribution", "Energies", 100, 0, 0);
+      TH1F *p_l = new TH1F("Energy Distribution", "Energies", 50, lower_bound_for_hist,upper_bound_for_hist);
       for(unsigned hist_filler_counter = 0; hist_filler_counter < total_energies.size(); hist_filler_counter++) {
       	p_l->Fill(total_energies[hist_filler_counter]);
       }
-      p_l->Fit("gaus", "IME", "", lower_bound_for_fit, upper_bound_for_fit);
+      p_l->Fit("gaus","IME");
       TF1 *gaussian_fit = p_l->GetFunction("gaus");
       mean_energy_wmips = gaussian_fit->GetParameter(1);
       mean_energy_wmips_error = gaussian_fit->GetParError(1);
@@ -656,82 +551,6 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
       delete gaussian_fit;
       delete p_l;
       delete myc;
-
-      myc = new TCanvas(Form("shower_profile_all")+et_portion,"Energy",800,600);
-      TH1F *h_shower_profile_all = new TH1F("Shower Profile all", "layer", weights.size(), -0.5, weights.size() - 0.5);
-      for (unsigned int layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
-        h_shower_profile_all->Fill(layer_counter, total_energies_by_layer_all[layer_counter]);
-      }
-      h_shower_profile_all->Draw();
-      histograms_output_file->WriteTObject(myc);
-      delete h_shower_profile_all;
-      delete myc;
-
-      myc = new TCanvas(Form("shower_profile_abovecut")+et_portion,"Energy",800,600);
-      TH1F *h_shower_profile_abovecut = new TH1F("Shower Profile abovecut", "layer", weights.size(), -0.5, weights.size() - 0.5);
-      for (unsigned int layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
-        h_shower_profile_abovecut->Fill(layer_counter, total_energies_by_layer_abovecut[layer_counter]);
-      }
-      h_shower_profile_abovecut->Draw();
-      histograms_output_file->WriteTObject(myc);
-      delete h_shower_profile_abovecut;
-      delete myc;
-
-      myc = new TCanvas(Form("shower_profile_belowcut")+et_portion,"Energy",800,600);
-      TH1F *h_shower_profile_belowcut = new TH1F("Shower Profile belowcut", "layer", weights.size(), -0.5, weights.size() - 0.5);
-      for (unsigned int layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
-        h_shower_profile_belowcut->Fill(layer_counter, total_energies_by_layer_belowcut[layer_counter]);
-      }
-      h_shower_profile_belowcut->Draw();
-      histograms_output_file->WriteTObject(myc);
-      delete h_shower_profile_belowcut;
-      delete myc;
-
-      if (digi_or_raw_switch == 2 || digi_or_raw_switch == 3) {
-        myc = new TCanvas(Form("xy_positions_gen_particle_")+et_portion,"Energy",800,600);
-        TH2F *h_xy_positions_gen_particle = new TH2F(Form("xy_positions_gen_particle_")+et_portion, "x_y_positions", 500, -1000, 1000, 500, -1000, 1000);
-        for (std::vector<std::pair<Double_t, Double_t>>::iterator pair_iterator = xy_positions_gen_particle.begin(); pair_iterator != xy_positions_gen_particle.end(); ++pair_iterator) {
-          h_xy_positions_gen_particle->Fill((*pair_iterator).first, (*pair_iterator).second);
-        }
-        h_xy_positions_gen_particle->Draw();
-        histograms_output_file->WriteTObject(myc);
-        delete h_xy_positions_gen_particle;
-        delete myc;
-      }
-
-      if (digi_or_raw_switch == 1 || digi_or_raw_switch == 3) {
-        for (unsigned int layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
-          TCanvas *myc_by_layer = new TCanvas(Form("xy_positions_abovecut_")+et_portion+Form("_layer_%i",layer_counter), "Layer", 800, 600);
-          TH2F *h_xy_positions_abovecut = new TH2F(Form("xy_positions_abovecut_")+et_portion+Form("_layer_%i",layer_counter), "x_y_positions", 500, -1000, 1000, 500, -1000, 1000);
-          for (std::vector<std::pair<Double_t, Double_t>>::iterator pair_iterator = xy_positions_by_layer_abovecut[layer_counter].begin(); pair_iterator != xy_positions_by_layer_abovecut[layer_counter].end(); ++pair_iterator) {
-            h_xy_positions_abovecut->Fill((*pair_iterator).first, (*pair_iterator).second);
-          }
-          h_xy_positions_abovecut->Draw();
-          histograms_output_file->WriteTObject(myc_by_layer);
-          delete h_xy_positions_abovecut;
-          delete myc_by_layer;
-
-          myc_by_layer = new TCanvas(Form("xy_positions_belowcut_")+et_portion+Form("_layer_%i",layer_counter), "Layer", 800, 600);
-          TH2F *h_xy_positions_belowcut = new TH2F(Form("xy_positions_belowcut_")+et_portion+Form("_layer_%i",layer_counter), "x_y_positions", 500, -1000, 1000, 500, -1000, 1000);
-          for (std::vector<std::pair<Double_t, Double_t>>::iterator pair_iterator = xy_positions_by_layer_belowcut[layer_counter].begin(); pair_iterator != xy_positions_by_layer_belowcut[layer_counter].end(); ++pair_iterator) {
-            h_xy_positions_belowcut->Fill((*pair_iterator).first, (*pair_iterator).second);
-          }
-          h_xy_positions_belowcut->Draw();
-          histograms_output_file->WriteTObject(myc_by_layer);
-          delete h_xy_positions_belowcut;
-          delete myc_by_layer;
-
-          myc_by_layer = new TCanvas(Form("xy_positions_all_")+et_portion+Form("_layer_%i",layer_counter), "Layer", 800, 600);
-          TH2F *h_xy_positions_all = new TH2F(Form("xy_positions_all_")+et_portion+Form("_layer_%i",layer_counter), "x_y_positions", 500, -1000, 1000, 500, -1000, 1000);
-          for (std::vector<std::pair<Double_t, Double_t>>::iterator pair_iterator = xy_positions_by_layer_all[layer_counter].begin(); pair_iterator != xy_positions_by_layer_all[layer_counter].end(); ++pair_iterator) {
-            h_xy_positions_all->Fill((*pair_iterator).first, (*pair_iterator).second);
-          }
-          h_xy_positions_all->Draw();
-          histograms_output_file->WriteTObject(myc_by_layer);
-          delete h_xy_positions_all;
-          delete myc_by_layer;
-        }
-      }
     } // ends loop over et
     
     TVectorD Tmean_energies_wmips(mean_energies_wmips.size(),&mean_energies_wmips[0]);
