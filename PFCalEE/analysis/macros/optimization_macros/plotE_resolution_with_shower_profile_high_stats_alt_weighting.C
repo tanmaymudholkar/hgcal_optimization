@@ -74,7 +74,7 @@ bool testInputFile(TString inputPath, TFile* testFile) {
   return true;
 }
 
-void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TString version_name, TString datadir, TString outputdir, Double_t threshold_adc, Int_t digi_or_raw_switch) { // main
+void plotE_resolution_with_shower_profile_high_stats_alt_weighting(Int_t version_number, TString version_name, TString datadir, TString outputdir, Double_t threshold_adc, Int_t digi_or_raw_switch) { // main
   
   // load the shared library for HGCSS* classes:
   gSystem->Load("/afs/cern.ch/user/t/tmudholk/public/research/hgcal_optimization_latest/PFCal/PFCalEE/userlib/lib/libPFCalEEuserlib.so");
@@ -117,22 +117,62 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
   // TString str_threshold = Form("%.2f",threshold);
   // TString HGcal_common_prefix_firstpart = datadir + Form("/HGcal__version%i_model2_BOFF_",version_number);
 
-  std::vector<Double_t> weights;
-  ifstream f_layer_weights;
-  f_layer_weights.open(datadir+Form("/layer_weights_version%i.dat",version_number));
+  std::vector<Double_t> weights_raw;
+  ifstream f_layer_weights_raw;
+  f_layer_weights_raw.open(datadir+Form("/layer_weights_version%i.dat",version_number));
   std::string line;
   Double_t weight;
-  if (f_layer_weights.is_open()) {
-    while (getline(f_layer_weights,line)) {
+  if (f_layer_weights_raw.is_open()) {
+    while (getline(f_layer_weights_raw,line)) {
       weight = std::atof(line.c_str());
-      weights.push_back(weight);
+      weights_raw.push_back(weight);
     }
   }
-  f_layer_weights.close();
+  f_layer_weights_raw.close();
+
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << "Old weights:" << std::endl;
+
+  for (unsigned layer_counter = 0; layer_counter != weights_raw.size(); layer_counter++) {
+    std::cout << "layer " << layer_counter << ": " << weights_raw[layer_counter] << std::endl;
+  }
+
+  std::vector<Double_t> weights;
+  weights.push_back(weights_raw[0]+0.5*weights_raw[1]);
+  for (unsigned layer_counter = 1; layer_counter != (weights_raw.size()-1); layer_counter++) {
+    weights.push_back(0.5*(weights_raw[layer_counter]+weights_raw[layer_counter+1]));
+  }
+  weights.push_back(0.5*weights_raw[(weights_raw.size()-1)]);
+
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << "New weights:" << std::endl;
 
   for (unsigned layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
     std::cout << "layer " << layer_counter << ": " << weights[layer_counter] << std::endl;
   }
+
+  // std::vector<Double_t> weights;
+  // ifstream f_layer_weights;
+  // f_layer_weights.open(datadir+Form("/layer_weights_version%i.dat",version_number));
+  // std::string line;
+  // Double_t weight;
+  // if (f_layer_weights.is_open()) {
+  //   while (getline(f_layer_weights,line)) {
+  //     weight = std::atof(line.c_str());
+  //     weights.push_back(weight);
+  //   }
+  // }
+  // f_layer_weights.close();
+
+  // for (unsigned layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
+  //   std::cout << "layer " << layer_counter << ": " << weights[layer_counter] << std::endl;
+  // }
 
   // for (unsigned layer_counter = 0; layer_counter != weights.size(); layer_counter++) {
   //   if (layer_counter >= 28) weights[layer_counter] = 0;
