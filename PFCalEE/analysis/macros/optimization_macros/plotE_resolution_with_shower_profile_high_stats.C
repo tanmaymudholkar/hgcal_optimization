@@ -106,6 +106,7 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
   // Double_t et_values_array[] = {3,5,20,50,100,150}; // high stats vflat and version 34 intersection
   // Double_t et_values_array[] = {3,5,20,50,100}; // high stats version 34 only
   Double_t et_values_array[] = {3,5,10,30,50,70,100,150}; // version 33 and 30, hexagonal geometry
+  // Double_t et_values_array[] = {3,5,10,100}; // version 33 and 30, hexagonal geometry
   // Double_t et_values_array[] = {3,5,7,10,20,30,40,50,60,70,100,125,150}; // old version 30
   // Double_t et_values_array[] = {3,7,10,40,100}; // old version 30 reduced
   // Double_t et_values_array[] = {3,5,10,100}; // version 33 and 30, hexagonal geometry, reduced
@@ -161,7 +162,7 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
     Double_t resolution_error;
 
     TFile *histograms_output_file = new TFile(outputdir+Form("/root_histograms/histograms_threshold_%.1f_",threshold_mips)+version_name+eta_portion+Form("_results.root"),"RECREATE");
-    
+
     for (unsigned int et_counter = 0; et_counter != et_values.size(); et_counter++) {
 
       TString et_portion = Form("et%.0f",et_values[et_counter]);
@@ -171,6 +172,7 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
       if (digi_or_raw_switch == 1 || digi_or_raw_switch == 3) {
         // WHEN YOU CHANGE THIS REMEMBER ALSO TO CHANGE CONDITION REGARDING THRESHOLD IN TOTAL ENERGY CALCULATION
         Digi_common_prefix = datadir + Form("/DigiIC3_thr5.0__version%i_model2_BOFF_",version_number);
+        // Digi_common_prefix = datadir + Form("/DigiIC3__version%i_model2_BOFF_",version_number);
       }
       if (digi_or_raw_switch == 2 || digi_or_raw_switch == 3) {
         HGcal_common_prefix = datadir + Form("/HGcal__version%i_model2_BOFF_",version_number);
@@ -380,7 +382,10 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
       TH1F *p_l_temp;
       if (digi_or_raw_switch == 1 || digi_or_raw_switch == 3) p_l_temp = new TH1F("Hits Energy Distribution", "Energies", 200, 0, 30);
       if (digi_or_raw_switch == 2) p_l_temp = new TH1F("Hits Energy Distribution", "Energies", 200, 0, 5);
-      
+
+      ofstream output_total_energies;
+      TString outfile_name = outputdir+Form("/resolutions/data_total_energies_")+version_name+et_portion+eta_portion+Form("_thr%.1f",threshold_mips);
+      output_total_energies.open(outfile_name);
       for (unsigned ievt(0); ievt<nEvts; ++ievt){// loop on events
       // for (unsigned ievt(0); ievt<1000; ++ievt){// loop on events
       	totalE = 0;
@@ -562,8 +567,10 @@ void plotE_resolution_with_shower_profile_high_stats(Int_t version_number, TStri
 	meanE_statistical += totalE;
 	sigE_statistical += totalE*totalE;
 	// }// end else condition for counting only meaningful genvecs
+
+        output_total_energies << ievt << "    " << totalE << std::endl;
       }// loop on events
-      
+      output_total_energies.close();
       // if (digi_or_raw_switch == 2) {
       //   delete lSimTree;
       // }
