@@ -197,6 +197,10 @@ if et>0 : outTag='%s_et%d'%(outTag,et)
 if opt.eta>0 : outTag='%s_eta%3.3f'%(outTag,opt.eta) 
 if opt.phi!=0.5 : outTag='%s_phi%3.3fpi'%(outTag,opt.phi) 
 if (opt.run>=0) : outTag='%s_run%d'%(outTag,opt.run)
+
+scriptFile.write('localdir=`pwd`\n')
+scriptFile.write('%s/userlib/bin/digitizer %d PFcal.root $localdir/ %s %s %s %d %d %d %s | tee %s\n'%(os.getcwd(),opt.nevts,granularity,noise,threshold,interCalib,nSiLayers,nPuVtx,INPATHPU,outlog))
+
 scriptFile.write('mv PFcal.root HGcal_%s.root\n'%(outTag))
 scriptFile.write('localdir=`pwd`\n')
 scriptFile.write('echo "--Local directory is " $localdir >> g4.log\n')
@@ -219,12 +223,6 @@ if len(opt.eos)>0:
     scriptFile.write('rm HGcal_%s.root\n'%(outTag))
     scriptFile.write('fi\n')
     scriptFile.write('fi\n')
-
-scriptFile.write('localdir=`pwd`\n')
-scriptFile.write('%s/userlib/bin/digitizer %d %s/HGcal_%s.root $localdir/ %s %s %s %d %d %d %s | tee %s\n'%(os.getcwd(),opt.nevts,eosDir,outTag,granularity,noise,threshold,interCalib,nSiLayers,nPuVtx,INPATHPU,outlog))
-scriptFile.write('echo "--Local directory is " $localdir >> g4.log\n')
-scriptFile.write('ls * >> g4.log\n')
-if len(opt.eos)>0:
     scriptFile.write('cmsStage -f DigiPFcal.root %s/Digi%s_%s.root\n'%(eosDir,suffix,outTag))
     scriptFile.write('if (( "$?" != "0" )); then\n')
     scriptFile.write('echo " --- Problem with copy of file DigiPFcal.root to EOS. Keeping locally." >> g4.log\n')
