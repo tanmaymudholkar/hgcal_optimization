@@ -19,3 +19,11 @@ geometry_of_detector
 *.log
 layer_weights*
 output*
+data_total_energies*
+data_calibrations*
+data_fits*
+analyzed_data_means_and_rmses*
+data_resolutions*
+et_3_5_10_30*
+et_50_70_100_150*
+fractional_difference_histograms*
