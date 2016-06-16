@@ -380,7 +380,8 @@ void analyze_for_given_et(Double_t et,
   std::vector<std::pair<Double_t, Double_t>> xy_positions_gen_particle;
   Double_t meanE_statistical = 0;
   Double_t sigE_statistical = 0;
-  std::cout << "et" << et << " eta" << eta << std::endl;
+  unsigned nEvts_to_count = 0;
+  // std::cout << "et" << et << " eta" << eta << std::endl;
 
   TChain  *lSimTree = new TChain("HGCSSTree");
   TChain  *lRecTree = new TChain("RecoTree");
@@ -391,10 +392,10 @@ void analyze_for_given_et(Double_t et,
   // std::cout << "versionNumber is " << versionNumber << std::endl;
   // std::cout << "model is " << model << std::endl;
 
-  std::vector<HGCSSRecoHit> * rechitvec = 0;
-  std::vector<HGCSSSimHit> * simhitvec = 0;
+  std::vector<HGCSSRecoHit> *rechitvec = 0;
+  std::vector<HGCSSSimHit> *simhitvec = 0;
   // std::vector<HGCSSSamplingSection> * ssvec = 0;
-  std::vector<HGCSSGenParticle> * genvec = 0; // get the generated particle vector
+  std::vector<HGCSSGenParticle> *genvec = 0; // get the generated particle vector
   
   if (digi_or_raw_switch == 1 || digi_or_raw_switch == 3) {
     lRecTree->SetBranchAddress("HGCSSRecoHitVec",&rechitvec);
@@ -413,14 +414,13 @@ void analyze_for_given_et(Double_t et,
     nEvts_total = lSimTree->GetEntries();
   }
 
-  unsigned nEvts = (max_events == 0? nEvts_total : (nEvts_total < max_events? nEvts_total : max_events));
-      
-  unsigned nEvts_to_count = 0;
+  unsigned nEvts_over_which_to_loop = (max_events == 0? nEvts_total : (nEvts_total < max_events? nEvts_total : max_events));
+  
   Double_t totalE(0);
 
   Double_t totalE_by_layer[weights.size()];
       
-  std::cout << "no of events = " << nEvts << std::endl;
+  // std::cout << "no of events over which to loop = " << nEvts_over_which_to_loop << std::endl;
 
   TCanvas *c_individual_hits_energy_distribution = new TCanvas(Form("c_individual_hits_energy_distribution_")+et_portion,Form("individual_hits_energy_distribution_"),800,600);
   c_individual_hits_energy_distribution->cd();
@@ -429,10 +429,10 @@ void analyze_for_given_et(Double_t et,
   // if (digi_or_raw_switch == 2) p_l_temp = new TH1F("Hits Energy Distribution", "Energies", 200, 0, 5);
   // if (get_hits_distribution) h_individual_hits_energy_distribution
 
-  ofstream output_total_energies;
-  TString outfile_name = outputdir+Form("/resolutions/data_total_energies_")+version_name+et_portion+eta_portion+Form("_thr%.1f",threshold_mips);
-  output_total_energies.open(outfile_name);
-  for (unsigned ievt(0); ievt<nEvts; ++ievt){// loop on events
+  ofstream o_total_energies;
+  TString o_total_energies_name = outputdir+Form("/data/data_total_energies_")+version_name+et_portion+eta_portion+Form("_thr%.1f",threshold_mips);
+  o_total_energies.open(o_total_energies_name);
+  for (unsigned ievt(0); ievt<nEvts_over_which_to_loop; ++ievt){// loop on events
     // for (unsigned ievt(0); ievt<1000; ++ievt){// loop on events
     totalE = 0;
     // Double_t totalE_with_5_mips_threshold = 0;
@@ -608,9 +608,9 @@ void analyze_for_given_et(Double_t et,
     meanE_statistical += totalE;
     sigE_statistical += totalE*totalE;
     
-    output_total_energies << ievt << "    " << totalE << std::endl;
+    o_total_energies << ievt << "    " << totalE << std::endl;
   }// loop on events
-  output_total_energies.close();
+  o_total_energies.close();
   // if (digi_or_raw_switch == 2) {
   //   delete lSimTree;
   // }
@@ -797,6 +797,12 @@ void analyze_for_given_eta(Double_t eta) {
   delete energy_mips_calibration;
   delete c_mips_calibration;
 
+  ofstream o_calibration;
+  TString o_calibration_name = outputdir+Form("/data/data_calibrations_")+version_name+eta_portion+Form("_thr%.1f",threshold_mips);
+  o_calibration.open(o_calibration_name);
+  o_calibration << conversion_factor << "    " << conversion_factor_error << "    " << offset << "    " << offset_error << std::endl;
+  o_calibration.close();
+
   std::vector<Double_t> resolutions;
   std::vector<Double_t> resolutions_errors;
   Double_t resolution;
@@ -810,13 +816,13 @@ void analyze_for_given_eta(Double_t eta) {
   }
   TVectorD Tresolutions(resolutions.size(),&resolutions[0]);
   TVectorD Tresolutions_errors(resolutions_errors.size(),&resolutions_errors[0]);
-  ofstream outfile;
-  TString outfile_name = outputdir+Form("/resolutions/data_resolutions_")+version_name+eta_portion+Form("_thr%.1f",threshold_mips);
-  outfile.open(outfile_name);
+  ofstream o_resolutions;
+  TString o_resolutions_name = outputdir+Form("/data/data_resolutions_")+version_name+eta_portion+Form("_thr%.1f",threshold_mips);
+  o_resolutions.open(o_resolutions_name);
   for(unsigned int et_counter = 0; et_counter != et_values.size(); et_counter++) {
-    outfile << et_values[et_counter] << "   " << resolutions[et_counter] << "   " << resolutions_errors[et_counter] << "    " << events_measured[et_counter] << std::endl;
+    o_resolutions << et_values[et_counter] << "   " << resolutions[et_counter] << "   " << resolutions_errors[et_counter] << "    " << events_measured[et_counter] << std::endl;
   }
-  outfile.close();
+  o_resolutions.close();
     
   TCanvas *c_resolution_versus_energy_standalone_withnoise = new TCanvas(Form("resolution_versus_energy_standalone_withnoise"),"Resolution versus Energy",800,600);
   c_resolution_versus_energy_standalone_withnoise->cd();
@@ -847,11 +853,11 @@ void analyze_for_given_eta(Double_t eta) {
   c_resolution_versus_energy_standalone_withnoise->Update();
   // c_resolution_versus_energy_standalone_withnoise->Print(outputdir+(Form("/plots/plot_")+(version_name+(Form("_resolutions_versus_energy_standalone_withnoise_") + eta_portion))) + Form("_thr%.1f",threshold_mips) + Form(".pdf"));
   histograms_output_file->WriteTObject(c_resolution_versus_energy_standalone_withnoise);
-  ofstream fit_withnoise;
-  outfile_name = outputdir+Form("/fits/data_fits_withnoise_")+version_name+eta_portion+Form("_thr%.1f",threshold_mips);
-  fit_withnoise.open(outfile_name);
-  fit_withnoise << fit_const_withnoise << "    " << fit_const_error_withnoise << "    " << fit_stoch_withnoise << "    " << fit_stoch_error_withnoise << "    " << fit_noise_withnoise << "    " << fit_noise_error_withnoise << "    " << chisqdf << std::endl;
-  fit_withnoise.close();
+  ofstream o_fit_withnoise;
+  TString o_fit_withnoise_name = outputdir+Form("data/data_fits_withnoise_")+version_name+eta_portion+Form("_thr%.1f",threshold_mips);
+  o_fit_withnoise.open(o_fit_withnoise_name);
+  o_fit_withnoise << fit_const_withnoise << "    " << fit_const_error_withnoise << "    " << fit_stoch_withnoise << "    " << fit_stoch_error_withnoise << "    " << fit_noise_withnoise << "    " << fit_noise_error_withnoise << "    " << chisqdf << std::endl;
+  o_fit_withnoise.close();
   delete resolutions_versus_energy_standalone_withnoise;
   delete function_to_fit_standalone_withnoise;
   delete c_resolution_versus_energy_standalone_withnoise;
@@ -886,11 +892,11 @@ void analyze_for_given_eta(Double_t eta) {
   resolution_versus_energy_standalone->Update();
   // resolution_versus_energy_standalone->Print(outputdir+(Form("/plots/plot_")+(version_name+(Form("_resolutions_versus_energy_standalone_") + eta_portion))) + Form("_thr%.1f",threshold_mips) + Form(".pdf"));
   histograms_output_file->WriteTObject(resolution_versus_energy_standalone);
-  ofstream fit_withoutnoise;
-  outfile_name = outputdir+Form("/fits/data_fits_")+version_name+eta_portion+Form("_thr%.1f",threshold_mips);
-  fit_withoutnoise.open(outfile_name);
-  fit_withoutnoise << fit_const << "    " << fit_const_error << "    " << fit_stoch << "    " << fit_stoch_error << "    " << chisqdf << std::endl;
-  fit_withoutnoise.close();
+  ofstream o_fit_withoutnoise;
+  TString o_fit_withoutnoise_name = outputdir+Form("/data/data_fits_")+version_name+eta_portion+Form("_thr%.1f",threshold_mips);
+  o_fit_withoutnoise.open(o_fit_withoutnoise_name);
+  o_fit_withoutnoise << fit_const << "    " << fit_const_error << "    " << fit_stoch << "    " << fit_stoch_error << "    " << chisqdf << std::endl;
+  o_fit_withoutnoise.close();
   delete resolutions_versus_energy_standalone;
   delete function_to_fit_standalone;
   delete resolution_versus_energy_standalone;
@@ -953,7 +959,20 @@ void check_parameters(Int_t arg_version_number,
             << "Output directory = " << arg_outputdir << ";" << std::endl
             << "Threshold = " << arg_threshold_adc << " ADCs;" << std::endl
             << "Switch = " << (arg_digi_or_raw_switch == 1? "Digi;" : (arg_digi_or_raw_switch == 2? "Raw;" : (arg_digi_or_raw_switch == 3? "Digi+Raw;" : "None;"))) << std::endl
-            << (arg_use_modified_weighting_scheme? "Using modified weighting scheme;" : "Using normal weighting scheme;") << std::endl;
+            << (arg_use_modified_weighting_scheme? "Using modified weighting scheme;" : "Using normal weighting scheme;") << std::endl
+            << (arg_multiple_runs_present? "Running analysis for multiple runs;" : "Running analysis for single runs;") << std::endl
+            << (arg_get_hits_distribution? "Getting distribution of individual hits;" : "Not getting distribution of individual hits;") << std::endl
+            << (arg_get_shower_profile? "Getting shower profile;" : "Not getting shower profile;") << std::endl
+            << (arg_get_xy_positions_gen_particle? "Getting x,y distribution of generated particles" : "Not getting x,y distribution of generated particles") << std::endl
+            << (arg_get_xy_positions_by_layer? "Getting x,y distribution of rechits" : "Not getting x,y distribution of rechits") << std::endl;
+
+  if (arg_max_events == 0) {
+    std::cout << "Analyzing all events" << std::endl;
+  }
+  else {
+    std::cout << "Analyzing at most " << arg_max_events << " events" << std::endl;
+  }
+  
   if (arg_threshold_adc < 0.5 && arg_digi_or_raw_switch != 2) {
     std::cout << "Threshold provided is less than minimum threshold analyzable from Digi file" << std::endl;
     std::exit(EXIT_FAILURE);
