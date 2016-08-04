@@ -792,7 +792,7 @@ void DetectorConstruction::UpdateCalorSize(){
   else if (model_ == DetectorConstruction::m_BOXWITHCRACK_100 ){
     m_nSectors = 3;
     m_sectorWidth = 460;
-    m_interSectorWidth = 10;
+    m_interSectorWidth = 6;
     m_CalorSizeXY=m_nSectors*m_sectorWidth;
   }
   else if (model_ == DetectorConstruction::m_FULLSECTION){
@@ -935,7 +935,8 @@ void DetectorConstruction::buildSectorStack(const unsigned sectorNum,
 	//
 	G4double extraWidth = 0;
 	if (m_nSectors>1 && eleName=="W" && model_ != DetectorConstruction::m_FULLSECTION){
-	 extraWidth = 5*mm;
+          // extraWidth = 5*mm;
+          extraWidth = -1.*m_interSectorWidth;
 	}
 	if(thick>0){
 	  solid = constructSolid(baseName,thick,zOffset+zOverburden,angOffset+minL,width+extraWidth);
@@ -994,44 +995,81 @@ void DetectorConstruction::fillInterSectorSpace(const unsigned sectorNum,
   char nameBuf[10];
   G4CSGSolid *solid;
 
-  for(size_t i=0; i<m_caloStruct.size(); i++)
-    {
-      G4double crackOffset = getCrackOffset(i);
-      G4double angOffset = getAngOffset(i);
+  // air-Cu-air-Cu-air structure: hardcoded constants
+  G4double airWidthInside = 1.*mm;
+  G4double airWidthOutside = 3.*mm;
+  G4double CuWidth = 0.5*mm;
 
-      if (model_ == DetectorConstruction::m_FULLSECTION) {
-	crackOffset=0;
-      }
-      const unsigned nEle = m_caloStruct[i].n_elements;
-      for (unsigned ie(0); ie<nEle;++ie){
+  // air-Cu-air-Cu-air structure: structure definition
+  std::vector<std::string> gapMaterials;
+  std::vector<G4double> gapWidths;
+  std::vector<G4double> gapOffsets;
+  G4double runningOffset = 0.*mm;
+  gapMaterials.push_back("Air"); gapWidths.push_back(airWidthInside); gapOffsets.push_back(runningOffset); runningOffset += airWidthInside;
+  gapMaterials.push_back("Cu"); gapWidths.push_back(CuWidth); gapOffsets.push_back(runningOffset); runningOffset += CuWidth;
+  gapMaterials.push_back("Air"); gapWidths.push_back(airWidthOutside); gapOffsets.push_back(runningOffset); runningOffset += airWidthOutside;
+  gapMaterials.push_back("Cu"); gapWidths.push_back(CuWidth); gapOffsets.push_back(runningOffset); runningOffset += CuWidth;
+  gapMaterials.push_back("Air"); gapWidths.push_back(airWidthInside); gapOffsets.push_back(runningOffset); runningOffset += airWidthInside;
+  G4double totalWidth = runningOffset;
 
-	std::string eleName = m_caloStruct[i].ele_name[ie];
-	G4double thick = m_caloStruct[i].ele_thick[ie];
-	G4double extraWidth = 0;
-	if (eleName=="W" && model_ != DetectorConstruction::m_FULLSECTION){
-	 extraWidth = -5.*mm;
-	 //std::cout << " -- total width: " << width+extraWidth << " offsets: " << crackOffset << " " << angOffset << std::endl;
-	}
-	eleName = "CFMix";
-	sprintf(nameBuf,"%s%d_%d",eleName.c_str(),int(sectorNum),int(i+1));
-	std::string baseName(nameBuf);
-	if(thick>0){
-	  solid = constructSolid(baseName,thick,zOffset+zOverburden,angOffset+minL,width+extraWidth);
-	  G4LogicalVolume *logi = new G4LogicalVolume(solid, m_materials[eleName], baseName+"log");
-	  G4double xpvpos = -m_CalorSizeXY/2.+minL+width/2+crackOffset;
-	  if (model_ == DetectorConstruction::m_FULLSECTION) xpvpos=0;
-	  G4PVPlacement *tmp = new G4PVPlacement(0, G4ThreeVector(xpvpos,0.,zOffset+zOverburden+thick/2), logi, baseName+"phys", m_logicWorld, false, 0);
-	  //std::cout << "** positionning layer " << baseName << " at " << xpvpos << " 0 " << zOffset+zOverburden+thick/2 << std::endl;
+  // air-Cu-air-Cu-air structure: sanity checks. Make sure that the parameter "width" passed to this function is consistent with the hardcoded constants above.
+  G4double tolerance = 0.01*mm;
+  if (model_ == DetectorConstruction::m_BOXWITHCRACK_100) {
+    if ((width - totalWidth) > tolerance || (totalWidth - width) > tolerance) {
+      std::cout << "WARNING!!! WARNING!!! Total width not equal (within tolerance) to width passed as argument to DetectorConstruction::fillInterSectorSpace for model m_BOXWITHCRACK_100!" << std::endl
+                << "Total width = " << totalWidth << std::endl
+                << "Given width = " << width << std::endl;
+      std::exit(EXIT_FAILURE);
+    }
+  }
 
-	  G4VisAttributes *simpleBoxVisAtt= new G4VisAttributes(G4Colour::Magenta);
-	  simpleBoxVisAtt->SetVisibility(true);
-	  simpleBoxVisAtt->SetForceSolid(true);
-	  logi->SetVisAttributes(simpleBoxVisAtt);
-	  zOverburden = zOverburden + thick;
-	}
-      }//loop on elements
-    }//loop on layers
+  for (unsigned gapCounter = 0; gapCounter < gapMaterials.size(); ++gapCounter) {
+    std::string gapMaterial = gapMaterials[gapCounter];
+    G4double gapWidth = gapWidths[gapCounter];
+    G4double gapOffset = gapOffsets[gapCounter];
 
+    for(size_t i=0; i<m_caloStruct.size(); i++)
+      {
+        G4double crackOffset = getCrackOffset(i);
+        G4double angOffset = getAngOffset(i);
+
+        if (model_ == DetectorConstruction::m_FULLSECTION) {
+          crackOffset=0;
+        }
+        const unsigned nEle = m_caloStruct[i].n_elements;
+        for (unsigned ie(0); ie<nEle;++ie){
+
+          std::string eleName = m_caloStruct[i].ele_name[ie];
+          G4double thick = m_caloStruct[i].ele_thick[ie];
+          G4double extraWidth = 0;
+          if (eleName=="W" && model_ != DetectorConstruction::m_FULLSECTION){
+            // extraWidth = -5.*mm;
+            extraWidth = 1.*m_interSectorWidth;
+            //std::cout << " -- total width: " << width+extraWidth << " offsets: " << crackOffset << " " << angOffset << std::endl;
+          }
+          // eleName = "CFMix";
+          eleName = gapMaterial;
+          sprintf(nameBuf,"%s%d_%d",eleName.c_str(),int(sectorNum),int(i+1));
+          std::string baseName(nameBuf);
+          if(thick>0){
+            // solid = constructSolid(baseName,thick,zOffset+zOverburden,angOffset+minL,width+extraWidth);
+            solid = constructSolid(baseName,thick,zOffset+zOverburden,angOffset+minL,gapWidth+extraWidth);
+            G4LogicalVolume *logi = new G4LogicalVolume(solid, m_materials[eleName], baseName+"log");
+            // G4double xpvpos = -m_CalorSizeXY/2.+minL+width/2+crackOffset;
+            G4double xpvpos = -m_CalorSizeXY/2.+minL+gapOffset+gapWidth/2+crackOffset;
+            if (model_ == DetectorConstruction::m_FULLSECTION) xpvpos=0;
+            G4PVPlacement *tmp = new G4PVPlacement(0, G4ThreeVector(xpvpos,0.,zOffset+zOverburden+thick/2), logi, baseName+"phys", m_logicWorld, false, 0);
+            //std::cout << "** positionning layer " << baseName << " at " << xpvpos << " 0 " << zOffset+zOverburden+thick/2 << std::endl;
+
+            G4VisAttributes *simpleBoxVisAtt= new G4VisAttributes(G4Colour::Magenta);
+            simpleBoxVisAtt->SetVisibility(true);
+            simpleBoxVisAtt->SetForceSolid(true);
+            logi->SetVisAttributes(simpleBoxVisAtt);
+            zOverburden = zOverburden + thick;
+          }
+        }//loop on elements
+      }//loop on layers
+  } // loop on gap materials
 }//fill intersector space
 
 G4double DetectorConstruction::getCrackOffset(size_t layer){
@@ -1040,7 +1078,11 @@ G4double DetectorConstruction::getCrackOffset(size_t layer){
   //with cracks shifted systematically layer-to-layer
   //if (m_nSectors>1) return 10*((7*layer)%31);
   //cracks shifted every two layers by 2cm
-  if (m_nSectors>1) return static_cast<unsigned>(layer/2.)*30;
+
+  // if (m_nSectors>1) return static_cast<unsigned>(layer/2.)*30;
+
+  //cracks shifted every other layer by 3cm: "2-stream design"
+  if (m_nSectors > 1) return static_cast<unsigned>((layer%4)/2)*30;
 
   return 0;
 }
