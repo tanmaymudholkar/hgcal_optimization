@@ -936,7 +936,7 @@ void DetectorConstruction::buildSectorStack(const unsigned sectorNum,
 	G4double extraWidth = 0;
 	if (m_nSectors>1 && eleName=="W" && model_ != DetectorConstruction::m_FULLSECTION){
           // extraWidth = 5*mm;
-          extraWidth = -1.*m_interSectorWidth;
+          extraWidth = m_interSectorWidth;
 	}
 	if(thick>0){
 	  solid = constructSolid(baseName,thick,zOffset+zOverburden,angOffset+minL,width+extraWidth);
@@ -1044,7 +1044,7 @@ void DetectorConstruction::fillInterSectorSpace(const unsigned sectorNum,
           G4double extraWidth = 0;
           if (eleName=="W" && model_ != DetectorConstruction::m_FULLSECTION){
             // extraWidth = -5.*mm;
-            extraWidth = 1.*m_interSectorWidth;
+            extraWidth = -1.*gapWidth;
             //std::cout << " -- total width: " << width+extraWidth << " offsets: " << crackOffset << " " << angOffset << std::endl;
           }
           // eleName = "CFMix";
