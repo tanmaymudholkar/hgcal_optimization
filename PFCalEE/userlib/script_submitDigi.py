@@ -19,4 +19,4 @@ print ("WARNING: only integer energies supported!!!")
 for run_number in range(5,511):
     time.sleep(1.01)
     print ("run number: %i"%(run_number))
-    os.system("./submitProd.py -q 1nd -t V06e-04-06 -r %i -v %i -m 4 -a %.3f -b 0 -d gamma -n 200 -o /afs/cern.ch/work/t/tmudholk/public/simulation_results/cracks_study -e /store/cmst3/group/hgcal/HGCalCracks -g"%(run_number, version, eta))
+    os.system("./submitDigi.py -s 1nh -q 1nh -t V06e-04-06 -r %i -v %i -m 4 -a %.3f -b 0 -d gamma -n 200 -o /afs/cern.ch/work/t/tmudholk/public/simulation_results/cracks_study -e /store/cmst3/group/hgcal/HGCalCracks -E /store/cmst3/group/hgcal/HGCalCracks -g"%(run_number, version, eta))

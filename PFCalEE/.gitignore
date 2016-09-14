@@ -7,3 +7,6 @@ bin
 obj
 *.root
 userlib/src/dict.cc
+*for_weight*
+g4copy.log
+geometry_of_detector
