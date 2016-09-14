@@ -29,13 +29,13 @@
 #include "../../../userlib/include/HGCSSGenParticle.hh"
 
 const Int_t version_number = 100;
-const TString datadir = Form("/afs/cern.ch/user/t/tmudholk/private/mount/eos_mount/cms/store/cmst3/group/hgcal/HGCalCracks/gitV06e-04-06/gamma");
-// const TString datadir = Form("/afs/cern.ch/user/t/tmudholk/private/temp/testcracks");
+// const TString datadir = Form("/afs/cern.ch/user/t/tmudholk/private/mount/eos_mount/cms/store/cmst3/group/hgcal/HGCalCracks/gitV06e-04-06/gamma");
+const TString datadir = Form("/afs/cern.ch/user/t/tmudholk/private/temp/testcracks");
 const TString pathToLayerWeights = Form("/afs/cern.ch/user/t/tmudholk/public/research/hgcal_cracks_study/PFCal/PFCalEE/analysis/macros/cracks/layer_weights_version100_averaged.dat");
 const TString et_portion = Form("et%.0f", 60.0);
 const TString eta_portion = Form("_eta%.3f", 2.0);
-const TString version_name = Form("cracks_study_3mmgap_averaged_weights");
-const Double_t targetBinSize_mm = 3.;
+const TString version_name = Form("cracks_study_2mmgap_averaged_weights");
+const Double_t targetBinSize_mm = 2.;
 const Double_t particleXMax_mm = 290.;
 const Double_t particleXMin_mm = -170.;
 const Double_t eta = 2.0;
@@ -240,17 +240,20 @@ void populateEnergyHistogramsMap() {
   std::vector<HGCSSSimHit> *simhitvec = 0;
   // std::vector<HGCSSSamplingSection> * ssvec = 0;
   std::vector<HGCSSGenParticle> *genvec = 0; // get the generated particle vector
+  HGCSSEvent * event = 0; // no problem: clearly the header files are being read and the class HGCSSEvent can be used
 
   lRecTree->SetBranchAddress("HGCSSRecoHitVec",&rechitvec);
   lSimTree->SetBranchAddress("HGCSSSimHitVec",&simhitvec);
   lSimTree->SetBranchAddress("HGCSSGenParticleVec",&genvec);
   // lSimTree->SetBranchAddress("HGCSSSamplingSectionVec",&ssvec);
-  
+  lSimTree->SetBranchAddress("HGCSSEvent",&event); // Problem ??!!
+    
   unsigned nEvts_total = lSimTree->GetEntries();
   std::cout << "number of events: " << nEvts_total << std::endl;
   
   TH1F *h_generatedParticlesX = new TH1F(Form("h_generatedParticlesX"), Form("number of events; x"), nBinsRequired, lowerEdgeFirstBin, upperEdgeLastBin);
   TH1F *h_generatedParticlesY = new TH1F(Form("h_generatedParticlesY"), Form("number of events; y"), nBinsRequired, 0, 0);
+  // TH1F *h_generatedParticlesZ = new TH1F(Form("h_generatedParticlesZ"), Form("number of events; z"), nBinsRequired, 0, 0);
 
   TAxis *axisWithCorrectBinning = h_generatedParticlesX->GetXaxis();
 
@@ -286,11 +289,15 @@ void populateEnergyHistogramsMap() {
     lRecTree->GetEntry(ievt);
     Double_t posX_gen_ini = ((*genvec)[0]).x();
     Double_t posY_gen_ini = ((*genvec)[0]).y();
+    // Double_t posX_gen_ini = event.vtx_x();
+    // Double_t posY_gen_ini = event.vtx_y();
+    // Double_t posZ_gen_ini = event.vtx_z();
     h_generatedParticlesX->Fill(posX_gen_ini);
     Double_t binNumber = axisWithCorrectBinning->FindBin(posX_gen_ini);
     // std::cout << "Checking... for initial position: " << posX_gen_ini << ", bin number: " << binNumber << ", corresponding bin position: " << axisWithCorrectBinning->GetBinCenter(binNumber) << std::endl;
     analyzeEvent(rechitvec, energiesPerEvent[binNumber], sumEnergy[binNumber], sumEnergySquare[binNumber], numberOfEvents[binNumber]);
     h_generatedParticlesY->Fill(posY_gen_ini);
+    // h_generatedParticlesZ->Fill(posZ_gen_ini);
   }
   std::cout << std::endl;
   TFile *histogramsOutputFile = new TFile(Form("root_histograms/histograms_")+version_name+eta_portion+Form("_results.root"),"RECREATE");
@@ -298,8 +305,10 @@ void populateEnergyHistogramsMap() {
   std::cout << "Printing histograms data for histogram of x-positions of generated particles:" << std::endl;
   printHistogramData(h_generatedParticlesX);
   histogramsOutputFile->WriteTObject(h_generatedParticlesY);
+  // histogramsOutputFile->WriteTObject(h_generatedParticlesZ);
   delete h_generatedParticlesX;
   delete h_generatedParticlesY;
+  // delete h_generatedParticlesZ;
 
   std::map<Int_t, std::pair<Double_t, Double_t> > histogramRangesMap;
   populateHistogramRangesMap(histogramRangesMap, sumEnergy, sumEnergySquare, numberOfEvents);
@@ -314,7 +323,7 @@ void populateEnergyHistogramsMap() {
 
 void populateFromData() {
   // load the shared library for HGCSS* classes:
-  gSystem->Load("/afs/cern.ch/user/t/tmudholk/public/research/hgcal_optimization_latest/PFCal/PFCalEE/userlib/lib/libPFCalEEuserlib.so");
+  gSystem->Load("/afs/cern.ch/user/t/tmudholk/public/research/hgcal_cracks_study/PFCal/PFCalEE/userlib/lib/libPFCalEEuserlib.so");
   setBinning();
   readWeights();
   // std::cout << "Checking... bin centers: " << std::endl;
