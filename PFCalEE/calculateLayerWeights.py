@@ -48,7 +48,8 @@ print "Calculating unnormalized sums... total_dEdXs_times_thickness:"
 print total_dEdXs_times_thickness
 print
 
-normalizer=sum(total_dEdXs_times_thickness)/len(total_dEdXs_times_thickness)
+# normalizer=sum(total_dEdXs_times_thickness)/len(total_dEdXs_times_thickness)
+normalizer = 1
 
 print "Normalizing... total_dEdXs_times_thickness:"
 for iterator_over_layers in range(len(total_dEdXs_times_thickness)):
@@ -71,7 +72,8 @@ total_dEdXs_times_thickness_averaged[-1]=total_dEdXs_times_thickness[-1]
 print total_dEdXs_times_thickness_averaged
 
 print "Normalizing... total_dEdXs_times_thickness:"
-normalizer=sum(total_dEdXs_times_thickness_averaged)/len(total_dEdXs_times_thickness_averaged)
+# normalizer=sum(total_dEdXs_times_thickness_averaged)/len(total_dEdXs_times_thickness_averaged)
+normalizer = 1
 for iterator_over_layers in range(len(total_dEdXs_times_thickness)):
     total_dEdXs_times_thickness_averaged[iterator_over_layers]=total_dEdXs_times_thickness_averaged[iterator_over_layers]/normalizer
 print total_dEdXs_times_thickness_averaged

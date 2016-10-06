@@ -10,3 +10,6 @@ userlib/src/dict.cc
 *for_weight*
 g4copy.log
 geometry_of_detector
+analysis/macros/cracks/plots/
+analysis/macros/cracks/populateFromData
+layer_weights_*
