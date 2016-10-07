@@ -16,7 +16,7 @@ eta = 2.0
 
 print ("WARNING: only integer energies supported!!!")
 
-for run_number in range(5,511):
+for run_number in range(3,511):
     time.sleep(1.01)
     print ("run number: %i"%(run_number))
-    os.system("./submitProd.py -q 1nd -t V06e-04-06 -r %i -v %i -m 4 -a %.3f -b 0 -d gamma -n 200 -o /afs/cern.ch/work/t/tmudholk/public/simulation_results/cracks_study -e /store/cmst3/group/hgcal/HGCalCracks -g"%(run_number, version, eta))
+    os.system("./submitProd.py -q 1nd -t V06e-04-06_gapInW -r %i -v %i -m 4 -a %.3f -b 0 -d gamma -n 200 -o /afs/cern.ch/work/t/tmudholk/public/simulation_results/cracks_study -e /store/cmst3/group/hgcal/HGCalCracks -g"%(run_number, version, eta))

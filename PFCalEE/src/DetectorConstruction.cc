@@ -936,7 +936,8 @@ void DetectorConstruction::buildSectorStack(const unsigned sectorNum,
 	G4double extraWidth = 0;
 	if (m_nSectors>1 && eleName=="W" && model_ != DetectorConstruction::m_FULLSECTION){
           // extraWidth = 5*mm;
-          extraWidth = m_interSectorWidth;
+          // extraWidth = m_interSectorWidth;
+          extraWidth = 1.*mm;
 	}
 	if(thick>0){
 	  solid = constructSolid(baseName,thick,zOffset+zOverburden,angOffset+minL,width+extraWidth);
