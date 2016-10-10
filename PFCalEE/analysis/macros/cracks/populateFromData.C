@@ -39,11 +39,14 @@
 
 
 const Int_t version_number = 100;
-const TString datadir = Form("/afs/cern.ch/user/t/tmudholk/private/mount/eos_mount/cms/store/cmst3/group/hgcal/HGCalCracks/gitV06e-04-06/gamma");
+
+const TString datadir = Form("/afs/cern.ch/user/t/tmudholk/private/mount/eos_mount/cms/store/cmst3/group/hgcal/HGCalCracks/gitV06e-04-06_gapInW/gamma");
+TString m_versionName = Form("cracks_study_normal_weighting_gapInW");
+
 // const TString datadir = Form("/afs/cern.ch/user/t/tmudholk/private/temp/testcracks");
 const TString pathToLayerWeights = Form("/afs/cern.ch/user/t/tmudholk/public/research/hgcal_cracks_study/PFCal/PFCalEE/analysis/macros/cracks/layer_weights_version100.dat");
 const TString et_portion = Form("et%.0f", 60.0);
-const Double_t incomingParticleEnergy = 225.731;
+// const Double_t incomingParticleEnergy = 225.731;
 const TString eta_portion = Form("_eta%.3f", 2.0);
 const Double_t particleXMax_mm = 290.;
 const Double_t particleXMin_mm = -170.;
@@ -60,7 +63,7 @@ const Double_t sigmas_down = 6.0;
 const Int_t numberOfBinsInEnergyHistograms = 50;
 
 // TString m_versionName;
-TString m_versionName = Form("cracks_study_with_gev");
+
 // Double_t m_targetBinSize_mm;
 
 Int_t m_nBinsRequired;
@@ -69,7 +72,7 @@ Int_t m_nBinsRequired;
 
 Double_t m_baseEnergy = 0;
 Double_t m_averageWidth = 0;
-Double_t m_mipsToGeVConversion = 0;
+// Double_t m_mipsToGeVConversion = 0;
 
 Double_t * m_binEdges;
 
@@ -213,7 +216,7 @@ void calculateBaseEnergyParameters(std::map<Int_t, TH1F*> energyHistogramsMap, T
   }
   m_baseEnergy = m_baseEnergy/binsToCount;
   m_averageWidth = m_averageWidth/binsToCount;
-  m_mipsToGeVConversion = incomingParticleEnergy/m_baseEnergy;
+  // m_mipsToGeVConversion = incomingParticleEnergy/m_baseEnergy;
 }
 
 void initializeEnergyHistogramsMap(std::map<Int_t, TH1F*> &energyHistogramsMap, std::map<Int_t, std::pair<Double_t, Double_t> > histogramRangesMap) {
@@ -464,14 +467,14 @@ void populateEnergyHistograms() {
   delete h_generatedParticlesX; // now safe to delete generatedParticlesX
 
   // Scale to GeV:
-  for (Int_t binCounter = 0; binCounter <= (1+m_nBinsRequired); ++binCounter) {
-    sumEnergy[binCounter] *= m_mipsToGeVConversion;
-    if ((energiesPerEvent[binCounter]).size() > 0) {
-      for (std::vector<Double_t>::iterator eventEnergyIterator = (energiesPerEvent[binCounter]).begin(); eventEnergyIterator != (energiesPerEvent[binCounter]).end(); ++eventEnergyIterator) {
-        *eventEnergyIterator *= m_mipsToGeVConversion;
-      }
-    }
-  }
+  // for (Int_t binCounter = 0; binCounter <= (1+m_nBinsRequired); ++binCounter) {
+  //   sumEnergy[binCounter] *= m_mipsToGeVConversion;
+  //   if ((energiesPerEvent[binCounter]).size() > 0) {
+  //     for (std::vector<Double_t>::iterator eventEnergyIterator = (energiesPerEvent[binCounter]).begin(); eventEnergyIterator != (energiesPerEvent[binCounter]).end(); ++eventEnergyIterator) {
+  //       *eventEnergyIterator *= m_mipsToGeVConversion;
+  //     }
+  //   }
+  // }
 
   TH1F *allEventsEnergyHistogram;
   initializeAllEventsEnergyHistogram(allEventsEnergyHistogram);

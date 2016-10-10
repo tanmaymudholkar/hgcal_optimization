@@ -1040,7 +1040,13 @@ G4double DetectorConstruction::getCrackOffset(size_t layer){
   //with cracks shifted systematically layer-to-layer
   //if (m_nSectors>1) return 10*((7*layer)%31);
   //cracks shifted every two layers by 2cm
-  if (m_nSectors>1) return static_cast<unsigned>(layer/2.)*30;
+
+
+  // if (m_nSectors>1) return static_cast<unsigned>(layer/2.)*30;
+
+  // "2-stream" design:
+
+  if (m_nSectors>1) return static_cast<unsigned>((layer%4)/2.)*30;
 
   return 0;
 }
