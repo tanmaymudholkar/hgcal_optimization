@@ -54,10 +54,11 @@ if opt.version==13:
 elif opt.version==25:
     INPATHPU="root://eoscms//eos/cms/store/cmst3/group/hgcal/Standalone/V25/MinBias/"
 elif opt.version==33:
-    INPATHPU="root://eoscms//eos/cms/store/cmst3/group/hgcal/Standalone/V33/MinBias/pile/gitV00-03-07/e-/"
+    # INPATHPU="root://eoscms//eos/cms/store/cmst3/group/hgcal/Standalone/V33/MinBias/pile/gitV00-03-07/e-/"
+    INPATHPU="root://eoscms//eos/cms/store/cmst3/group/hgcal/HGCalMinbias/PythiaTest/"
 
 #nPuVtxlist=[0,140,200]
-nPuVtxlist=[0]
+nPuVtxlist=[200]
 
 #in %
 interCalibList=[3];#0,1,2,3,4,5,10,15,20,50]
@@ -95,8 +96,8 @@ elif (opt.version==30 or opt.version==100 or opt.version==110):
     noise='0-27:0.14'
     threshold='0-27:5'
 elif (opt.version==33):
-    granularity='0-27:4,28-39:4,40-51:8'
-    noise='0-39:0.14,40-51:0.2'
+    granularity='0-27:4,28-39:4,40-51:4'
+    noise='0-39:0,40-51:0'
     threshold='0-51:5'
 elif (opt.version==27 or opt.version==31):
     granularity='0-11:4,12-23:8'
@@ -152,18 +153,18 @@ for nPuVtx in nPuVtxlist:
             bval="BOFF"
             if opt.Bfield>0 : bval="BON" 
             
-            outDir='%s/git_%s/version_%d/model_%d/%s/%s'%(opt.out,opt.gittag,opt.version,opt.model,opt.datatype,bval)
+            outDir='%s/version_%d/%s'%(opt.out,opt.version,opt.datatype)
             outDir='%s/%s'%(outDir,label) 
             if en>0 : outDir='%s/et_%d'%(outDir,en)
 
             #eosDirIn='%s'%(opt.eosin)
             if opt.alpha>0 : outDir='%s/eta_%3.3f/'%(outDir,opt.alpha) 
             if opt.phi!=0.5 : outDir='%s/phi_%3.3fpi/'%(outDir,opt.phi) 
-            if (opt.run>=0) : outDir='%s/run_%d/'%(outDir,opt.run)
+            if (opt.run>=0) : outDir='%s/000%03d/'%(outDir,opt.run)
         
             if len(opt.eos)>0:
-                eosDir='%s/git%s/%s'%(opt.eos,opt.gittag,opt.datatype)
-                eosDirIn='root://eoscms//eos/cms%s/git%s/%s'%(opt.eosin,opt.gittag,opt.datatype)
+                eosDir='%s/%s'%(opt.eos,opt.datatype)
+                eosDirIn='root://eoscms//eos/cms%s/%s'%(opt.eosin,opt.datatype)
             else:
                 eosDir='%s/'%(outDir)
                 eosDirIn='%s/'%(outDir)
@@ -177,11 +178,12 @@ for nPuVtx in nPuVtxlist:
             scriptFile.write('#!/bin/bash\n')
             scriptFile.write('source %s/../g4env.sh\n'%(os.getcwd()))
             #scriptFile.write('cd %s\n'%(outDir))
-            outTag='%s_version%d_model%d_%s'%(label,opt.version,opt.model,bval)
+            # outTag='%s_version%d_model%d_%s'%(label,opt.version,opt.model,bval)
+            outTag='version%d_000%03d'%(opt.version,opt.run)
             if en>0 : outTag='%s_et%d'%(outTag,en)
-            if opt.alpha>0 : outTag='%s_eta%3.3f'%(outTag,opt.alpha) 
-            if opt.phi!=0.5 : outTag='%s_phi%3.3fpi'%(outTag,opt.phi) 
-            if (opt.run>=0) : outTag='%s_run%d'%(outTag,opt.run)
+            # if opt.alpha>0 : outTag='%s_eta%3.3f'%(outTag,opt.alpha) 
+            # if opt.phi!=0.5 : outTag='%s_phi%3.3fpi'%(outTag,opt.phi) 
+            # if (opt.run>=0) : outTag='%s_run%d'%(outTag,opt.run)
             scriptFile.write('localdir=`pwd`\n')
             scriptFile.write('%s/bin/digitizer %d %s/HGcal_%s.root $localdir/ %s %s %s %d %d %d %s | tee %s\n'%(os.getcwd(),opt.nevts,eosDirIn,outTag,granularity,noise,threshold,interCalib,nSiLayers,nPuVtx,INPATHPU,outlog))
             scriptFile.write('echo "--Local directory is " $localdir >> %s\n'%(g4log))
