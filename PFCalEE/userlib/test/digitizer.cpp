@@ -200,7 +200,7 @@ void processHist(const unsigned iL,
 		 std::vector<PseudoJet> & lParticles
 		 ){
 
-  bool doSaturation=true;
+  bool doSaturation=false;
 
   DetectorEnum adet = subdet.type;
   bool isScint = subdet.isScint;
@@ -458,7 +458,7 @@ int main(int argc, char** argv){//main
         std::cout << "Adding MinBias file:" << puInput.str().c_str() << std::endl;
      }
      pclose(script);  
-     system("rm ./eosls.sh");
+     // system("rm ./eosls.sh");
 
     puTree->SetBranchAddress("HGCSSSimHitVec",&puhitvec);
 
@@ -693,12 +693,11 @@ int main(int argc, char** argv){//main
 	    lidxSet.insert(ipuevt);
 	    break;
 	  }
-	  else {
-	    std::cout << " -- Found duplicate ! Taking another shot." << std::endl;
+          else {
+            std::cout << " -- Found duplicate ! Taking another shot." << std::endl;
 	  }
 	}
 	//std::cout << " ---- adding evt " << ipuevt << std::endl;
-	
         puTree->GetEntry(ipuevt);
         //lRecoHits.reserve(lRecoHits.size()+(*puhitvec).size());
         prevLayer = 10000;
@@ -707,7 +706,7 @@ int main(int argc, char** argv){//main
 	isScint = false;
         for (unsigned iH(0); iH<(*puhitvec).size(); ++iH){//loop on hits
           HGCSSSimHit lHit = (*puhitvec)[iH];
-	  if (lHit.energy()>0){
+          if (lHit.energy()>0){
 	    unsigned layer = lHit.layer();
 	    if (layer != prevLayer){
 	      const HGCSSSubDetector & subdet = myDetector.subDetectorByLayer(layer);
@@ -716,17 +715,17 @@ int main(int argc, char** argv){//main
 	      subdetLayer = layer-subdet.layerIdMin;
 	      prevLayer = layer;
 	      //std::cout << " - layer " << layer << " " << subdet.name << " " << subdetLayer << std::endl;
-	    }
+            }
 	    std::pair<double,double> xy = lHit.get_xy(isScint,geomConv);
 	    double posx = xy.first;//lHit.get_x(cellSize);
 	    double posy = xy.second;//lHit.get_y(cellSize);
-	    double posz = lHit.get_z();
-	    double radius = sqrt(pow(posx,2)+pow(posy,2));
+            double posz = lHit.get_z();
+            double radius = sqrt(pow(posx,2)+pow(posy,2));
 	    if (lHit.silayer() < geomConv.getNumberOfSiLayers(type,radius)){
 	      double energy = lHit.energy()*mycalib.MeVToMip(layer,radius);
 	      double realtime = mycalib.correctTime(lHit.time(),posx,posy,posz);
 	      bool passTime = myDigitiser.passTimeCut(type,realtime);
-	      if (!passTime) continue;
+              if (!passTime) continue;
 	      
 	      if (debug > 1) std::cout << " hit " << iH
 				       << " lay " << layer
@@ -738,12 +737,11 @@ int main(int argc, char** argv){//main
 	      //geomConv.fill(type,subdetLayer,energy,realtime,posx,posy,posz);
 	      geomConv.fill(layer,energy,realtime,lHit.cellid(),posz);
 	    }
-	  }
-
+          }
         }//loop on hits
       }//loop on interactions
     }//add PU
-
+    
     if (debug>0) {
       std::cout << " **DEBUG** simhits = " << (*hitvec).size() << " " << lSimHits.size() << std::endl;
     }

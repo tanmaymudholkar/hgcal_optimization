@@ -128,9 +128,13 @@ void HGCSSSimHit::Add(const G4SiHit & aSiHit){
 
 std::pair<double,double> HGCSSSimHit::get_xy(const bool isScintillator,
 					     const HGCSSGeometryConversion & aGeom) const {
-  if (isScintillator) return aGeom.squareGeom.find(cellid_)->second;
+  if (isScintillator) {
+    std::cout << "Finding xy positions at cellid = ... " << cellid_ << std::endl;
+    std::pair<double,double> xyanswer = aGeom.squareGeom.find(cellid_)->second;
+    std::cout << "Answer = ... x = " << xyanswer.first << " , y = " << xyanswer.second << std::endl;
+    return aGeom.squareGeom.find(cellid_)->second;
+  }
   else return aGeom.hexaGeom.find(cellid_)->second;
-
 }
 
 ROOT::Math::XYZPoint HGCSSSimHit::position(const bool isScintillator,
