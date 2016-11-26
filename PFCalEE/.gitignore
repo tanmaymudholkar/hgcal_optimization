@@ -6,3 +6,6 @@ LSFJOB_*
 bin
 obj
 *.root
+*.out
+dict.h
+dict.cc

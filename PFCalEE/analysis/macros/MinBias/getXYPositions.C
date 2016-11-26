@@ -32,7 +32,7 @@ const TString outputFileName = Form("xyPositionsRaw_minimal.root");
 const std::string granulStr = "0-27:4,28-39:4,40-51:4";
 
 const unsigned hardcodedMaxDataCounter = 2;
-const unsigned hardcodedMaxEvents = 1000;
+const unsigned hardcodedMaxEvents = 100;
 
 HGCSSInfo *info;
 double calorSizeXY = 0;
@@ -170,10 +170,10 @@ void fillTree(std::vector<HGCSSSimHit> *simhitvec, TTree *outputTree, Double_t &
       outputTree->Fill();
       // if (layer > 42) std::cout << "layer number " << layer << std::endl;
       // }
-      if (layer >=39 && layer <= 41) {
-        std::cout << "energy = " << energy << ", xpos = " << xpos << ", ypos = " << ypos << ", layer = " << layer << ", cellid = " << cellid <<  std::endl;
-        std::cout << "isScint: " << (isScint? "true" : "false") << std::endl;
-      }
+      // if (layer >=39 && layer <= 41) {
+      //   std::cout << "energy = " << energy << ", xpos = " << xpos << ", ypos = " << ypos << ", layer = " << layer << ", cellid = " << cellid <<  std::endl;
+      //   std::cout << "isScint: " << (isScint? "true" : "false") << std::endl;
+      // }
     }
   }
 }

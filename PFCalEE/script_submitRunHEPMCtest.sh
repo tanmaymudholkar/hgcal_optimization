@@ -1,0 +1,1 @@
+./submitRunHEPMC.py -q 1nw -v 33 -m 2 -f /afs/cern.ch/work/t/tmudholk/public/pythia/Pythia140305_000001.dat -s test -n 10 -o /afs/cern.ch/work/t/tmudholk/public/simulation_results/minbias -e /store/cmst3/group/hgcal/HGCalMinbias -S

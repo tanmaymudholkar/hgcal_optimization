@@ -37,11 +37,14 @@ EventAction::EventAction()
 
   //honeycomb
   geomConv_ = new HGCSSGeometryConversion(info->model(),CELL_SIZE_X);
+  std::cout << "Setting xysize to: " << xysize << std::endl;
+  geomConv_->setXYwidth(xysize);
+  std::cout << "Initializing HoneyComb:" << std::endl;
   geomConv_->initialiseHoneyComb(xysize,CELL_SIZE_X);
   //square map for BHCAL
+  std::cout << "Initializing SquareMap:" << std::endl;
   geomConv_->initialiseSquareMap(xysize,10.);
-
-
+  
   tree_=new TTree("HGCSSTree","HGC Standalone simulation tree");
   tree_->Branch("HGCSSEvent","HGCSSEvent",&event_);
   tree_->Branch("HGCSSSamplingSectionVec","std::vector<HGCSSSamplingSection>",&ssvec_);

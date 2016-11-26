@@ -243,13 +243,14 @@ void HGCSSGeometryConversion::fillXY(TH2Poly* hist, std::map<int,std::pair<doubl
     int id = polyBin->GetBinNumber();
     std::pair<double,double> xy = std::pair<double,double>((polyBin->GetXMax()+polyBin->GetXMin())/2.,(polyBin->GetYMax()+polyBin->GetYMin())/2.);
     geom.insert(std::pair<unsigned,std::pair<double,double> >(id,xy));
+    // std::cout << "id = " << id << ", x = " << xy.first << ", y = " << xy.second << std::endl;
   }
   
   std::cout << " -- Check geomMap: size = " << geom.size() << std::endl;
-  //std::map<int,std::pair<double,double> >::iterator liter=geom.begin();
-  //for ( ; liter != geom.end();++liter){
-  //std::cout << " id " << liter->first << ": x=" << liter->second.first << ", y=" << liter->second.second << std::endl;
-  //}
+  std::map<int,std::pair<double,double> >::iterator liter=geom.begin();
+  for ( ; liter != geom.end();++liter){
+    std::cout << " id " << liter->first << ": x=" << liter->second.first << ", y=" << liter->second.second << std::endl;
+  }
   
 }
 

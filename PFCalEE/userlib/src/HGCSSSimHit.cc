@@ -28,6 +28,13 @@ HGCSSSimHit::HGCSSSimHit(const G4SiHit & aSiHit,
   assert(map);
   cellid_ = map->FindBin(x,y);
 
+  if (energy_ > 0) {
+    unsigned tempLayerNumber = static_cast<unsigned>(layer_/3);
+    if (tempLayerNumber == 39 || tempLayerNumber == 40) {
+      std::cout << "at energy = " << energy_ << ", layer = " << tempLayerNumber << ", x = " << x << ", y = " << y << ", cellid_ = " << cellid_ << std::endl;
+    }
+  }
+  
   //for (int ix(1);ix<map->GetNumberOfBins()+1; ++ix){
   //if (map->GetBinContent(ix)!=0)
     //cellid_ = ix;
@@ -129,9 +136,9 @@ void HGCSSSimHit::Add(const G4SiHit & aSiHit){
 std::pair<double,double> HGCSSSimHit::get_xy(const bool isScintillator,
 					     const HGCSSGeometryConversion & aGeom) const {
   if (isScintillator) {
-    std::cout << "Finding xy positions at cellid = ... " << cellid_ << std::endl;
-    std::pair<double,double> xyanswer = aGeom.squareGeom.find(cellid_)->second;
-    std::cout << "Answer = ... x = " << xyanswer.first << " , y = " << xyanswer.second << std::endl;
+    // std::cout << "Finding xy positions at cellid = ... " << cellid_ << std::endl;
+    // std::pair<double,double> xyanswer = aGeom.squareGeom.find(cellid_)->second;
+    // std::cout << "Answer = ... x = " << xyanswer.first << " , y = " << xyanswer.second << std::endl;
     return aGeom.squareGeom.find(cellid_)->second;
   }
   else return aGeom.hexaGeom.find(cellid_)->second;
