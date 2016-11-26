@@ -200,7 +200,7 @@ void processHist(const unsigned iL,
 		 std::vector<PseudoJet> & lParticles
 		 ){
 
-  bool doSaturation=true;
+  bool doSaturation=false;
 
   DetectorEnum adet = subdet.type;
   bool isScint = subdet.isScint;
@@ -520,7 +520,9 @@ int main(int argc, char** argv){//main
   //const double xWidth = geomConv.getXYwidth();
   geomConv.initialiseHoneyComb(calorSizeXY,cellSize);
   //square map for BHCAL
-  geomConv.initialiseSquareMap(calorSizeXY/2.,10.);
+  // Correction made to the following line to ensure compatibility with raw output
+  // geomConv.initialiseSquareMap(calorSizeXY/2.,10.);
+  geomConv.initialiseSquareMap(calorSizeXY,10.);
 
   HGCSSDigitisation myDigitiser;
 
