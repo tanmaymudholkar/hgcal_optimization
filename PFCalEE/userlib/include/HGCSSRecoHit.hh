@@ -23,7 +23,7 @@ public:
     ypos_(0),
     zpos_(0),
     layer_(0),
-    //cellid_(0),
+    cellid_(0),
     noiseFrac_(0),
     time_(0)
   {};
@@ -106,13 +106,13 @@ public:
     layer_ = layer;
   };
 
-  // inline unsigned cellid() const {
-  //   return cellid_;
-  // };
+  inline unsigned cellid() const {
+    return cellid_;
+  };
 
-  // inline void cellid(const unsigned & id){
-  //   cellid_ = id;
-  // };
+  inline void cellid(const unsigned & id){
+    cellid_ = id;
+  };
 
   inline double noiseFraction() const {
     return noiseFrac_;
@@ -176,7 +176,7 @@ private:
   double ypos_;
   double zpos_;
   unsigned layer_;
-  //unsigned cellid_;
+  unsigned cellid_;
   double noiseFrac_;
   double time_;
 

@@ -6,3 +6,5 @@ LSFJOB_*
 bin
 obj
 *.root
+analysis/macros/MinBias/backup*
+analysis/macros/MinBias/plots*

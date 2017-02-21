@@ -184,7 +184,7 @@ void processHist(const unsigned iL,
 */
 
 void processHist(const unsigned iL,
-		 std::map<unsigned,MergeCells> & histE,
+                 std::map<unsigned,MergeCells> & histE,
 		 std::map<int,std::pair<double,double> > & geom,
 		 HGCSSDigitisation & myDigitiser,
 		 TH1F* & p_noise,
@@ -249,7 +249,7 @@ void processHist(const unsigned iL,
     if (isScint && simEcor>0 && doSaturation) {
       digiE = myDigitiser.digiE(simEcor);
     }
-    myDigitiser.addNoise(digiE,iL,p_noise);
+    // myDigitiser.addNoise(digiE,iL,p_noise);
     
     double noiseFrac = 1.0;
     if (simEcor>0) noiseFrac = (digiE-simEcor)/simEcor;
@@ -270,6 +270,7 @@ void processHist(const unsigned iL,
 	//double calibE = myDigitiser.MIPtoGeV(subdet,digiE);
 	HGCSSRecoHit lRecHit;
 	lRecHit.layer(iL);
+        lRecHit.cellid(iB+1);
 	lRecHit.energy(digiE);
 	lRecHit.adcCounts(adc);
 	lRecHit.x(xy.first);
@@ -658,6 +659,7 @@ int main(int argc, char** argv){//main
       double radius = sqrt(pow(posx,2)+pow(posy,2));
       double posz = lHit.get_z();
       double energy = lHit.energy()*mycalib.MeVToMip(layer,radius); // if (energy > 0) std::cout << "sim energy = "<<lHit.energy()<<", reco energy = "<<energy<<std::endl;
+      unsigned cellid = lHit.cellid();
       double realtime = mycalib.correctTime(lHit.time(),posx,posy,posz);
       bool passTime = myDigitiser.passTimeCut(type,realtime);
       if (!passTime) continue;
@@ -672,7 +674,7 @@ int main(int argc, char** argv){//main
 				 << " t " << lHit.time() << " " << realtime
 				 << std::endl;
 	//geomConv.fill(type,subdetLayer,energy,realtime,posx,posy,posz);
-	geomConv.fill(layer,energy,realtime,lHit.cellid(),posz);
+	geomConv.fill(layer,energy,realtime,cellid,posz);
       }
 
     }//loop on input simhits
@@ -711,7 +713,7 @@ int main(int argc, char** argv){//main
           HGCSSSimHit lHit = (*puhitvec)[iH];
 	  if (lHit.energy()>0){
 	    unsigned layer = lHit.layer();
-	    if (layer != prevLayer){
+            if (layer != prevLayer){
 	      const HGCSSSubDetector & subdet = myDetector.subDetectorByLayer(layer);
 	      isScint = subdet.isScint;
 	      type = subdet.type;
@@ -726,6 +728,7 @@ int main(int argc, char** argv){//main
 	    double radius = sqrt(pow(posx,2)+pow(posy,2));
 	    if (lHit.silayer() < geomConv.getNumberOfSiLayers(type,radius)){
 	      double energy = lHit.energy()*mycalib.MeVToMip(layer,radius);
+              unsigned cellid = lHit.cellid();
 	      double realtime = mycalib.correctTime(lHit.time(),posx,posy,posz);
 	      bool passTime = myDigitiser.passTimeCut(type,realtime);
 	      if (!passTime) continue;
@@ -738,7 +741,7 @@ int main(int argc, char** argv){//main
 				       << " t " << lHit.time() << " " << realtime
 				       << std::endl;
 	      //geomConv.fill(type,subdetLayer,energy,realtime,posx,posy,posz);
-	      geomConv.fill(layer,energy,realtime,lHit.cellid(),posz);
+	      geomConv.fill(layer,energy,realtime,cellid,posz);
 	    }
 	  }
 
@@ -785,13 +788,13 @@ int main(int argc, char** argv){//main
       }
 
       //cell-to-cell cross-talk for scintillator
-      if (isScint){
-	//2.5% per 30-mm edge
-	myDigitiser.setIPCrossTalk(0.025*10.*granularity[iL]/30.);
-      }
-      else {
-	myDigitiser.setIPCrossTalk(0);
-      }
+      // if (isScint){
+      //   //2.5% per 30-mm edge
+      //   myDigitiser.setIPCrossTalk(0.025*10.*granularity[iL]/30.);
+      // }
+      // else {
+      myDigitiser.setIPCrossTalk(0);
+        // }
 
       //processHist(iL,histE,myDigitiser,p_noise,histZ,meanZpos,isTBsetup,subdet,pThreshInADC,pSaveDigis,lDigiHits,lRecoHits,pMakeJets,lParticles);
       processHist(iL,histE,isScint?geomConv.squareGeom:geomConv.hexaGeom,myDigitiser,p_noise,meanZpos,isTBsetup,subdet,pThreshInADC,pSaveDigis,lDigiHits,lRecoHits,pMakeJets,lParticles);

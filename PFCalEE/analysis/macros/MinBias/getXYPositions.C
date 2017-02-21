@@ -189,7 +189,7 @@ void readDataIntoTree(TTree *outputTree, Double_t &energy, Double_t &xpos, Doubl
   HGCSSGeometryConversion geomConv(model,cellSize,false,2);
   geomConv.setXYwidth(calorSizeXY);
   geomConv.initialiseHoneyComb(calorSizeXY,cellSize);
-  geomConv.initialiseSquareMap(calorSizeXY/2.,10.);
+  geomConv.initialiseSquareMap(calorSizeXY,10.);
 
   const unsigned nLayers = myDetector.nLayers();
   std::vector<unsigned> granularity;

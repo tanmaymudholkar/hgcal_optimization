@@ -10,8 +10,8 @@ random.seed()
 
 usage = 'usage: %prog [options]'
 parser = optparse.OptionParser(usage)
-parser.add_option('-s', '--short-queue',    dest='squeue'             , help='short batch queue'            , default='1nd')
-parser.add_option('-q', '--long-queue' ,    dest='lqueue'             , help='long batch queue'             , default='2nw')
+parser.add_option('-s', '--short-queue' ,    dest='squeue'             , help='short batch queue'            , default='1nd')
+parser.add_option('-q', '--long-queue'  ,    dest='lqueue'             , help='long batch queue'             , default='2nw')
 parser.add_option('-t', '--git-tag'     ,    dest='gittag'             , help='git tag version'              , default='V00-00-00')
 parser.add_option('-r', '--run'         ,    dest='run'                , help='stat run'                     , default=-1,      type=int)
 parser.add_option('-v', '--version'     ,    dest='version'            , help='detector version'             , default=3,      type=int)
@@ -25,8 +25,9 @@ parser.add_option('-n', '--nevts'       ,    dest='nevts'              , help='n
 parser.add_option('-o', '--out'         ,    dest='out'                , help='output directory'             , default=os.getcwd() )
 parser.add_option('-e', '--eos'         ,    dest='eos'                , help='eos path to save root file to EOS',         default='')
 parser.add_option('-E', '--eosin'       ,    dest='eosin'              , help='eos path to read input root file from EOS',  default='')
-parser.add_option('-g', '--gun'         ,    action="store_true",  dest='dogun'              , help='use particle gun.')
-parser.add_option('-S', '--no-submit'   ,    action="store_true",  dest='nosubmit'           , help='Do not submit batch job.')
+parser.add_option('-g', '--gun'         ,    action="store_true"       , dest='dogun'                        , help='use particle gun.')
+parser.add_option('-S', '--no-submit'   ,    action="store_true"       , dest='nosubmit'                     , help='Do not submit batch job.')
+parser.add_option('-N', '--version-name',    dest='versionName'        , help='version name'                 , default='')
 (opt, args) = parser.parse_args()
 
 
@@ -58,7 +59,8 @@ elif opt.version==33:
     INPATHPU="root://eoscms//eos/cms/store/cmst3/group/hgcal/HGCalMinbias/PythiaTest/"
 
 #nPuVtxlist=[0,140,200]
-nPuVtxlist=[200]
+# nPuVtxlist=[200]
+nPuVtxlist=[5]
 
 #in %
 interCalibList=[3];#0,1,2,3,4,5,10,15,20,50]
@@ -98,7 +100,8 @@ elif (opt.version==30 or opt.version==100 or opt.version==110):
 elif (opt.version==33):
     granularity='0-27:4,28-39:4,40-51:4'
     noise='0-39:0,40-51:0'
-    threshold='0-51:5'
+    # threshold='0-51:5'
+    threshold='0-9:4.1,10-51:5'
 elif (opt.version==27 or opt.version==31):
     granularity='0-11:4,12-23:8'
     noise='0-11:0.14,12-23:0.2'
@@ -140,10 +143,10 @@ for nPuVtx in nPuVtxlist:
 
     for interCalib in interCalibList:
         if nPuVtx>0 :
-            suffix='Pu%d_IC%d'%(nPuVtx,interCalib)
+            suffix='%s_Pu%d_IC%d'%(opt.versionName, nPuVtx,interCalib)
             myqueue=opt.lqueue
         else :
-            suffix='IC%d'%(interCalib)
+            suffix='%s_IC%d'%(opt.versionName, interCalib)
             myqueue=opt.squeue
 
         if opt.model!=2 : suffix='%s_Si%d'%(suffix,nSiLayers)

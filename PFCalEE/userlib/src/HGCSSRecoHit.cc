@@ -21,6 +21,7 @@ HGCSSRecoHit::HGCSSRecoHit(const HGCSSSimHit & aSimHit,
   ypos_ = xy.second;
 
   time_ = aSimHit.time();
+  cellid_ = aSimHit.cellid();
 
   //cellid encoding:
   //bool x_side = x>0 ? true : false;
@@ -68,8 +69,7 @@ void HGCSSRecoHit::Add(const HGCSSSimHit & aSimHit){
 
 void HGCSSRecoHit::Print(std::ostream & aOs) const{
   aOs << "====================================" << std::endl
-      << " = Layer " << layer_ //<< " cellid " << cellid_ 
-      << std::endl
+      << " = Layer " << layer_ << " cellid " << cellid_ << std::endl
       << " = Energy " << energy_ << " noiseFrac " << noiseFrac_ << std::endl
       << " = Digi E " << adcCounts_ << " adcCounts." << std::endl
       << " = time " << time_ << std::endl
