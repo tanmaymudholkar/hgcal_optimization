@@ -788,13 +788,13 @@ int main(int argc, char** argv){//main
       }
 
       //cell-to-cell cross-talk for scintillator
-      // if (isScint){
-      //   //2.5% per 30-mm edge
-      //   myDigitiser.setIPCrossTalk(0.025*10.*granularity[iL]/30.);
-      // }
-      // else {
-      myDigitiser.setIPCrossTalk(0);
-        // }
+      if (isScint){
+        //2.5% per 30-mm edge
+        myDigitiser.setIPCrossTalk(0.025*10.*granularity[iL]/30.);
+      }
+      else {
+        myDigitiser.setIPCrossTalk(0);
+      }
 
       //processHist(iL,histE,myDigitiser,p_noise,histZ,meanZpos,isTBsetup,subdet,pThreshInADC,pSaveDigis,lDigiHits,lRecoHits,pMakeJets,lParticles);
       processHist(iL,histE,isScint?geomConv.squareGeom:geomConv.hexaGeom,myDigitiser,p_noise,meanZpos,isTBsetup,subdet,pThreshInADC,pSaveDigis,lDigiHits,lRecoHits,pMakeJets,lParticles);
