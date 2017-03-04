@@ -1,0 +1,6 @@
+--Local directory is  /afs/cern.ch/user/t/tmudholk/public/research/hgcal_minbias_modified_geometry/PFCal/PFCalEE/userlib/testworkdir
+digijobnoiseOff_IC3.log
+DigiPFcal.root
+runDigiJobnoiseOff_IC3.sh
+ --- Size check done: Localsize = 448, eossize = 448
+ --- File DigiPFcal.root successfully copied to EOS: /store/cmst3/group/hgcal/BHStudies_Standalone/HepMCTest_VBFHtoBB/PythiaTest/DiginoiseOff_IC3_version33_modifiedGeometry.root

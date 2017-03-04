@@ -28,6 +28,7 @@ parser.add_option('-E', '--eosin'       ,    dest='eosin'              , help='e
 parser.add_option('-g', '--gun'         ,    action="store_true"       , dest='dogun'                        , help='use particle gun.')
 parser.add_option('-S', '--no-submit'   ,    action="store_true"       , dest='nosubmit'                     , help='Do not submit batch job.')
 parser.add_option('-N', '--version-name',    dest='versionName'        , help='version name'                 , default='')
+parser.add_option('-x', '--input-suffix',    dest='inputSuffix'        , help='input suffix'                 , default='')
 (opt, args) = parser.parse_args()
 
 
@@ -60,7 +61,8 @@ elif opt.version==33:
 
 #nPuVtxlist=[0,140,200]
 # nPuVtxlist=[200]
-nPuVtxlist=[5]
+# nPuVtxlist=[5]
+nPuVtxlist=[0]
 
 #in %
 interCalibList=[3];#0,1,2,3,4,5,10,15,20,50]
@@ -182,7 +184,12 @@ for nPuVtx in nPuVtxlist:
             scriptFile.write('source %s/../g4env.sh\n'%(os.getcwd()))
             #scriptFile.write('cd %s\n'%(outDir))
             # outTag='%s_version%d_model%d_%s'%(label,opt.version,opt.model,bval)
-            outTag='version%d_000%03d'%(opt.version,opt.run)
+            if (opt.run >= 0):
+                outTag='version%d_000%03d'%(opt.version,opt.run)
+            else:
+                outTag='version%d'%(opt.version)
+            if (len(opt.inputSuffix) > 0):
+                outTag='%s_%s'%(outTag, opt.inputSuffix)
             if en>0 : outTag='%s_et%d'%(outTag,en)
             # if opt.alpha>0 : outTag='%s_eta%3.3f'%(outTag,opt.alpha) 
             # if opt.phi!=0.5 : outTag='%s_phi%3.3fpi'%(outTag,opt.phi) 

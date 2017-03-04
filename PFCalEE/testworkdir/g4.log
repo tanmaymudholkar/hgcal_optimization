@@ -1,0 +1,9 @@
+--Local directory is  /afs/cern.ch/user/t/tmudholk/public/research/hgcal_minbias_modified_geometry/PFCal/PFCalEE/testworkdir
+currentEvent.rndm
+currentRun.rndm
+G4History.macro
+g4.log
+g4steer.mac
+PFcal.root
+runJob.sh
+ --- File PFcal.root successfully copied to EOS: /store/cmst3/group/hgcal/BHStudies_Standalone/HepMCTest_VBFHtoBB/PythiaTest/HGcal_version33_modifiedGeometry.root

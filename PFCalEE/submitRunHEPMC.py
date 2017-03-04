@@ -39,7 +39,10 @@ scriptFile.write('localdir=`pwd`\n')
 scriptFile.write('echo "--Local directory is " $localdir > g4.log\n')
 scriptFile.write('ls * >> g4.log\n')
 if len(opt.eos)>0:
-    outTag='version%d_%s'%(opt.version,opt.suffix)
+    # outTag='version%d_%s'%(opt.version,opt.suffix)
+    outTag='version%d'%(opt.version)
+    if (len(opt.suffix) > 0):
+        outTag='version%d_%s'%(opt.version,opt.suffix)
     scriptFile.write('grep "alias eos=" /afs/cern.ch/project/eos/installation/cms/etc/setup.sh | sed "s/alias /export my/" > eosenv.sh\n')
     scriptFile.write('source eosenv.sh\n')
     scriptFile.write('$myeos mkdir -p %s\n'%eosDir)

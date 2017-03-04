@@ -2,6 +2,7 @@
 #include <sstream>
 #include <iostream>
 #include <cmath>
+#include <fstream>
 
 HGCSSGeometryConversion::HGCSSGeometryConversion(const unsigned model, const double cellsize, const bool bypassR, const unsigned nSiLayers){
 
@@ -108,34 +109,85 @@ void HGCSSGeometryConversion::initialiseSquareMap(const double xymin, const doub
 }
 
 void HGCSSGeometryConversion::initialiseSquareMap(TH2Poly *map, const double xymin, const double side, bool print){
-  unsigned nx=static_cast<unsigned>(xymin*2./side);
-  unsigned ny=nx;
-  unsigned i,j;
-  Double_t x1,y1,x2,y2;
-  Double_t dx=side, dy=side;
-  x1 = -1.*xymin;
-  x2 = x1+dx;
-  
-  for (i = 0; i<nx; i++) {
-    y1 = -1.*xymin;
-    y2 = y1+dy;
-    for (j = 0; j<ny; j++) {
-      map->AddBin(x1, y1, x2, y2);
-      y1 = y2;
-      y2 = y1+dy;
+  const std::string inputRadialPositions = "/afs/cern.ch/user/t/tmudholk/public/research/hgcal_minbias_modified_geometry/PFCal/PFCalEE/radialPositions.dat";
+  const Double_t cellSizeDegrees = 1.25;
+  const Double_t errorThreshold = 0.00001;
+
+  unsigned int nDivisions = static_cast<unsigned int>(360./cellSizeDegrees);
+  if (abs((360./cellSizeDegrees) - nDivisions) > errorThreshold) {
+    std::cout << "ERROR: Cell Size in degrees, as given for BH, not compatible with an integer number of cells" << std::endl;
+    std::exit(EXIT_FAILURE);
+  }
+
+  std::vector<Double_t> radialPositions;
+  std::string line;
+  std::ifstream inputFile(inputRadialPositions.c_str());
+  if (inputFile.is_open()) {
+    while(std::getline(inputFile, line)) {
+      radialPositions.push_back(atof(line.c_str()));
     }
-    x1 = x2;
-    x2 = x1+dx;
+    inputFile.close();
   }
-  
-  if (print) {
-    std::cout <<  " -- Initialising squareMap with parameters: " << std::endl
-	      << " ---- xymin = " << -1.*xymin << ", side = " << side
-	      << ", nx = " << nx << ", ny=" << ny
-	      << std::endl;
+  else {
+    std::cout << "ERROR: Unable to open input file to read in radial positions" << std::endl;
+    std::exit(EXIT_FAILURE);
   }
-  
+
+  for (unsigned int radialPositionsCounter = 0; radialPositionsCounter <= radialPositions.size()-2; ++radialPositionsCounter) {
+    Double_t lowerRadialPosition = radialPositions[radialPositionsCounter];
+    Double_t higherRadialPosition = radialPositions[radialPositionsCounter+1];
+    for (unsigned int angularPositionCounter = 0; angularPositionCounter < nDivisions; ++angularPositionCounter) {
+      Double_t lowerPhi = (angularPositionCounter*2*3.1416)/nDivisions;
+      Double_t higherPhi = ((1+angularPositionCounter)*2*3.1416)/nDivisions;
+
+      Double_t x[4], y[4];
+
+      x[0] = lowerRadialPosition*cos(lowerPhi);
+      y[0] = lowerRadialPosition*sin(lowerPhi);
+
+      x[1] = lowerRadialPosition*cos(higherPhi);
+      y[1] = lowerRadialPosition*sin(higherPhi);
+
+      x[2] = higherRadialPosition*cos(higherPhi);
+      y[2] = higherRadialPosition*sin(higherPhi);
+
+      x[3] = higherRadialPosition*cos(lowerPhi);
+      y[3] = higherRadialPosition*sin(lowerPhi);
+
+      map->AddBin(4, x, y);
+    }
+  }
 }
+
+// void HGCSSGeometryConversion::initialiseSquareMap(TH2Poly *map, const double xymin, const double side, bool print){
+//   unsigned nx=static_cast<unsigned>(xymin*2./side);
+//   unsigned ny=nx;
+//   unsigned i,j;
+//   Double_t x1,y1,x2,y2;
+//   Double_t dx=side, dy=side;
+//   x1 = -1.*xymin;
+//   x2 = x1+dx;
+  
+//   for (i = 0; i<nx; i++) {
+//     y1 = -1.*xymin;
+//     y2 = y1+dy;
+//     for (j = 0; j<ny; j++) {
+//       map->AddBin(x1, y1, x2, y2);
+//       y1 = y2;
+//       y2 = y1+dy;
+//     }
+//     x1 = x2;
+//     x2 = x1+dx;
+//   }
+  
+//   if (print) {
+//     std::cout <<  " -- Initialising squareMap with parameters: " << std::endl
+// 	      << " ---- xymin = " << -1.*xymin << ", side = " << side
+// 	      << ", nx = " << nx << ", ny=" << ny
+// 	      << std::endl;
+//   }
+  
+// }
 
 void HGCSSGeometryConversion::initialiseHoneyComb(const double width, const double side){
   initialiseHoneyComb(hexagonMap(),width,side,true);
@@ -438,7 +490,3 @@ void HGCSSGeometryConversion::resetVector(std::map<unsigned,MergeCells> & aVec)
 {
   aVec.clear();
 }
-
-
-
-

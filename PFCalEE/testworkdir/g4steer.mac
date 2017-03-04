@@ -1,0 +1,12 @@
+/control/verbose 0
+/control/saveHistory
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+/N03/det/setField 3.8 T
+/N03/det/setModel 2
+/random/setSeeds 85950 74186
+/generator/select hepmcAscii
+/generator/hepmcAscii/open /afs/cern.ch/user/t/tmudholk/public/research/standalone/CMSSW_8_0_26_patch1/src/VBFHtoBB_HepMC.dat
+/generator/hepmcAscii/verbose 0
+/run/beamOn 5
