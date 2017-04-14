@@ -38,9 +38,11 @@ EventAction::EventAction()
   //honeycomb
   geomConv_ = new HGCSSGeometryConversion(info->model(),CELL_SIZE_X);
   geomConv_->initialiseHoneyComb(xysize,CELL_SIZE_X);
-  //square map for BHCAL
-  geomConv_->initialiseSquareMap(xysize,10.);
-
+  // // square map for BHCAL
+  // geomConv_->initialiseSquareMap(xysize,10.);
+  // Instead of square map for BHCal, we now implement annular maps for FH9-->BH12
+  std::string geometryInputFolder = "/afs/cern.ch/user/t/tmudholk/public/research/hgcal_BHStudies/test/FH_BH_Geometry";
+  geomConv_->initialiseFHBHMaps(geometryInputFolder);
 
   tree_=new TTree("HGCSSTree","HGC Standalone simulation tree");
   tree_->Branch("HGCSSEvent","HGCSSEvent",&event_);
@@ -144,7 +146,7 @@ void EventAction::EndOfEventAction(const G4Event* g4evt)
 			       <<  lSec.voldEdx() << ";"
 			       << std::endl;
       //std::cout << " n_sens_ele = " << (*detector_)[i].n_sens_elements << std::endl;
-      bool is_scint = (*detector_)[i].hasScintillator;
+      // bool is_scint = (*detector_)[i].hasScintillator;
       for (unsigned idx(0); idx<(*detector_)[i].n_sens_elements; ++idx){
 	std::map<unsigned,HGCSSSimHit> lHitMap;
 	std::pair<std::map<unsigned,HGCSSSimHit>::iterator,bool> isInserted;
@@ -155,7 +157,11 @@ void EventAction::EndOfEventAction(const G4Event* g4evt)
 
 	for (unsigned iSiHit(0); iSiHit<(*detector_)[i].getSiHitVec(idx).size();++iSiHit){
 	  G4SiHit lSiHit = (*detector_)[i].getSiHitVec(idx)[iSiHit];
-	  HGCSSSimHit lHit(lSiHit,idx,is_scint?geomConv_->squareMap() : geomConv_->hexagonMap());
+          unsigned layerNumber = lSiHit.layer;
+          
+	  // HGCSSSimHit lHit(lSiHit,idx,is_scint?geomConv_->squareMap() : geomConv_->hexagonMap());
+          // HGCSSSimHit lHit(lSiHit,idx,layerNumber < ANNULARGEOMETRYFIRSTLAYER? geomConv_->hexagonMap() : geomConv_->fhbhMaps(layerNumber));
+          HGCSSSimHit lHit(lSiHit,idx,layerNumber >= ANNULARGEOMETRYFIRSTLAYER? geomConv_->fhbhMaps(layerNumber-ANNULARGEOMETRYFIRSTLAYER) : geomConv_->hexagonMap());
 	  
 	  isInserted = lHitMap.insert(std::pair<unsigned,HGCSSSimHit>(lHit.cellid(),lHit));
 	  if (!isInserted.second) isInserted.first->second.Add(lSiHit);

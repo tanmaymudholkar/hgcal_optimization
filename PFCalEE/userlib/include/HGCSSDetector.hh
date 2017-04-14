@@ -1,6 +1,8 @@
 #ifndef HGCSSDetector_h
 #define HGCSSDetector_h
 
+#include "HGCSSHardcodedConstants.hh"
+
 #include <string>
 #include <vector>
 #include <map>
@@ -126,7 +128,8 @@ public:
       indices_[1] = 10;
       indices_[2] = 20;
       indices_[3] = 28;
-      indices_[4] = 40;
+      // indices_[4] = 40;
+      indices_[4] = ANNULARGEOMETRYFIRSTLAYER;
       indices_[5] = 52;
       indices_[6] = 52;
     }

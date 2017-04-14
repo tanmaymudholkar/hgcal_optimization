@@ -20,8 +20,10 @@
 #include "HGCSSInfo.hh"
 #include "HGCSSDetector.hh"
 #include "HGCSSGeometryConversion.hh"
+#include "HGCSSHardcodedConstants.hh"
 
-const TString dataDir = Form("root://eoscms//eos/cms/store/cmst3/group/hgcal/HGCalMinbias/PythiaTest/");
+// const TString dataDir = Form("root://eoscms//eos/cms/store/cmst3/group/hgcal/HGCalMinbias/PythiaTest/");
+const TString dataDir = Form("root://eoscms//eos/cms/store/cmst3/group/hgcal/BHStudies_Standalone/Minbias_14TeV_SingleEvents/");
 const std::string inputEtaRangesFileName = "etaBinBoundaries.dat";
 const std::string inputLayerZPositionsFileName = "layerZPositions.dat";
 const TString outputDir = Form("totalNumberOfCellsInEtaBinsInfo");
@@ -86,7 +88,7 @@ bool testFile(TString inputPath) {
 
 void initializeCalorimeterProperties() {
   std::cout << "Initializing calorimeter properties..." << std::endl;
-  TString digiFileName = dataDir+Form("DigiPu200_IC3_version33_000001.root");
+  TString digiFileName = dataDir+Form("Digi_Pu200_IC3_version33_Minbias_14TeV_SingleEvents_0001.root");
   bool dataExists = testFile(digiFileName);
   if (dataExists) {
     TFile *inputFile = TFile::Open(digiFileName);
@@ -143,7 +145,9 @@ void initializeGeometryConversion() {
   geomConv = new HGCSSGeometryConversion(model,cellSize,false,2);
   geomConv->setXYwidth(calorSizeXY);
   geomConv->initialiseHoneyComb(calorSizeXY,cellSize);
-  geomConv->initialiseSquareMap(calorSizeXY,10.);
+  // geomConv->initialiseSquareMap(calorSizeXY,10.);
+  std::string geometryInputFolder = "/afs/cern.ch/user/t/tmudholk/public/research/hgcal_BHStudies/test/FH_BH_Geometry";
+  geomConv->initialiseFHBHMaps(geometryInputFolder);
 }
 
 inline Double_t getEta(Double_t xPosition, Double_t yPosition, Double_t zPosition) {
@@ -154,15 +158,17 @@ std::map<Int_t, Int_t> getNumberOfCellsMap(unsigned layerCounter) {
   std::cout << "Getting number of cells for layer index " << layerCounter << " ..." << std::endl;
   Double_t zPosition = layerZPositions[layerCounter];
 
-  const HGCSSSubDetector & subdet = myDetector.subDetectorByLayer(layerCounter);
-  bool isScint = subdet.isScint;
+  // const HGCSSSubDetector & subdet = myDetector.subDetectorByLayer(layerCounter);
+  // bool isScint = subdet.isScint;
   
   std::map<Int_t, Int_t> numberOfCellsMap;
   for (unsigned etaBinCounter = 0; etaBinCounter <= 1+nEtaBins; ++etaBinCounter) {
     numberOfCellsMap[etaBinCounter] = 0;
   }
 
-  std::map<int,std::pair<double,double> >& mapForLayer = isScint? geomConv->squareGeom : geomConv->hexaGeom;
+  bool radialMapToBeUsed = (layerCounter >= ANNULARGEOMETRYFIRSTLAYER);
+
+  std::map<int,std::pair<double,double> >& mapForLayer = radialMapToBeUsed?geomConv->fhbhGeoms[layerCounter-ANNULARGEOMETRYFIRSTLAYER]:geomConv->hexaGeom;
   unsigned nBins = mapForLayer.size();
   std::cout << "For this layer, nBins = " << nBins << std::endl;
 

@@ -12,6 +12,7 @@
 #include "TTree.h"
 #include "SamplingSection.hh"
 #include "G4SiHit.hh"
+#include "HGCSSHardcodedConstants.hh"
 #include "HGCSSEvent.hh"
 #include "HGCSSSamplingSection.hh"
 #include "HGCSSSimHit.hh"

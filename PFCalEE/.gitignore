@@ -8,3 +8,8 @@ obj
 *.root
 analysis/macros/MinBias/backup*
 analysis/macros/MinBias/plots*
+analysis/macros/BHStudies/*.out
+analysis/macros/BHStudies/rootpy*
+analysis/macros/BHStudies/*plots*
+analysis/macros/BHStudies/*Plots*
+analysis/macros/BHStudies/noiseFracComparison

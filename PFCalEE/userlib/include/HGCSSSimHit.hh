@@ -10,6 +10,7 @@
 
 #include "G4SiHit.hh"
 #include "HGCSSGeometryConversion.hh"
+#include "HGCSSHardcodedConstants.hh"
 
 #include "Math/Point3D.h"
 #include "Math/Point3Dfwd.h"
@@ -149,11 +150,13 @@ public:
   // return (cellid_ & 0xFFFE0000) >> 17;
   //};
 
-  std::pair<double,double> get_xy(const bool isScintillator,
-				  const HGCSSGeometryConversion & aGeom) const;
+  // std::pair<double,double> get_xy(const bool isScintillator,
+  //       			  const HGCSSGeometryConversion & aGeom) const;
+  std::pair<double,double> get_xy(const bool radialMapToBeUsed, const HGCSSGeometryConversion & aGeom, unsigned layerCounter = 0) const;
 
-  ROOT::Math::XYZPoint position(const bool isScintillator,
-				const HGCSSGeometryConversion & aGeom) const;
+  // ROOT::Math::XYZPoint position(const bool isScintillator,
+  //       			const HGCSSGeometryConversion & aGeom) const;
+  ROOT::Math::XYZPoint position(const bool radialMapToBeUsed, const HGCSSGeometryConversion & aGeom, unsigned layerCounter) const;
 
   //inline double get_x(TH2Poly* map) const {
   //float sign = get_x_side() ? 1. : -1. ;

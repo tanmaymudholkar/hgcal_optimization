@@ -15,6 +15,7 @@ HGCSSSimHit::HGCSSSimHit(const G4SiHit & aSiHit,
   time_ = aSiHit.time*aSiHit.energy;
   zpos_ = aSiHit.hit_z;
   setLayer(aSiHit.layer,asilayer);
+  bool radialMapToBeUsed = (aSiHit.layer >= ANNULARGEOMETRYFIRSTLAYER);
 
   //coordinates in mm
   //double z = aSiHit.hit_x;
@@ -26,7 +27,14 @@ HGCSSSimHit::HGCSSSimHit(const G4SiHit & aSiHit,
   //GetMaximumBin doesn't work :(
 
   assert(map);
-  cellid_ = map->FindBin(x,y);
+  if (radialMapToBeUsed) {
+    double r, phi;
+    r = sqrt(x*x + y*y);
+    phi = (ROOT::Math::XYZPoint(x, y, 0.).phi());
+    if (phi < 0) phi += 2*TMath::Pi();
+    cellid_ = map->FindBin(phi, r);
+  }
+  else cellid_ = map->FindBin(x, y);
 
   //for (int ix(1);ix<map->GetNumberOfBins()+1; ++ix){
   //if (map->GetBinContent(ix)!=0)
@@ -126,16 +134,27 @@ void HGCSSSimHit::Add(const G4SiHit & aSiHit){
 
 
 
-std::pair<double,double> HGCSSSimHit::get_xy(const bool isScintillator,
-					     const HGCSSGeometryConversion & aGeom) const {
-  if (isScintillator) return aGeom.squareGeom.find(cellid_)->second;
+// std::pair<double,double> HGCSSSimHit::get_xy(const bool isScintillator,
+// 					     const HGCSSGeometryConversion & aGeom) const {
+std::pair<double,double> HGCSSSimHit::get_xy(const bool radialMapToBeUsed, const HGCSSGeometryConversion & aGeom, unsigned layerCounter) const {
+  // if (isScintillator) return aGeom.squareGeom.find(cellid_)->second;
+  if (radialMapToBeUsed) {
+    // const std::map<int,std::map<int,std::pair<double,double> > > &fhbhGeomsTemp = aGeom.fhbhGeoms;
+    // const std::map<int,std::pair<double,double> > &fhbhGeom = fhbhGeomsTemp[layerCounter];
+    // const std::map<int,std::pair<double,double> > &fhbhGeom = aGeom.fhbhGeom(layerCounter);
+    const std::pair<double,double> phir = aGeom.fhbhGeoms[layerCounter-ANNULARGEOMETRYFIRSTLAYER].find(cellid_)->second;
+    double phi = phir.first;
+    double r = phir.second;
+    std::pair<double,double> xypair(r*cos(phi),r*sin(phi));
+    return xypair;
+  }
   else return aGeom.hexaGeom.find(cellid_)->second;
-
 }
 
-ROOT::Math::XYZPoint HGCSSSimHit::position(const bool isScintillator,
-					   const HGCSSGeometryConversion & aGeom) const{
-  std::pair<double,double> xy = get_xy(isScintillator,aGeom);
+// ROOT::Math::XYZPoint HGCSSSimHit::position(const bool isScintillator,
+// 					   const HGCSSGeometryConversion & aGeom) const{
+ROOT::Math::XYZPoint HGCSSSimHit::position(const bool radialMapToBeUsed, const HGCSSGeometryConversion & aGeom, unsigned layerCounter) const {
+  std::pair<double,double> xy = get_xy(radialMapToBeUsed, aGeom, layerCounter);
   return ROOT::Math::XYZPoint(xy.first/10.,xy.second/10.,zpos_/10.);
 }
 
@@ -146,12 +165,14 @@ double HGCSSSimHit::theta(const bool isScintillator,
 
 double HGCSSSimHit::eta(const bool isScintillator,
 			const HGCSSGeometryConversion & aGeom) const {
-  return position(isScintillator,aGeom).eta();
+  bool radialMapToBeUsed = (layer_ >= 3*ANNULARGEOMETRYFIRSTLAYER);
+  return position(radialMapToBeUsed,aGeom,layer_/3).eta();
 }
 
 double HGCSSSimHit::phi(const bool isScintillator,
 			const HGCSSGeometryConversion & aGeom) const {
-  return position(isScintillator,aGeom).phi();
+  bool radialMapToBeUsed = (layer_ >= 3*ANNULARGEOMETRYFIRSTLAYER);
+  return position(radialMapToBeUsed,aGeom,layer_/3).phi();
 }
 
 void HGCSSSimHit::Print(std::ostream & aOs) const{

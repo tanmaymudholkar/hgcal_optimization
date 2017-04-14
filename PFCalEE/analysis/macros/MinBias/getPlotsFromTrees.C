@@ -29,13 +29,15 @@
 #include "HGCSSInfo.hh"
 #include "HGCSSDetector.hh"
 // #include "HGCSSGeometryConversion.hh"
+#include "HGCSSHardcodedConstants.hh"
 
 /// std::vector<Int_t> etaBinsToPlot(1,3,5,7,9);
-const TString dataDir = Form("root://eoscms//eos/cms/store/cmst3/group/hgcal/HGCalMinbias/PythiaTest/");
+const TString dataDir = Form("root://eoscms//eos/cms/store/cmst3/group/hgcal/BHStudies_Standalone/Minbias_14TeV_10Events/");
+const TString inputDigiFileNamePrefix = Form("Digi_Pu200_IC3_version33_model2_Minbias_14TeV_10Events_");
 // const TString inputFileName = Form("/afs/cern.ch/work/t/tmudholk/public/simulation_results/minbias/version_33/PythiaTest/occupiedCellsTreesMaxEta3.root");
-const TString inputFileName = Form("/afs/cern.ch/work/t/tmudholk/public/simulation_results/minbias/version_33/PythiaTest/occupiedCellsTrees.root");
+const TString inputFileName = Form("/afs/cern.ch/work/t/tmudholk/public/bhStudies/occupancyRootFiles/occupiedCellsTrees_Minbias_14TeV_10Events.root");
 const TString plotsDir = Form("plots/");
-const TString outputFileName = Form("plots/plotsCollection.root");
+const TString outputFileName = Form("plots/plotsCollection_occupiedCellsTrees_Minbias_14TeV_10Events.root");
 const std::string inputEtaRangesFileName = "etaBinBoundaries.dat";
 const TString totalNumberOfCellsInEtaBinsDir = Form("totalNumberOfCellsInEtaBinsInfo");
 // const Double_t listOfThresholds[] = {0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 5.5}; // assumed to be in ascending order of threshold in mips
@@ -46,11 +48,12 @@ const Double_t listOfThresholds[] = {0.5, 5.0}; // assumed to be in ascending or
 Int_t listOfEtaBinsToPlot[] = {9,7,5,3,1}; // assumed to be in descending order of eta
 Int_t startEtaBinToCountInTotalOccupancy = 1;
 Int_t stopEtaBinToCountInTotalOccupancy = 10;
-unsigned startLayers[] = {0,28,40};
+unsigned startLayers[] = {0,ANNULARGEOMETRYFIRSTLAYER,BHFIRSTLAYER};
 std::vector<Int_t> etaBinsToPlot(listOfEtaBinsToPlot, listOfEtaBinsToPlot+sizeof(listOfEtaBinsToPlot)/sizeof(listOfEtaBinsToPlot[0]));
-std::map<Int_t, Int_t> colorsForEtaBins = {{1, kRed}, {3, kGreen}, {5, kBlue}, {7, kYellow}, {9, kBlack}}; // number of colors should be equal to size of list of eta bins to plot
+std::map<Int_t, Int_t> colorsForEtaBins = {{1, kRed}, {3, kGreen}, {5, kBlue}, {7, kMagenta}, {9, kBlack}}; // number of colors should be equal to size of list of eta bins to plot
 std::map<Int_t, TString> namesForEtaBins = {{1, Form("1.5 < #cbar#kern[0.3]{#eta}#cbar < 1.6")}, {3, Form("1.8 < #cbar#kern[0.3]{#eta}#cbar < 2.0")}, {5, Form("2.1 < #cbar#kern[0.3]{#eta}#cbar < 2.2")}, {7, Form("2.4 < #cbar#kern[0.3]{#eta}#cbar < 2.5")}, {9, Form("2.7 < #cbar#kern[0.3]{#eta}#cbar < 2.8")}};
-const TString versionName = Form("withMedian");
+const bool drawLogScale = true;
+const TString versionName = Form("logScale");
 
 HGCSSInfo *info;
 double calorSizeXY = 0;
@@ -131,7 +134,7 @@ bool testFile(TString inputPath) {
 void initializeCalorimeterProperties() {
   std::cout << "Initializing calorimeter properties..." << std::endl;
   // TString digiFileName = dataDir+Form("DiginoXTalk_Pu200_IC3_version33_000001.root");
-  TString digiFileName = dataDir+Form("DigiPu200_IC3_version33_000001.root");
+  TString digiFileName = dataDir + inputDigiFileNamePrefix + Form("%04d", 1) + Form(".root");
   bool dataExists = testFile(digiFileName);
   if (dataExists) {
     TFile *inputFile = TFile::Open(digiFileName);
@@ -255,7 +258,7 @@ void plotVerticalLayerBoundaries(TCanvas *outputCanvas, Double_t ymax, Double_t 
   // TLine *l_gapOddEnd = new TLine(gapOddEnd, ymin - 0.085*(ymax - ymin), gapOddEnd, ymax + 0.085*(ymax - ymin));
   // TLine *l_eefe = new TLine(27.5, ymin - 0.085*(ymax - ymin), 27.5, ymax + 0.085*(ymax - ymin));
   TLine *l_eefe = new TLine(27.5, ymin, 27.5, 0.8*ymax);
-  TLine *l_febe = new TLine(39.5, ymin, 39.5, 0.8*ymax);
+  TLine *l_febe = new TLine(35.5, ymin, 35.5, 0.8*ymax);
 
   // l_gapEvenBegin->SetLineColor(kRed);
   // l_gapEvenEnd->SetLineColor(kRed);
@@ -274,12 +277,14 @@ void saveOccupiedCellsMapToFiles(TFile *outputFile, Double_t threshold, unsigned
   TString outputCanvasName = Form("occupiedCells_startLayer%i_threshold%.1f", startLayer, threshold);
   TCanvas *outputCanvas = new TCanvas(outputCanvasName, outputCanvasName);
   gPad->SetLogy(0);
-  TLegend *legend = new TLegend(0.1, 0.1, 0.4, 0.5, "Colors for #eta-ranges:");
+  TLegend *legend;
+  if (drawLogScale) legend= new TLegend(0.1, 0.1, 0.4, 0.5, "Colors for #eta-ranges:");
+  else legend = new TLegend(0.6, 0.5, 0.9, 0.9, "Colors for #eta-ranges:");
   for (std::vector<Int_t>::iterator etaBinsToPlotIterator = etaBinsToPlot.begin(); etaBinsToPlotIterator != etaBinsToPlot.end(); ++etaBinsToPlotIterator) {
     Int_t etaBin = *etaBinsToPlotIterator;
     // outputFile->WriteTObject(occupiedCellsMap[etaBin]);
     if (etaBin == etaBinsToPlot[0]) {
-      gPad->SetLogy();
+      if (drawLogScale) gPad->SetLogy();
       TLegendEntry *legendEntry = legend->AddEntry(occupiedCellsMap[etaBin], namesForEtaBins[etaBin], "");
       legendEntry->SetTextColor(colorsForEtaBins[etaBin]);
       occupiedCellsMap[etaBin]->SetTitle(Form("Number of cells with deposited rechit energy above %.1f mips", threshold));
@@ -318,19 +323,35 @@ void calculateOccupancies(Double_t threshold, unsigned startLayer) {
   for (Int_t etaBinCounter = 0; etaBinCounter <= (1+nEtaBins); ++etaBinCounter) {
     TProfile *occupiedCellsProfile = occupiedCellsMap[etaBinCounter];
     for (unsigned layerCounter = startLayer; layerCounter < nLayers; ++layerCounter) {
-      Double_t occupancy = (occupiedCellsProfile->GetBinContent(1+layerCounter-startLayer))/(totalNumberOfCellsMap[layerCounter][etaBinCounter]);
+      Int_t totNCells = (totalNumberOfCellsMap[layerCounter][etaBinCounter]);
+      Double_t occupancy = 0;
+      if (totNCells > 0) occupancy = (occupiedCellsProfile->GetBinContent(1+layerCounter-startLayer))/totNCells;
       if (threshold == listOfThresholds[0] && etaBinCounter == listOfEtaBinsToPlot[0]) {
         if (occupancy > occupancyMaxval[startLayer]) occupancyMaxval[startLayer] = occupancy;
       }
-      Double_t occupancyError = (occupiedCellsProfile->GetBinError(1+layerCounter-startLayer))/(totalNumberOfCellsMap[layerCounter][etaBinCounter]);
-      occupancyMap[etaBinCounter]->SetPoint(layerCounter-startLayer, layerCounter, occupancy);
-      occupancyMap[etaBinCounter]->SetPointError(layerCounter-startLayer, 0, occupancyError);
+      Double_t occupancyError = 0;
+      if (totNCells > 0) occupancyError = (occupiedCellsProfile->GetBinError(1+layerCounter-startLayer))/totNCells;
+      if (occupancy > 0) {
+        occupancyMap[etaBinCounter]->SetPoint(layerCounter-startLayer, layerCounter, occupancy);
+        occupancyMap[etaBinCounter]->SetPointError(layerCounter-startLayer, 0, occupancyError);
+      }
+      else {
+        occupancyMap[etaBinCounter]->SetPoint(layerCounter-startLayer, layerCounter, 0.1);
+        occupancyMap[etaBinCounter]->SetPointError(layerCounter-startLayer, 0, 0.01);
+      }
 
       std::vector<Int_t> occupiedCellsVector = occupiedCellsVectorMap[etaBinCounter][layerCounter];
       // Double_t *occupiedCellsArray = &occupiedCellsVector[0];
-      Double_t occupancyMedian = TMath::Median(occupiedCellsVector.size(), &occupiedCellsVector[0])/(totalNumberOfCellsMap[layerCounter][etaBinCounter]);
-      occupancyMedianMap[etaBinCounter]->SetPoint(layerCounter-startLayer, layerCounter, occupancyMedian);
-      occupancyMedianMap[etaBinCounter]->SetPointError(layerCounter-startLayer, 0, occupancyError);
+      Double_t occupancyMedian = 0;
+      if (totNCells > 0) occupancyMedian = TMath::Median(occupiedCellsVector.size(), &occupiedCellsVector[0])/totNCells;
+      if (occupancyMedian > 0) {
+        occupancyMedianMap[etaBinCounter]->SetPoint(layerCounter-startLayer, layerCounter, occupancyMedian);
+        occupancyMedianMap[etaBinCounter]->SetPointError(layerCounter-startLayer, 0, occupancyError);
+      }
+      else {
+        occupancyMedianMap[etaBinCounter]->SetPoint(layerCounter-startLayer, layerCounter, 0.01);
+        occupancyMedianMap[etaBinCounter]->SetPointError(layerCounter-startLayer, 0, 0);
+      }
     }
   }
 }
@@ -342,13 +363,15 @@ void saveOccupancyMapsToFiles(TFile *outputFile, Double_t threshold, unsigned st
   gPad->SetLogy(0);
   // TLegend *legend = new TLegend(0.7, 0.6, 0.9, 0.9, "Colors for #eta-ranges:");
   // TLegend *legend = new TLegend(0.8, 0.7, 1.0, 1.0, "Colors for #eta-ranges:");
-  TLegend *legend = new TLegend(0.1, 0.1, 0.3, 0.4, "Colors for #eta-ranges:");
+  TLegend *legend;
+  if (drawLogScale) legend = new TLegend(0.1, 0.1, 0.3, 0.4, "Colors for #eta-ranges:");
+  else legend = new TLegend(0.7, 0.6, 0.9, 0.9, "Colors for #eta-ranges:");
   for (std::vector<Int_t>::iterator etaBinsToPlotIterator = etaBinsToPlot.begin(); etaBinsToPlotIterator != etaBinsToPlot.end(); ++etaBinsToPlotIterator) {
     Int_t etaBin = *etaBinsToPlotIterator;
     TGraphErrors *occupancyMapToPlot = plotMedian ? occupancyMedianMap[etaBin] : occupancyMap[etaBin];
     // outputFile->WriteTObject(occupancyMapToPlot);
     if (etaBin == etaBinsToPlot[0] && startLayer == startLayers[0]) {
-      gPad->SetLogy();
+      if (drawLogScale) gPad->SetLogy();
       TLegendEntry *legendEntry = legend->AddEntry(occupancyMapToPlot, namesForEtaBins[etaBin], "");
       legendEntry->SetTextColor(colorsForEtaBins[etaBin]);
       occupancyMapToPlot->SetMaximum(1.1*occupancyMaxval[startLayer]);

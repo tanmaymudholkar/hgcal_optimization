@@ -25,18 +25,19 @@
 #include "HGCSSDetector.hh"
 #include "HGCSSGeometryConversion.hh"
 
-const TString dataDir = Form("root://eoscms//eos/cms/store/cmst3/group/hgcal/HGCalMinbias/PythiaTest/");
+const TString dataDir = Form("root://eoscms//eos/cms/store/cmst3/group/hgcal/BHStudies_Standalone/Minbias_14TeV_10Events/");
+const TString inputFileNamePrefix = Form("Digi_Pu200_IC3_version33_model2_Minbias_14TeV_10Events_");
 const std::string inputEtaRangesFileName = "etaBinBoundaries.dat";
 const TString totalNumberOfCellsInEtaBinsDir = Form("totalNumberOfCellsInEtaBinsInfo");
-const TString outputDir = Form("/afs/cern.ch/work/t/tmudholk/public/simulation_results/minbias/version_33/PythiaTest/");
-const TString outputFileNamePrefix = Form("occupiedCellsTreesMaxEta3");
+const TString outputDir = Form("/afs/cern.ch/work/t/tmudholk/public/bhStudies/occupancyRootFiles/");
+const TString outputFileNamePrefix = Form("occupiedCellsTrees_Minbias_14TeV_10Events");
 // const TString versionName = Form("noXTalk");
 
-const Double_t listOfThresholds[] = {0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 5.5};
-// const Double_t listOfThresholds[] = {0.5, 5.0};
+// const Double_t listOfThresholds[] = {0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 5.5};
+const Double_t listOfThresholds[] = {0.5, 5.0};
 // const Double_t listOfThresholds[] = {0.5, 5.0, 5.5};
 // const Double_t listOfThresholds[] = {0.5, 2.0, 5.0}; // assumed to be in ascending order of threshold in mips
-// const unsigned hardcodedMaxDataCounter = 2;
+unsigned hardcodedMaxDataCounter = 0;
 
 HGCSSInfo *info;
 double calorSizeXY = 0;
@@ -100,7 +101,7 @@ bool testFile(TString inputPath) {
 
 void initializeCalorimeterProperties() {
   std::cout << "Initializing calorimeter properties..." << std::endl;
-  TString digiFileName = dataDir+Form("DigiPu200_IC3_version33_000001.root");
+  TString digiFileName = dataDir + inputFileNamePrefix + Form("%04d", 1) + Form(".root");
   bool dataExists = testFile(digiFileName);
   if (dataExists) {
     TFile *inputFile = TFile::Open(digiFileName);
@@ -131,7 +132,9 @@ void initializeGeometryConversion() {
   geomConv = new HGCSSGeometryConversion(model,cellSize,false,2);
   geomConv->setXYwidth(calorSizeXY);
   geomConv->initialiseHoneyComb(calorSizeXY,cellSize);
-  geomConv->initialiseSquareMap(calorSizeXY,10.);
+  // geomConv->initialiseSquareMap(calorSizeXY,10.);
+  std::string geometryInputFolder = "/afs/cern.ch/user/t/tmudholk/public/research/hgcal_BHStudies/test/FH_BH_Geometry";
+  geomConv->initialiseFHBHMaps(geometryInputFolder);
 }
 
 void readTotalNumberOfCellsFromFiles() {
@@ -160,15 +163,17 @@ void readTotalNumberOfCellsFromFiles() {
 }
 
 void readInputFiles(TChain *lRecTree) {
-  TString digiPrefix = Form("DigiPu200_IC3_version33_000");
+  // TString digiPrefix = Form("DigiPu200_IC3_version33_000");
   TString suffix = Form(".root");
   unsigned dataCounter = 0;
   unsigned consecutiveNonexistentFiles = 0;
   // while (consecutiveNonexistentFiles < 4 && (hardcodedMaxDataCounter == 0 || dataCounter < hardcodedMaxDataCounter)) {
-  while (consecutiveNonexistentFiles < 4) {
+  bool continueReading = true;
+  // while (consecutiveNonexistentFiles < 4) {
+  while (continueReading) {
     std::cout << "Reading input files for data counter " << dataCounter << std::endl;
     // TFile *inputFile;
-    TString fileName = dataDir + digiPrefix + Form("%03d", dataCounter) + suffix;
+    TString fileName = dataDir + inputFileNamePrefix + Form("%04d", dataCounter) + suffix;
     bool dataExists = testFile(fileName);
     if (dataExists) {
       lRecTree->AddFile(fileName);
@@ -193,6 +198,8 @@ void readInputFiles(TChain *lRecTree) {
       ++consecutiveNonexistentFiles;
     }
     ++dataCounter;
+    continueReading = (consecutiveNonexistentFiles < 4);
+    if (hardcodedMaxDataCounter != 0) continueReading = (continueReading && dataCounter < hardcodedMaxDataCounter);
   }
 }
 

@@ -6,9 +6,13 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <cstdlib>
+#include <fstream>
 #include "TRandom3.h"
 #include "TH2D.h"
 #include "HGCSSDetector.hh"
+#include "TAxis.h"
+#include "HGCSSHardcodedConstants.hh"
 
 class HGCSSDigitisation {
 
@@ -94,6 +98,8 @@ public:
   inline void setNoise(const unsigned & alay, const double & aNoise){
     noise_[alay] = aNoise;
   };
+  
+  void setVariableNoise(const unsigned & alay, const std::string inputGeometryFilePath);
 
   inline void setMipToADC(DetectorEnum adet, const double & aMipToADC){
     mipToADC_[adet] = aMipToADC;
@@ -136,7 +142,7 @@ public:
 
   double ipXtalk(const std::vector<double> & aSimEvec);
 
-  void addNoise(double & aDigiE, const unsigned & alay, TH1F * & hist);
+  double addNoise(double & aDigiE, const unsigned & alay, TH1F * & hist, const double & radialDistance, bool useVariableNoise);
   
   unsigned adcConverter(double eMIP, DetectorEnum adet);
 
@@ -163,6 +169,8 @@ private:
   std::map<DetectorEnum,double> timeCut_;
   std::map<DetectorEnum,double> gainSmearing_;
   std::map<unsigned,double> noise_;
+  std::map<unsigned, std::map<int, double> > variableNoise_;
+  std::map<unsigned, TAxis*> variableBinningAxis_;
 
 };
 

@@ -3,6 +3,7 @@
 #include<iostream>
 #include<fstream>
 #include<sstream>
+#include<cmath>
 #include <boost/algorithm/string.hpp>
 
 #include "TFile.h"
@@ -19,6 +20,7 @@
 
 #include "fastjet/ClusterSequence.hh"
 
+#include "HGCSSHardcodedConstants.hh"
 #include "HGCSSEvent.hh"
 #include "HGCSSInfo.hh"
 #include "HGCSSSimHit.hh"
@@ -197,7 +199,8 @@ void processHist(const unsigned iL,
 		 HGCSSRecoHitVec & lDigiHits,
 		 HGCSSRecoHitVec & lRecoHits,
 		 const bool pMakeJets,
-		 std::vector<PseudoJet> & lParticles
+		 std::vector<PseudoJet> & lParticles,
+                 bool useVariableNoise
 		 ){
 
   bool doSaturation=false;
@@ -207,11 +210,39 @@ void processHist(const unsigned iL,
   bool isSi = subdet.isSi;
 
   //double rLim = subdet.radiusLim;
-  for (unsigned iB(0); iB<histE.size();++iB){//loop on bins
-    std::pair<double,double> xy = geom[iB+1];
-    
+  // if (debug > 1)
+  // std::cout << "Entered processHist for layer = " << iL
+  //           << "; number of bins to loop over = " << histE.size() << std::endl;
+  // unsigned coutCounter = 0;
+  unsigned originalSize = histE.size();
+  // for (unsigned iB(0); iB<histE.size();++iB){//loop on bins
+  for (unsigned iB(1); iB<=originalSize;++iB){//loop on bins
+    // if (iL == 41 && coutCounter < 9000) {
+    //   std::cout << "iB: " << iB << std::endl;
+    //   std::cout << "histE.size() = " << histE.size() << std::endl;
+    //   ++coutCounter;
+    // }
+    bool radialMapToBeUsed = (iL >= ANNULARGEOMETRYFIRSTLAYER);
+    std::pair<double,double> xyFromGeom = geom[iB];
+    std::pair<double,double> xy;
+    double radialDistance = 0.;
+    if (radialMapToBeUsed) {
+      double phi = xyFromGeom.first;
+      double r = xyFromGeom.second;
+      xy.first = r*cos(phi);
+      xy.second = r*sin(phi);
+      radialDistance = r;
+    }
+    else {
+      xy.first = xyFromGeom.first;
+      xy.second = xyFromGeom.second;
+      radialDistance = sqrt((xy.first*xy.first) + (xy.second*xy.second));
+    }
+    // if (iL == 41 && coutCounter < 9000) std::cout << "After xy assignment, histE.size() = " << histE.size() << std::endl;
+    // if (iL == 41 && coutCounter < 9000) std::cout << "xy: (" << xy.first << ", " << xy.second << ")" << std::endl;
     double digiE = 0;
     double simE = histE[iB].energy;
+    // if (iL == 41 && coutCounter < 9000) std::cout << "After simE assignment, histE.size() = " << histE.size() << std::endl;
     //double time = 0;
     //if (simE>0) time = histE[iB].time/simE;
     
@@ -249,7 +280,8 @@ void processHist(const unsigned iL,
     if (isScint && simEcor>0 && doSaturation) {
       digiE = myDigitiser.digiE(simEcor);
     }
-    // myDigitiser.addNoise(digiE,iL,p_noise);
+    double addedNoise = myDigitiser.addNoise(digiE,iL,p_noise,radialDistance, useVariableNoise);
+    (void)addedNoise;
     
     double noiseFrac = 1.0;
     if (simEcor>0) noiseFrac = (digiE-simEcor)/simEcor;
@@ -270,7 +302,8 @@ void processHist(const unsigned iL,
 	//double calibE = myDigitiser.MIPtoGeV(subdet,digiE);
 	HGCSSRecoHit lRecHit;
 	lRecHit.layer(iL);
-        lRecHit.cellid(iB+1);
+        lRecHit.cellid(iB);
+        // if (iL == 41 && coutCounter < 9000) std::cout << "After cellid assignment, histE.size() = " << histE.size() << std::endl;
 	lRecHit.energy(digiE);
 	lRecHit.adcCounts(adc);
 	lRecHit.x(xy.first);
@@ -360,6 +393,7 @@ int main(int argc, char** argv){//main
 	    
   //std::string pModel = "model2";
   unsigned debug = 0;
+  // unsigned debug = 2;
   unsigned pSeed = 0;
   bool pSaveDigis = 0;
   bool pSaveSims = 0;
@@ -393,6 +427,7 @@ int main(int argc, char** argv){//main
   //////////////////////////////////////////////////////////
   //for HGCAL, true means only 12 FHCAL layers considered (24 are simulated)
   bool concept = true;
+  bool useVariableNoise = false;
 
   // choose a jet definition
   double R = 0.5;
@@ -523,8 +558,10 @@ int main(int argc, char** argv){//main
   //square map for BHCAL
   // Correction made to the following line to ensure compatibility with raw output
   // geomConv.initialiseSquareMap(calorSizeXY/2.,10.);
-  geomConv.initialiseSquareMap(calorSizeXY,10.);
+  // geomConv.initialiseSquareMap(calorSizeXY,10.);
 
+  std::string geometryInputFolder = "/afs/cern.ch/user/t/tmudholk/public/research/hgcal_BHStudies/test/FH_BH_Geometry";
+  geomConv.initialiseFHBHMaps(geometryInputFolder);
   HGCSSDigitisation myDigitiser;
 
   std::vector<unsigned> granularity;
@@ -547,6 +584,20 @@ int main(int argc, char** argv){//main
     std::cout << iL << " : " << granularity[iL] << ", " << pNoiseInMips[iL] << " mips, " << pThreshInADC[iL] << " adc - ";
     if (iL%5==4) std::cout << std::endl;
     myDigitiser.setNoise(iL,pNoiseInMips[iL]);
+    std::string inputGeometryFilePath;
+    if (iL >= ANNULARGEOMETRYFIRSTLAYER && iL <= BHLASTLAYER) {
+      unsigned offset;
+      if (iL >= ANNULARGEOMETRYFIRSTLAYER && iL <= FHLASTLAYER) {
+        offset = FHFIRSTLAYER-1;
+        inputGeometryFilePath = geometryInputFolder + "/" + "geometry_FH" + std::to_string(iL-offset) + ".txt";
+      }
+      else if (iL >= BHFIRSTLAYER && iL <= BHLASTLAYER) {
+        offset = BHFIRSTLAYER-1;
+        inputGeometryFilePath = geometryInputFolder + "/" + "geometry_BH" + std::to_string(iL-offset) + ".txt";
+      }
+      myDigitiser.setVariableNoise(iL, inputGeometryFilePath);
+    }
+        
     //nbCells += N_CELLS_XY_MAX/(granularity[iL]*granularity[iL]);
   }
   std::cout << std::endl;     
@@ -653,7 +704,10 @@ int main(int argc, char** argv){//main
 	prevLayer = layer;
 	if (debug > 1) std::cout << " - layer " << layer << " " << subdet.name << " " << subdetLayer << std::endl;
       }
-      std::pair<double,double> xy = lHit.get_xy(isScint,geomConv);
+      // std::pair<double,double> xy = lHit.get_xy(isScint,geomConv);
+      bool radialMapToBeUsed = (layer >= ANNULARGEOMETRYFIRSTLAYER);
+      // std::cout << "Callling get_xy for: " << (radialMapToBeUsed? "radMapUsed" : "radMapNotUsed") << ", layer = " << layer << std::endl;
+      std::pair<double,double> xy = lHit.get_xy(radialMapToBeUsed,geomConv,layer);
       double posx = xy.first;//lHit.get_x(cellSize);
       double posy = xy.second;//lHit.get_y(cellSize);
       double radius = sqrt(pow(posx,2)+pow(posy,2));
@@ -721,8 +775,10 @@ int main(int argc, char** argv){//main
 	      prevLayer = layer;
 	      //std::cout << " - layer " << layer << " " << subdet.name << " " << subdetLayer << std::endl;
 	    }
-	    std::pair<double,double> xy = lHit.get_xy(isScint,geomConv);
-	    double posx = xy.first;//lHit.get_x(cellSize);
+            // std::pair<double,double> xy = lHit.get_xy(isScint,geomConv);
+            bool radialMapToBeUsed = (layer >= ANNULARGEOMETRYFIRSTLAYER);
+            std::pair<double,double> xy = lHit.get_xy(radialMapToBeUsed,geomConv,layer);
+            double posx = xy.first;//lHit.get_x(cellSize);
 	    double posy = xy.second;//lHit.get_y(cellSize);
 	    double posz = lHit.get_z();
 	    double radius = sqrt(pow(posx,2)+pow(posy,2));
@@ -766,7 +822,9 @@ int main(int argc, char** argv){//main
       const HGCSSSubDetector & subdet = myDetector.subDetectorByLayer(iL);
       bool isScint = subdet.isScint;
       //nTotBins += histE->GetNumberOfBins();
-      unsigned nBins = isScint?geomConv.squareMap()->GetNumberOfBins() : geomConv.hexagonMap()->GetNumberOfBins();
+      // unsigned nBins = isScint?geomConv.squareMap()->GetNumberOfBins() : geomConv.hexagonMap()->GetNumberOfBins();
+      bool radialMapToBeUsed = (iL >= ANNULARGEOMETRYFIRSTLAYER);
+      unsigned nBins = radialMapToBeUsed?geomConv.fhbhMaps(iL-ANNULARGEOMETRYFIRSTLAYER)->GetNumberOfBins() : geomConv.hexagonMap()->GetNumberOfBins();
       nTotBins += nBins;
       if (pSaveDigis) lDigiHits.reserve(nTotBins);
       
@@ -797,8 +855,11 @@ int main(int argc, char** argv){//main
       }
 
       //processHist(iL,histE,myDigitiser,p_noise,histZ,meanZpos,isTBsetup,subdet,pThreshInADC,pSaveDigis,lDigiHits,lRecoHits,pMakeJets,lParticles);
-      processHist(iL,histE,isScint?geomConv.squareGeom:geomConv.hexaGeom,myDigitiser,p_noise,meanZpos,isTBsetup,subdet,pThreshInADC,pSaveDigis,lDigiHits,lRecoHits,pMakeJets,lParticles);
- 
+      // processHist(iL,histE,isScint?geomConv.squareGeom:geomConv.hexaGeom,myDigitiser,p_noise,meanZpos,isTBsetup,subdet,pThreshInADC,pSaveDigis,lDigiHits,lRecoHits,pMakeJets,lParticles);
+      processHist(iL,histE,radialMapToBeUsed?geomConv.fhbhGeoms[iL-ANNULARGEOMETRYFIRSTLAYER]:geomConv.hexaGeom,myDigitiser,p_noise,meanZpos,isTBsetup,subdet,pThreshInADC,pSaveDigis,lDigiHits,lRecoHits,pMakeJets,lParticles, useVariableNoise);
+      if (debug > 1) {
+        std::cout << "At the end of this processHist call, lRecoHits.size() = " << lRecoHits.size() << std::endl;
+      }
     }//loop on layers
 
     if (debug) {

@@ -8,6 +8,7 @@
 #include <sstream>
 #include "TMath.h"
 
+#include "HGCSSHardcodedConstants.hh"
 #include "HGCSSSimHit.hh"
 #include "HGCSSGeometryConversion.hh"
 #include "Math/Point3D.h"

@@ -3,6 +3,70 @@
 #include <sstream>
 #include <iostream>
 
+void HGCSSDigitisation::setVariableNoise(const unsigned & alay, const std::string inputGeometryFilePath) {
+  std::cout << "Starting to set noise for layer " << alay << "... reading in geometry..." << std::endl;
+  std::vector<Double_t> radialBinEdgesVector;
+  std::vector<Double_t> mipNoiseVector;
+  std::ifstream inputFile;
+  inputFile.open(inputGeometryFilePath);
+  if (inputFile.is_open()) {
+    std::cout << "Opened file! Now reading in geometry..." << std::endl;
+    // std::string layerIdentifier;
+    Int_t layerNumber;
+    Double_t centerR, area, mipsig, sipm_noise, sig_over_noise, power, fluence, dose, outerR, innerR;
+    // Double_t outerR_old = 0;
+    bool isFirstLine = true;
+    // while (inputFile >> layerIdentifier >> centerR >> area >> outerR >> innerR) {
+    while (inputFile >> layerNumber >> centerR >> area >> mipsig >> sipm_noise >> sig_over_noise >> power >> fluence >> dose >> outerR >> innerR) {
+      // std::cout << "layerIdentifier: " << layerIdentifier << "; centerR = " << centerR << "; area = " << area << "; outerR = " << outerR << "; innerR = " << innerR << std::endl;
+      std::cout << "layerNumber: " << layerNumber
+                << "; centerR = " << centerR
+                << "; area = " << area
+                << "; mipsig = " << mipsig
+                << "; sipm_noise = " << sipm_noise
+                << "; sig_over_noise = " << sig_over_noise
+                << "; power = " << power
+                << "; fluence = " << fluence
+                << "; dose = " << dose
+                << "; outerR = " << outerR
+                << "; innerR = " << innerR << std::endl;
+      
+      radialBinEdgesVector.push_back(innerR);
+      mipNoiseVector.push_back(1./sig_over_noise);
+      if (isFirstLine) {
+        isFirstLine = false;
+      }
+      // else if((fabs(outerR_old - innerR)/innerR) > MAX_FRACTIONAL_TOLERANCE) {
+      //   std::cout << "ERROR: old outer R, " << outerR << ", does not match new inner R, " << innerR << std::endl;
+      //   std::exit(EXIT_FAILURE);
+      // }
+      // outerR_old = outerR;
+    }
+    radialBinEdgesVector.push_back(outerR);
+  }
+  else {
+    std::cout << "Could not open file " << inputGeometryFilePath << " for reading!" << std::endl;
+    std::exit(EXIT_FAILURE);
+  }
+  inputFile.close();
+  std::cout << "Successfully read geometry from file! Now setting binning..." << std::endl;
+  int nAxisBins = radialBinEdgesVector.size()-1;
+  Double_t *radialBinEdges = &radialBinEdgesVector[0];
+  variableBinningAxis_[alay] = new TAxis(nAxisBins, radialBinEdges);
+  std::map<int, double> noiseMap;
+  noiseMap[0] = 0.;
+  for (int binCounter = 1; binCounter <= nAxisBins; ++binCounter) {
+    noiseMap[binCounter] = mipNoiseVector[binCounter-1];
+  }
+  noiseMap[1+nAxisBins] = 0.;
+  variableNoise_[alay] = noiseMap;
+  std::cout << "Checking..." << std::endl;
+  std::cout << "At layer = " << alay << ":" << std::endl;
+  for (std::map<int, double>::iterator noiseMapIterator = noiseMap.begin(); noiseMapIterator != noiseMap.end(); ++noiseMapIterator) {
+    std::cout << "noise[" << noiseMapIterator->first << "] = " << noiseMapIterator->second << std::endl;
+  }
+}
+
 unsigned HGCSSDigitisation::nRandomPhotoElec(const double & aMipE){
   double mean = aMipE*npe_;
   int result = rndm_.Poisson(mean);
@@ -82,16 +146,28 @@ double HGCSSDigitisation::ipXtalk(const std::vector<double> & aSimEvec){
   return result;
 }
 
-void HGCSSDigitisation::addNoise(double & aDigiE, const unsigned & alay ,
-				 TH1F * & hist){
+double HGCSSDigitisation::addNoise(double & aDigiE, const unsigned & alay ,
+                                   TH1F * & hist, const double & radialDistance, bool useVariableNoise){
   bool print = false;
   //if (aDigiE>0) print = true;
   if (print) std::cout << "HGCSSDigitisation::addNoise " << aDigiE << " ";
-  double lNoise = rndm_.Gaus(0,noise_[alay]);
+  double noiseSigmaVal = 0.;
+  if (useVariableNoise) {
+    if (alay < ANNULARGEOMETRYFIRSTLAYER) noiseSigmaVal = noise_[alay];
+    else {
+      int radialBinNumber = (variableBinningAxis_[alay])->FindFixBin(radialDistance);
+      noiseSigmaVal = variableNoise_[alay][radialBinNumber];
+    }
+  }
+  else {
+    noiseSigmaVal = noise_[alay];
+  }
+  double lNoise = rndm_.Gaus(0,noiseSigmaVal);
   if (hist) hist->Fill(lNoise);
   aDigiE += lNoise;
   if (aDigiE<0) aDigiE = 0;
   if (print) std::cout << lNoise << " " << aDigiE << std::endl;
+  return lNoise;
 }
 
 unsigned HGCSSDigitisation::adcConverter(double eMIP, DetectorEnum adet){

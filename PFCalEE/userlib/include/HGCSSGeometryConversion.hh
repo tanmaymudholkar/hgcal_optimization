@@ -2,14 +2,19 @@
 #define HGCSSGeometryConversion_h
 
 
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <cmath>
+#include <cstdlib>
 #include "TH2D.h"
 #include "TH2Poly.h"
 #include "TMath.h"
 #include "HGCSSDetector.hh"
+#include "HGCSSHardcodedConstants.hh"
+
+
 
 struct MergeCells {
   double energy;
@@ -30,17 +35,35 @@ public:
     return &hc;
   };
 
-  TH2Poly *squareMap(){
-    static TH2Poly hsq;
-    return &hsq;
-  };
+  // TH2Poly *squareMap(){
+  //   static TH2Poly hsq;
+  //   return &hsq;
+  // };
+
+  // TH2Poly *fhbhMaps(unsigned layerCounter) {
+  //   static std::map<int, TH2Poly> hfhbh;
+  //   return &(hfhbh[layerCounter]);
+  // }
+
+  TH2Poly *fhbhMaps(unsigned fhbhCounter) {
+    static TH2Poly hfhbh[NFHBHLAYERS];
+    return &(hfhbh[fhbhCounter]);
+  }
 
   std::map<int,std::pair<double,double> > hexaGeom;
-  std::map<int,std::pair<double,double> > squareGeom;
+  // std::map<int,std::pair<double,double> > squareGeom;
+  // std::map<int,std::map<int,std::pair<double,double> > > fhbhGeoms; // first index for layer counter
+  std::map<int,std::pair<double,double> > fhbhGeoms[NFHBHLAYERS]; // first index for layer counter
+  
+  // void initialiseSquareMap(const double xymin, const double side);
 
-  void initialiseSquareMap(const double xymin, const double side);
+  // void initialiseSquareMap(TH2Poly *map, const double xymin, const double side, bool print);
 
-  void initialiseSquareMap(TH2Poly *map, const double xymin, const double side, bool print);
+  std::vector<Double_t> readInGeometryFromFile(std::string inputFileName);
+
+  void initialiseFHBHMaps(std::string geometryInputFolder);
+
+  void initialiseFHBHMap(TH2Poly *map, std::vector<Double_t> geometryVector, unsigned nPhiDivisions);
 
   void initialiseHoneyComb(const double xymin, const double side);
 
@@ -51,6 +74,10 @@ public:
   void setGranularity(const std::vector<unsigned> & granul);
 
   unsigned getGranularity(const unsigned aLayer, const HGCSSSubDetector & adet);
+
+  // const std::map<int,std::pair<double,double> > & fhbhGeom(unsigned layerCounter) {
+  //   return fhbhGeoms[layerCounter];
+  // }
 
   inline double getXYwidth() const {
     return width_;

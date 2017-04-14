@@ -6,6 +6,8 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
+#include "HGCSSHardcodedConstants.hh"
+
 #include <map>
 #include <string>
 

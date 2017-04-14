@@ -3,6 +3,8 @@
 #include <iostream>
 #include <cmath>
 
+#define MAX_FRACTIONAL_TOLERANCE 0.001
+
 HGCSSGeometryConversion::HGCSSGeometryConversion(const unsigned model, const double cellsize, const bool bypassR, const unsigned nSiLayers){
 
   dopatch_=false;
@@ -97,44 +99,125 @@ HGCSSGeometryConversion::~HGCSSGeometryConversion(){
   */
 
   hexaGeom.clear();
-  squareGeom.clear();
+  // squareGeom.clear();
+  for (unsigned fhbhCounter = 0; fhbhCounter < 16; ++fhbhCounter) {
+    fhbhGeoms[fhbhCounter].clear();
+  }
 }
 
+// void HGCSSGeometryConversion::initialiseSquareMap(const double xymin, const double side){
+//   initialiseSquareMap(squareMap(),xymin,side,true);
+//   fillXY(squareMap(),squareGeom);
+// }
 
-
-void HGCSSGeometryConversion::initialiseSquareMap(const double xymin, const double side){
-  initialiseSquareMap(squareMap(),xymin,side,true);
-  fillXY(squareMap(),squareGeom);
-}
-
-void HGCSSGeometryConversion::initialiseSquareMap(TH2Poly *map, const double xymin, const double side, bool print){
-  unsigned nx=static_cast<unsigned>(xymin*2./side);
-  unsigned ny=nx;
-  unsigned i,j;
-  Double_t x1,y1,x2,y2;
-  Double_t dx=side, dy=side;
-  x1 = -1.*xymin;
-  x2 = x1+dx;
+// void HGCSSGeometryConversion::initialiseSquareMap(TH2Poly *map, const double xymin, const double side, bool print){
+//   unsigned nx=static_cast<unsigned>(xymin*2./side);
+//   unsigned ny=nx;
+//   unsigned i,j;
+//   Double_t x1,y1,x2,y2;
+//   Double_t dx=side, dy=side;
+//   x1 = -1.*xymin;
+//   x2 = x1+dx;
   
-  for (i = 0; i<nx; i++) {
-    y1 = -1.*xymin;
-    y2 = y1+dy;
-    for (j = 0; j<ny; j++) {
-      map->AddBin(x1, y1, x2, y2);
-      y1 = y2;
-      y2 = y1+dy;
+//   for (i = 0; i<nx; i++) {
+//     y1 = -1.*xymin;
+//     y2 = y1+dy;
+//     for (j = 0; j<ny; j++) {
+//       map->AddBin(x1, y1, x2, y2);
+//       y1 = y2;
+//       y2 = y1+dy;
+//     }
+//     x1 = x2;
+//     x2 = x1+dx;
+//   }
+  
+//   if (print) {
+//     std::cout <<  " -- Initialising squareMap with parameters: " << std::endl
+// 	      << " ---- xymin = " << -1.*xymin << ", side = " << side
+// 	      << ", nx = " << nx << ", ny=" << ny
+// 	      << std::endl;
+//   }
+  
+// }
+
+std::vector<Double_t> HGCSSGeometryConversion::readInGeometryFromFile(std::string inputFileName) {
+  std::cout << "Starting to read in file with name " << inputFileName << std::endl;
+  std::vector<Double_t> geometryVector;
+  std::ifstream inputFile;
+  inputFile.open(inputFileName);
+  if (inputFile.is_open()) {
+    std::cout << "Opened file! Now reading in geometry..." << std::endl;
+    // std::string layerIdentifier;
+    Int_t layerNumber;
+    Double_t centerR, area, mipsig, sipm_noise, sig_over_noise, power, fluence, dose, outerR, innerR;
+    Double_t outerR_old = 0;
+    bool isFirstLine = true;
+    // while (inputFile >> layerIdentifier >> centerR >> area >> outerR >> innerR) {
+    while (inputFile >> layerNumber >> centerR >> area >> mipsig >> sipm_noise >> sig_over_noise >> power >> fluence >> dose >> outerR >> innerR) {
+      // std::cout << "layerIdentifier: " << layerIdentifier << "; centerR = " << centerR << "; area = " << area << "; outerR = " << outerR << "; innerR = " << innerR << std::endl;
+      std::cout << "layerNumber: " << layerNumber
+                << "; centerR = " << centerR
+                << "; area = " << area
+                << "; mipsig = " << mipsig
+                << "; sipm_noise = " << sipm_noise
+                << "; sig_over_noise = " << sig_over_noise
+                << "; power = " << power
+                << "; fluence = " << fluence
+                << "; dose = " << dose
+                << "; outerR = " << outerR
+                << "; innerR = " << innerR << std::endl;
+      
+      geometryVector.push_back(innerR);
+      if (isFirstLine) {
+        isFirstLine = false;
+      }
+      else if((fabs(outerR_old - innerR)/innerR) > MAX_FRACTIONAL_TOLERANCE) {
+        std::cout << "ERROR: old outer R, " << outerR << ", does not match new inner R, " << innerR << std::endl;
+        std::exit(EXIT_FAILURE);
+      }
+      outerR_old = outerR;
     }
-    x1 = x2;
-    x2 = x1+dx;
+    geometryVector.push_back(outerR);
   }
-  
-  if (print) {
-    std::cout <<  " -- Initialising squareMap with parameters: " << std::endl
-	      << " ---- xymin = " << -1.*xymin << ", side = " << side
-	      << ", nx = " << nx << ", ny=" << ny
-	      << std::endl;
+  else {
+    std::cout << "Could not open file " << inputFileName << " for reading!" << std::endl;
+    std::exit(EXIT_FAILURE);
   }
-  
+  inputFile.close();
+  std::cout << "Successfully read geometry!" << std::endl;
+  return geometryVector;
+}
+
+void HGCSSGeometryConversion::initialiseFHBHMaps(std::string geometryInputFolder) {
+  for (unsigned layerCounter = ANNULARGEOMETRYFIRSTLAYER; layerCounter <= FHLASTLAYER; ++layerCounter) { // FH9-->FH12
+    unsigned offset = FHFIRSTLAYER-1;
+    std::string inputFileName = geometryInputFolder + "/geometry_FH" + std::to_string(layerCounter-offset) + ".txt";
+    unsigned fhbhCounter = layerCounter - ANNULARGEOMETRYFIRSTLAYER;
+    std::vector<Double_t> geometryVector = readInGeometryFromFile(inputFileName);
+    initialiseFHBHMap(fhbhMaps(fhbhCounter), geometryVector, NDIVISIONSFH);
+    fillXY(fhbhMaps(fhbhCounter), fhbhGeoms[fhbhCounter]);
+  }
+  for (unsigned layerCounter = BHFIRSTLAYER; layerCounter <= BHLASTLAYER; ++layerCounter) { // BH1-->BH12
+    unsigned offset = BHFIRSTLAYER-1;
+    std::string inputFileName = geometryInputFolder + "/geometry_BH" + std::to_string(layerCounter-offset) + ".txt";
+    unsigned fhbhCounter = layerCounter - ANNULARGEOMETRYFIRSTLAYER;
+    std::vector<Double_t> geometryVector = readInGeometryFromFile(inputFileName);
+    initialiseFHBHMap(fhbhMaps(fhbhCounter), geometryVector, NDIVISIONSBH);
+    fillXY(fhbhMaps(fhbhCounter), fhbhGeoms[fhbhCounter]);
+  }
+}
+
+void HGCSSGeometryConversion::initialiseFHBHMap(TH2Poly *map, std::vector<Double_t> geometryVector, unsigned nPhiDivisions) {
+  std::cout << "Setting poly layer binning..." << std::endl;
+  for (unsigned phiBinCounter = 0; phiBinCounter < nPhiDivisions; ++phiBinCounter) {
+    Double_t phiBoundaryLow = 2*TMath::Pi()*(phiBinCounter*1./nPhiDivisions);
+    Double_t phiBoundaryHigh = 2*TMath::Pi()*((phiBinCounter+1)*1./nPhiDivisions);
+    for (unsigned geometryVectorCounter = 0; geometryVectorCounter < -1+geometryVector.size(); ++geometryVectorCounter) {
+      Double_t radialBoundaryLow = geometryVector[geometryVectorCounter];
+      Double_t radialBoundaryHigh = geometryVector[geometryVectorCounter+1];
+      map->AddBin(phiBoundaryLow, radialBoundaryLow, phiBoundaryHigh, radialBoundaryHigh);
+    }
+  }
 }
 
 void HGCSSGeometryConversion::initialiseHoneyComb(const double width, const double side){

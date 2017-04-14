@@ -15,7 +15,7 @@ parser.add_option('-v', '--version'    ,    dest='version'            , help='de
 parser.add_option('-m', '--model'    ,    dest='model'            , help='detector model'             , default=0,      type=int)
 parser.add_option('-f', '--datafile'   ,    dest='datafile'           , help='full path to HepMC input file'             , default='data/example_MyPythia.dat')
 parser.add_option('-d', '--datatype'   ,    dest='datatype'           , help='data type'                    , default='PythiaTest')
-parser.add_option('-s', '--suffix'     ,    dest='suffix'             , help='string to append to file name', default='')
+parser.add_option('-x', '--suffix'     ,    dest='suffix'             , help='string to append to file name', default='')
 parser.add_option('-n', '--nevts'      ,    dest='nevts'              , help='number of events to generate' , default=1000,    type=int)
 parser.add_option('-o', '--out'        ,    dest='out'                , help='output directory'             , default=os.getcwd() )
 parser.add_option('-e', '--eos'        ,    dest='eos'                , help='eos path to save root file to EOS',         default='')
@@ -24,8 +24,10 @@ parser.add_option('-S', '--no-submit'  ,    action="store_true",  dest='nosubmit
 
 nevents=opt.nevts
 
-outDir='%s/version_%d/%s/%s/'%(opt.out,opt.version,opt.datatype,opt.suffix)
-eosDir='%s/%s'%(opt.eos,opt.datatype)
+# outDir='%s/version_%d/%s/%s/'%(opt.out,opt.version,opt.datatype,opt.suffix)
+outDir='%s/version_%d/model%d/%s/'%(opt.out,opt.version,opt.model,opt.suffix)
+# eosDir='%s/%s'%(opt.eos,opt.datatype)
+eosDir='%s'%(opt.eos)
 os.system('mkdir -p %s'%outDir)
 
 #wrapper
@@ -39,7 +41,7 @@ scriptFile.write('localdir=`pwd`\n')
 scriptFile.write('echo "--Local directory is " $localdir > g4.log\n')
 scriptFile.write('ls * >> g4.log\n')
 if len(opt.eos)>0:
-    outTag='version%d_%s'%(opt.version,opt.suffix)
+    outTag='version%d_model%d_%s'%(opt.version,opt.model,opt.suffix)
     scriptFile.write('grep "alias eos=" /afs/cern.ch/project/eos/installation/cms/etc/setup.sh | sed "s/alias /export my/" > eosenv.sh\n')
     scriptFile.write('source eosenv.sh\n')
     scriptFile.write('$myeos mkdir -p %s\n'%eosDir)

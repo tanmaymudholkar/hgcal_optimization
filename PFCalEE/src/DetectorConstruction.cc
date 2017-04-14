@@ -613,12 +613,27 @@ void DetectorConstruction::buildHGCALFHE(const unsigned aVersion){
     for(unsigned i=0; i<5; i++) {
       m_caloStruct.push_back( SamplingSection(lThick,lEle) );
     }
-    unsigned nLay = aVersion==618? 3 : aVersion==624 ? 5 : 6;
+    // unsigned nLay = aVersion==618? 3 : aVersion==624 ? 5 : 6;
+    unsigned nLay = aVersion==618? 3 : aVersion==624 ? 5 : static_cast<unsigned>(ANNULARGEOMETRYFIRSTLAYER-FHFIRSTLAYER-6);
     lThick[2] = aVersion==624 ? 55*mm : brassthick;
     for(unsigned i=0; i<nLay; i++) {
       m_caloStruct.push_back( SamplingSection(lThick,lEle) );
     }
 
+    if (aVersion == 6) {
+      lThick.clear();
+      lEle.clear();
+      lThick.push_back(1.);lEle.push_back("CFMix");
+      lThick.push_back(6.); lEle.push_back("Cu");
+      lThick.push_back(brassthick);lEle.push_back("Brass");
+      lThick.push_back(0.5*mm); lEle.push_back("Cu");
+      lThick.push_back(2.6*mm);lEle.push_back("Air");
+      lThick.push_back(3.8*mm);lEle.push_back("Scintillator");
+      lThick.push_back(2.6*mm);lEle.push_back("Air");
+      for(unsigned i=0; i<BHFIRSTLAYER-ANNULARGEOMETRYFIRSTLAYER; i++) {
+        m_caloStruct.push_back( SamplingSection(lThick,lEle) );
+      }
+    }
 
   }
   else {
@@ -694,7 +709,8 @@ void DetectorConstruction::buildHGCALBHE(const unsigned aVersion){
     lThick.push_back(9.*mm);lEle.push_back("Scintillator");
   }
 
-  unsigned maxi = (aVersion==4)?9:11;
+  unsigned maxi = (aVersion==4)?9: aVersion==6 ? static_cast<unsigned>(BHLASTLAYER-BHFIRSTLAYER) : 11;
+  // unsigned maxi = (aVersion==4)?9: aVersion==6 ? static_cast<unsigned>(NFHBHLAYERS-1) : 11;
   for(unsigned i=0; i<maxi; i++) {
     m_caloStruct.push_back( SamplingSection(lThick,lEle) );
   }
