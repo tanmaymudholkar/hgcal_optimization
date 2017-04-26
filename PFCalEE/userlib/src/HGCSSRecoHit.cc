@@ -24,6 +24,16 @@ HGCSSRecoHit::HGCSSRecoHit(const HGCSSSimHit & aSimHit,
   time_ = aSimHit.time();
   cellid_ = aSimHit.cellid();
 
+  totNParticlesSim_ = aSimHit.numberOfParticles();
+  gammaFrac_ = aSimHit.gFrac();
+  electronFrac_ = aSimHit.eFrac();
+  muonFrac_ = aSimHit.muFrac();
+  neutronFrac_ = aSimHit.neutronFrac();
+  protonFrac_ = aSimHit.protonFrac();
+  hadronFrac_ = aSimHit.hadFrac();
+  trackIDMainParentSim_ = aSimHit.mainParentTrackID();
+  energyFracMainParentSim_ = aSimHit.mainParentEfrac();
+
   //cellid encoding:
   //bool x_side = x>0 ? true : false;
   //bool y_side = y>0 ? true : false;

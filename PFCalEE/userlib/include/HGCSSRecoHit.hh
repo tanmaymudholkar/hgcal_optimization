@@ -26,7 +26,16 @@ public:
     layer_(0),
     cellid_(0),
     noiseFrac_(0),
-    time_(0)
+    time_(0),
+    trackIDMainParentSim_(0),
+    totNParticlesSim_(0),
+    gammaFrac_(0),
+    electronFrac_(0),
+    muonFrac_(0),
+    neutronFrac_(0),
+    protonFrac_(0),
+    hadronFrac_(0),
+    energyFracMainParentSim_(0)
   {};
 
   HGCSSRecoHit(const HGCSSSimHit & aSimHit, 
@@ -163,6 +172,78 @@ public:
     return zpos_;
   };
 
+  inline double get_totNParticlesSim() {
+    return totNParticlesSim_;
+  };
+
+  inline void set_totNParticlesSim(double totNParticles) {
+    totNParticlesSim_ = totNParticles;
+  };
+
+  inline double get_gammaFrac() {
+    return gammaFrac_;
+  };
+
+  inline void set_gammaFrac(double gFrac) {
+    gammaFrac_ = gFrac;
+  };
+
+  inline double get_electronFrac() {
+    return electronFrac_;
+  };
+
+  inline void set_electronFrac(double eFrac) {
+    electronFrac_ = eFrac;
+  };
+
+  inline double get_muonFrac() {
+    return muonFrac_;
+  };
+
+  inline void set_muonFrac(double muFrac) {
+    muonFrac_ = muFrac;
+  };
+
+  inline double get_neutronFrac() {
+    return neutronFrac_;
+  };
+
+  inline void set_neutronFrac(double neutronFrac) {
+    neutronFrac_ = neutronFrac;
+  };
+
+  inline double get_protonFrac() {
+    return protonFrac_;
+  };
+
+  inline void set_protonFrac(double protonFrac) {
+    protonFrac_ = protonFrac;
+  };
+
+  inline double get_hadronFrac() {
+    return hadronFrac_;
+  };
+
+  inline void set_hadronFrac(double hadFrac) {
+    hadronFrac_ = hadFrac;
+  };
+
+  inline int get_trackIDMainParent() {
+    return trackIDMainParentSim_;
+  };
+
+  inline void set_trackIDMainParentSim(int trackIDMainParent) {
+    trackIDMainParentSim_ = trackIDMainParent;
+  };
+
+  inline double get_energyFracMainParentSim() {
+    return energyFracMainParentSim_;
+  };
+
+  inline void set_energyFracMainParentSim(double energyFracMainParent) {
+    energyFracMainParentSim_ = energyFracMainParent;
+  };
+
   // inline unsigned getGranularity() const{
   //   return (cellid_ & 0xFC000000) >> 26;
   // };
@@ -180,6 +261,8 @@ private:
   unsigned cellid_;
   double noiseFrac_;
   double time_;
+  int trackIDMainParentSim_;
+  double totNParticlesSim_, gammaFrac_, electronFrac_, muonFrac_, neutronFrac_, protonFrac_, hadronFrac_, energyFracMainParentSim_;
 
   ClassDef(HGCSSRecoHit,1);
 

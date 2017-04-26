@@ -63,7 +63,7 @@ void HGCSSDigitisation::setVariableNoise(const unsigned & alay, const std::strin
   std::cout << "Checking..." << std::endl;
   std::cout << "At layer = " << alay << ":" << std::endl;
   for (std::map<int, double>::iterator noiseMapIterator = noiseMap.begin(); noiseMapIterator != noiseMap.end(); ++noiseMapIterator) {
-    std::cout << "noise[" << noiseMapIterator->first << "] = " << noiseMapIterator->second << std::endl;
+    std::cout << "variableNoise[" << noiseMapIterator->first << "] = " << noiseMapIterator->second << std::endl;
   }
 }
 

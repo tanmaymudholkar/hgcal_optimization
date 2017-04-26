@@ -33,6 +33,11 @@
 
 using namespace fastjet;
 
+struct extraSimInfo {
+  int trackIDMainParentSim;
+  double totNParticlesSim, gammaFrac, electronFrac, muonFrac, neutronFrac, protonFrac, hadronFrac, energyFracMainParentSim;
+};
+
 template <class T>
 void extractParameterFromStr(std::string aStr,T & vec){ 
   if (aStr == "") return;
@@ -200,7 +205,8 @@ void processHist(const unsigned iL,
 		 HGCSSRecoHitVec & lRecoHits,
 		 const bool pMakeJets,
 		 std::vector<PseudoJet> & lParticles,
-                 bool useVariableNoise
+                 bool useVariableNoise,
+                 std::map<unsigned, std::map<unsigned, extraSimInfo> > &extraInfoMap
 		 ){
 
   bool doSaturation=false;
@@ -313,6 +319,17 @@ void processHist(const unsigned iL,
 	//unsigned x_cell = static_cast<unsigned>(fabs(x)/(cellSize*granularity[iL]));
 	//unsigned y_cell = static_cast<unsigned>(fabs(y)/(cellSize*granularity[iL]));
 	//lRecHit.encodeCellId(x>0,y>0,x_cell,y_cell,granularity[iL]);
+
+        lRecHit.set_totNParticlesSim(extraInfoMap[iL][iB].totNParticlesSim);
+        lRecHit.set_gammaFrac(extraInfoMap[iL][iB].gammaFrac);
+        lRecHit.set_electronFrac(extraInfoMap[iL][iB].electronFrac);
+        lRecHit.set_muonFrac(extraInfoMap[iL][iB].muonFrac);
+        std::cout << "Setting muon frac to: " << extraInfoMap[iL][iB].muonFrac << std::endl;
+        lRecHit.set_neutronFrac(extraInfoMap[iL][iB].neutronFrac);
+        lRecHit.set_protonFrac(extraInfoMap[iL][iB].protonFrac);
+        lRecHit.set_hadronFrac(extraInfoMap[iL][iB].hadronFrac);
+        lRecHit.set_trackIDMainParentSim(extraInfoMap[iL][iB].trackIDMainParentSim);
+        lRecHit.set_energyFracMainParentSim(extraInfoMap[iL][iB].energyFracMainParentSim);
 	
 	if (pSaveDigis) lDigiHits.push_back(lRecHit);
 	
@@ -658,6 +675,7 @@ int main(int argc, char** argv){//main
   if (pMakeJets) outputTree->Branch("HGCSSRecoJetVec","std::vector<HGCSSRecoJet>",&lCaloJets);
   TH1F * p_noise = new TH1F("noiseCheck",";noise (MIPs)",100,-5,5);
 
+  std::map<unsigned, std::map<unsigned, extraSimInfo> > extraInfoMap;
 
   /////////////////////////////////////////////////////////////
   //Loop on events
@@ -670,6 +688,8 @@ int main(int argc, char** argv){//main
   std::vector<PseudoJet> lParticles;
 
   for (unsigned ievt(0); ievt<nEvts; ++ievt){//loop on entries
+
+    extraInfoMap.clear();
 
     inputTree->GetEntry(ievt);
     lEvent.eventNumber(event->eventNumber());
@@ -731,6 +751,16 @@ int main(int argc, char** argv){//main
 	geomConv.fill(layer,energy,realtime,cellid,posz);
       }
 
+      extraInfoMap[layer][cellid].totNParticlesSim = lHit.numberOfParticles();
+      extraInfoMap[layer][cellid].gammaFrac = lHit.gFrac();
+      extraInfoMap[layer][cellid].electronFrac = lHit.eFrac();
+      extraInfoMap[layer][cellid].muonFrac = lHit.muFrac();
+      extraInfoMap[layer][cellid].neutronFrac = lHit.neutronFrac();
+      extraInfoMap[layer][cellid].protonFrac = lHit.protonFrac();
+      extraInfoMap[layer][cellid].hadronFrac = lHit.hadFrac();
+      extraInfoMap[layer][cellid].trackIDMainParentSim = lHit.mainParentTrackID();
+      extraInfoMap[layer][cellid].energyFracMainParentSim = lHit.mainParentEfrac();
+      
     }//loop on input simhits
 
     if(nPU!=0){
@@ -836,6 +866,17 @@ int main(int argc, char** argv){//main
 	tmpCell.energy = 0;
 	tmpCell.time = 0;
 	histE.insert(std::pair<unsigned,MergeCells>(iB,tmpCell));
+        extraSimInfo tmpInfo;
+        tmpInfo.totNParticlesSim = 0;
+        tmpInfo.gammaFrac = 0;
+        tmpInfo.electronFrac = 0;
+        tmpInfo.muonFrac = 0;
+        tmpInfo.neutronFrac = 0;
+        tmpInfo.protonFrac = 0;
+        tmpInfo.hadronFrac = 0;
+        tmpInfo.trackIDMainParentSim = 0;
+        tmpInfo.energyFracMainParentSim = 0;
+        extraInfoMap[iL].insert(std::pair<unsigned, extraSimInfo>(iB,tmpInfo));
       }
 
       //std::cout << iL << " " << meanZpos << std::endl;
@@ -856,7 +897,8 @@ int main(int argc, char** argv){//main
 
       //processHist(iL,histE,myDigitiser,p_noise,histZ,meanZpos,isTBsetup,subdet,pThreshInADC,pSaveDigis,lDigiHits,lRecoHits,pMakeJets,lParticles);
       // processHist(iL,histE,isScint?geomConv.squareGeom:geomConv.hexaGeom,myDigitiser,p_noise,meanZpos,isTBsetup,subdet,pThreshInADC,pSaveDigis,lDigiHits,lRecoHits,pMakeJets,lParticles);
-      processHist(iL,histE,radialMapToBeUsed?geomConv.fhbhGeoms[iL-ANNULARGEOMETRYFIRSTLAYER]:geomConv.hexaGeom,myDigitiser,p_noise,meanZpos,isTBsetup,subdet,pThreshInADC,pSaveDigis,lDigiHits,lRecoHits,pMakeJets,lParticles, useVariableNoise);
+      // processHist(iL,histE,radialMapToBeUsed?geomConv.fhbhGeoms[iL-ANNULARGEOMETRYFIRSTLAYER]:geomConv.hexaGeom,myDigitiser,p_noise,meanZpos,isTBsetup,subdet,pThreshInADC,pSaveDigis,lDigiHits,lRecoHits,pMakeJets,lParticles, useVariableNoise);
+      processHist(iL,histE,radialMapToBeUsed?geomConv.fhbhGeoms[iL-ANNULARGEOMETRYFIRSTLAYER]:geomConv.hexaGeom,myDigitiser,p_noise,meanZpos,isTBsetup,subdet,pThreshInADC,pSaveDigis,lDigiHits,lRecoHits,pMakeJets,lParticles, useVariableNoise, extraInfoMap);
       if (debug > 1) {
         std::cout << "At the end of this processHist call, lRecoHits.size() = " << lRecoHits.size() << std::endl;
       }

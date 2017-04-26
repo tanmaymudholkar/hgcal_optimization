@@ -21,7 +21,7 @@ parser.add_option('-a', '--eta'         ,    dest='eta'                , help='i
 parser.add_option('-p', '--phi'         ,    dest='phi'                , help='incidence phi angle in pi unit' , default=0.5,      type=float)
 parser.add_option('-T', '--transverseEnergy', dest='transverseEnergy', help='transverse energy in GeV'       , default=0,      type=float)
 parser.add_option('-b', '--Bfield'      ,    dest='Bfield'             , help='B field value in Tesla'       , default=0,      type=float)
-parser.add_option('-P', '--avgPileup'   ,    dest='avgPileup'          , help='average pileup'               , default=200,    type=int)
+parser.add_option('-P', '--avgPileup'   ,    dest='avgPileup'          , help='average pileup'               , default=0,    type=int)
 parser.add_option('-D', '--pileupDirectory'  ,dest='pileupDirectory'   , help='eos directory to read pileup root files from EOS',  default='')
 parser.add_option('-d', '--datatype'    ,    dest='datatype'           , help='data type or particle to shoot', default='e-')
 parser.add_option('-f', '--datafile'    ,    dest='datafile'           , help='full path to HepMC input file', default='data/example_MyPythia.dat')
@@ -34,6 +34,7 @@ parser.add_option('-g', '--gun'         ,    action="store_true"       , dest='d
 parser.add_option('-S', '--no-submit'   ,    action="store_true"       , dest='nosubmit'                     , help='Do not submit batch job.')
 parser.add_option('-N', '--version-name',    dest='versionName'        , help='version name'                 , default='')
 parser.add_option('-B', '--BHNoisemips' ,    dest='BHNoisemips'        , help='noise in the BH (in mips)'     , default=0, type=float)
+parser.add_option('-F', '--forceInputDir',   dest='forceInputDir'      , help='Force input directory'        , default='', type=str)
 (opt, args) = parser.parse_args()
 
 
@@ -179,7 +180,8 @@ for interCalib in interCalibList:
     # outDir='%s/git_%s/version_%d/%s'%(opt.out,opt.gittag,opt.version,opt.datatype)
     # outDir='%s/git_%s/version_%d/model_%d/%s/%s'%(opt.out,opt.gittag,opt.version,opt.model,opt.datatype,bval)
     # outDir='%s/git_%s/version_%d/model_%d/%s'%(opt.out,opt.gittag,opt.version,opt.model,bval) # without datatype
-    outDir='%s/version_%d/model_%d/%s/'%(opt.out,opt.version,opt.model,opt.suffix) # without gittag, datatype
+    # outDir='%s/version_%d/model_%d/%s/'%(opt.out,opt.version,opt.model,opt.suffix) # without gittag, datatype
+    outDir='%s/git_%s/version_%d/model_%d/%s/%s'%(opt.out,opt.gittag,opt.version,opt.model,opt.datatype,bval) # with gittag and with datatype
     # outDir='%s/%s'%(outDir,label)
     if en>0 : outDir='%s/et_%d'%(outDir,en)
     if opt.eta>0 : outDir='%s/eta_%3.3f/'%(outDir,opt.eta)
@@ -208,7 +210,8 @@ for interCalib in interCalibList:
     scriptFile.write('source %s/../g4env.sh\n'%(os.getcwd()))
     #scriptFile.write('cd %s\n'%(outDir))
     # outTag='%s_version%d_model%d_%s'%(label,opt.version,opt.model,bval)
-    outTag='version%d_model%d_%s'%(opt.version,opt.model,opt.suffix) # for hepmc-type input
+    # outTag='version%d_model%d_%s'%(opt.version,opt.model,opt.suffix) # for hepmc-type input
+    outTag='_version%d_model%d_%s'%(opt.version,opt.model,bval) # for gun (removing suffix)
     # outTag='%s_version%d_model%d_%s'%(label,opt.version,opt.model,bval)
     # outTag='version%d_000%03d'%(opt.version,opt.run)
     # if en>0 : outTag='%s_et%d'%(outTag,en)
@@ -219,7 +222,9 @@ for interCalib in interCalibList:
     # if (opt.run>=0) : outTag='%s_run%d'%(outTag,opt.run)
     if (opt.run>=0) : outTag='%s_run%d'%(outTag,opt.run)
     scriptFile.write('localdir=`pwd`\n')
-    scriptFile.write('%s/bin/digitizer %d %s/HGcal_%s.root $localdir/ %s %s %s %d %d %d %s | tee %s\n'%(os.getcwd(),opt.nevts,eosDirIn,outTag,granularity,noise,threshold,interCalib,nSiLayers,nPuVtx,INPATHPU,outlog))
+    hgcalSourceInputDir = eosDirIn
+    if (len(opt.forceInputDir) > 0): hgcalSourceInputDir = opt.forceInputDir
+    scriptFile.write('%s/bin/digitizer %d %s/HGcal_%s.root $localdir/ %s %s %s %d %d %d %s | tee %s\n'%(os.getcwd(),opt.nevts,opt.forceInputDir,outTag,granularity,noise,threshold,interCalib,nSiLayers,nPuVtx,INPATHPU,outlog))
     scriptFile.write('echo "--Local directory is " $localdir >> %s\n'%(g4log))
     scriptFile.write('ls * >> %s\n'%(g4log))
     if len(opt.eos)>0:

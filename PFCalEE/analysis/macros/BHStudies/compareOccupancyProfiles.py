@@ -8,15 +8,24 @@ import numpy, sys, os, math
 
 totalCellsDirectory = "totalNumberOfCellsInRadialBinsInfo"
 baseOccupiedCellsDirectory = "occupiedNumberOfCellsInRadialBinsInfo_base"
+overrideDefaultBaseRange = [0.0001, 0.05]
+
 toCompareOccupiedCellsDirectories = ["occupiedNumberOfCellsInRadialBinsInfo_constantNoise", "occupiedNumberOfCellsInRadialBinsInfo_variableNoise", "occupiedNumberOfCellsInRadialBinsInfo_noiseEstimate_constantNoise", "occupiedNumberOfCellsInRadialBinsInfo_noiseEstimate_variableNoise"]
 namesOfProfilesToCompare = ["constantNoise", "variableNoise", "noiseEstimate_constantNoise", "noiseEstimate_variableNoise"]
 overrideDefaultRanges = [[], [], [0.00002, 0.03], [0.00006, 0.05]]
 overrideDefaultErrorsRanges = [[], [], [], []]
 fileNamePrefixesToCompare = ["occupiedCells", "occupiedCells", "occupiedCells", "occupiedCells"]
 findRatioToCompare = [True, True, True, True]
+# toCompareOccupiedCellsDirectories = ["occupiedNumberOfCellsInRadialBinsInfo_variableNoise"]
+# namesOfProfilesToCompare = ["variableNoise"]
+# overrideDefaultRanges = [[0.0001, 0.05]]
+# overrideDefaultErrorsRanges = [[]]
+# fileNamePrefixesToCompare = ["occupiedCells"]
+# findRatioToCompare = [True]
+
 nProfilesToCompare = len(toCompareOccupiedCellsDirectories)
 outputDirectory = "rootpyOutput"
-listOfThresholds = [0.5, 5.0]
+listOfThresholds = [0.5]
 startLayer = 36
 stopLayer = 51
 rMin = 900.
@@ -45,9 +54,25 @@ def save2DMapToFile(inputMap, outputDirectory, outputName, useLogScale, plotText
     # ROOT.gStyle.Reset()
     outputCanvas = ROOT.TCanvas(inputMap.GetName(), inputMap.GetTitle(), 1024, 768)
     ROOT.gStyle.SetOptStat(0)
+    ROOT.gPad.SetLogx(0)
     ROOT.gPad.SetLogy(0)
     ROOT.gPad.SetLogz(0)
     if useLogScale: ROOT.gPad.SetLogz()
+    inputMap.GetYaxis().SetTitleOffset(1.3)
+    inputMap.GetXaxis().SetNdivisions(16)
+    for layerNumber in range(startLayer, 1+stopLayer):
+        labelText = ""
+        offset = 0
+        if layerNumber <= 39:
+            labelText = "FH"
+            offset = 27
+        elif layerNumber <= 51:
+            labelText = "BH"
+            offset = 39
+        labelText += "%s"%(layerNumber-offset)
+        inputMap.GetXaxis().SetBinLabel(layerNumber-startLayer+1, labelText)
+        # inputMap.GetXaxis().SetBinLabel(layerNumber-startLayer+1, labelText)
+        
     if (plotText):
         ROOT.gStyle.SetPaintTextFormat(paintTextFormat)
         inputMap.Draw("TEXTCOLZ0")
@@ -109,11 +134,13 @@ def initialize2DMapTo0(map2D):
 for thresholdCounter in range(len(listOfThresholds)):
     threshold = listOfThresholds[thresholdCounter]
     print ("Analyzing results for threshold = %.1f"%(threshold))
-    baseOccupancyMap = ROOT.TH2F("occupancy2DMap_threshold%.1f"%(threshold), "Occupancy Map;Layer;r(mm)", stopLayer-startLayer+1, -0.5+startLayer, 0.5+stopLayer, nRadialBins, rMin, rMax)
+    # baseOccupancyMap = ROOT.TH2F("occupancy2DMap_threshold%.1f"%(threshold), "Occupancy Map;Layer;r(mm)", stopLayer-startLayer+1, -0.5+startLayer, 0.5+stopLayer, nRadialBins, rMin, rMax)
+    baseOccupancyMap = ROOT.TH2F("occupancy2DMap_threshold%.1f"%(threshold), ";Layer;r(mm)", stopLayer-startLayer+1, -0.5+startLayer, 0.5+stopLayer, nRadialBins, rMin, rMax)
     baseOccupancyErrorsMap = ROOT.TH2F("occupancy2DErrorsMap_threshold%.1f"%(threshold), "Occupancy Errors Map;Layer;r(mm)", stopLayer-startLayer+1, -0.5+startLayer, 0.5+stopLayer, nRadialBins, rMin, rMax)
-    toCompareOccupancyMaps = {toCompareIndex:ROOT.TH2F("toCompareOccupancy2DMap_threshold%.1f_%s"%(threshold,namesOfProfilesToCompare[toCompareIndex]), "Occupancy Map: %s;Layer;r(mm)"%(namesOfProfilesToCompare[toCompareIndex]), stopLayer-startLayer+1, -0.5+startLayer, 0.5+stopLayer, nRadialBins, rMin, rMax) for toCompareIndex in range(nProfilesToCompare)}
+    # toCompareOccupancyMaps = {toCompareIndex:ROOT.TH2F("toCompareOccupancy2DMap_threshold%.1f_%s"%(threshold,namesOfProfilesToCompare[toCompareIndex]), "Occupancy Map: %s;Layer;r(mm)"%(namesOfProfilesToCompare[toCompareIndex]), stopLayer-startLayer+1, -0.5+startLayer, 0.5+stopLayer, nRadialBins, rMin, rMax) for toCompareIndex in range(nProfilesToCompare)}
+    toCompareOccupancyMaps = {toCompareIndex:ROOT.TH2F("toCompareOccupancy2DMap_threshold%.1f_%s"%(threshold,namesOfProfilesToCompare[toCompareIndex]), ";Layer;r(mm)", stopLayer-startLayer+1, -0.5+startLayer, 0.5+stopLayer, nRadialBins, rMin, rMax) for toCompareIndex in range(nProfilesToCompare)}
     toCompareOccupancyErrorsMaps = {toCompareIndex:ROOT.TH2F("toCompareOccupancyErrors2DMap_threshold%.1f_%s"%(threshold,namesOfProfilesToCompare[toCompareIndex]), "Occupancy Errors Map: %s;Layer;r(mm)"%(namesOfProfilesToCompare[toCompareIndex]), stopLayer-startLayer+1, -0.5+startLayer, 0.5+stopLayer, nRadialBins, rMin, rMax) for toCompareIndex in range(nProfilesToCompare)}
-    toCompareOccupancyRatioMaps = {toCompareIndex:ROOT.TH2F("toCompareOccupancyRatio2DMap_threshold%.1f_%s"%(threshold,namesOfProfilesToCompare[toCompareIndex]), "Occupancy Ratio Map: %s;Layer;r(mm)"%(namesOfProfilesToCompare[toCompareIndex]), stopLayer-startLayer+1, -0.5+startLayer, 0.5+stopLayer, nRadialBins, rMin, rMax) for toCompareIndex in range(nProfilesToCompare)}
+    toCompareOccupancyRatioMaps = {toCompareIndex:ROOT.TH2F("toCompareOccupancyRatio2DMap_threshold%.1f_%s"%(threshold,namesOfProfilesToCompare[toCompareIndex]), ";Layer;r(mm)", stopLayer-startLayer+1, -0.5+startLayer, 0.5+stopLayer, nRadialBins, rMin, rMax) for toCompareIndex in range(nProfilesToCompare)}
     toCompareOccupancyRatioErrorsMaps = {toCompareIndex:ROOT.TH2F("toCompareOccupancyRatioErrors2DMap_threshold%.1f_%s"%(threshold,namesOfProfilesToCompare[toCompareIndex]), "Occupancy Ratio Errors Map: %s;Layer;r(mm)"%(namesOfProfilesToCompare[toCompareIndex]), stopLayer-startLayer+1, -0.5+startLayer, 0.5+stopLayer, nRadialBins, rMin, rMax) for toCompareIndex in range(nProfilesToCompare)}
     occupanciesInRadialBin = {radialBinNumber:[] for radialBinNumber in range(1, 1+nRadialBins)}
     occupancyErrorsInRadialBin = {radialBinNumber:[] for radialBinNumber in range(1, 1+nRadialBins)}
@@ -183,7 +210,7 @@ for thresholdCounter in range(len(listOfThresholds)):
                         toCompareOccupancyRatioMaps[toCompareIndex].SetBinContent(layerBinNumber, radialBinNumber, occupancyRatio[toCompareIndex])
                         toCompareOccupancyRatioErrorsMaps[toCompareIndex].SetBinContent(layerBinNumber, radialBinNumber, occupancyRatioError[toCompareIndex])
     
-    save2DMapToFile(baseOccupancyMap, outputDirectory, "occupancy2DMap_threshold%.1f"%(threshold), True, False, [])
+    save2DMapToFile(baseOccupancyMap, outputDirectory, "occupancy2DMap_threshold%.1f"%(threshold), True, False, overrideDefaultBaseRange)
     save2DMapToFile(baseOccupancyErrorsMap, outputDirectory, "occupancyErrors2DMap_threshold%.1f"%(threshold), True, False, [])
     for toCompareIndex in range(nProfilesToCompare):
         save2DMapToFile(toCompareOccupancyMaps[toCompareIndex], outputDirectory, "occupancy2DMap_threshold%.1f_%s"%(threshold, namesOfProfilesToCompare[toCompareIndex]), True, False, overrideDefaultRanges[toCompareIndex])
